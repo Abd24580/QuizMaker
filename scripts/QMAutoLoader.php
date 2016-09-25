@@ -6,12 +6,12 @@
  * and open the template in the editor.
  */
 
-spl_autoload_register(function(){
+spl_autoload_register(function($className){
     /*Removes any '\' from left side of URL string*/
     $className = ltrim($className, '\\');
     /*Finds the position of the last occurance of '\' in the string*/
     $lastNsPos = strripos($className, '\\');
-    /*Returns only the first part of the URL.*/
+    /*Returns only the first part of the full class name.*/
     $namespace = substr($className, 0,$lastNsPos);
     /*Returns only the last part of the URL.*/
     $className = substr($className, $lastNsPos + 1);
