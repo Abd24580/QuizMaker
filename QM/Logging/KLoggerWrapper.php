@@ -53,4 +53,11 @@ class KLoggerWrapper extends AbstractLogger implements ILoggingService {
         $this->klogger->write($message);
     }
 
+    public function logException(\Exception $ex) {
+        $this->error("Exception: {$ex->getMessage()}", [
+            'Stack trace' => $ex->getTraceAsString(),
+            'Line error encountered' => $ex->getLine(),
+        ]);
+    }
+
 }

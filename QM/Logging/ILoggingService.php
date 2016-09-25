@@ -48,4 +48,10 @@ interface ILoggingService extends LoggerInterface{
      * @return string
      */
     public function getLastLogLine();
+    
+    /**
+     * Logs an exception as an error.
+     * @param \Exception $ex
+     */
+    public function logException(\Exception $ex);
 }
