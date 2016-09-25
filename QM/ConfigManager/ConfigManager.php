@@ -25,10 +25,10 @@ namespace QM\ConfigManager;
  * @author jtfalkenstein
  */
 class ConfigManager {
-    private $config;
+    private $configArray;
     
     public function __construct() {
-        $this->config = include ROOT.DS.'config'.DS.'config.php';
+        $this->configArray = include ROOT.DS.'config'.DS.'config.php';
     }
     /**
      * Gets a value (or array of values) from the application's configurations.
