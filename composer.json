@@ -3,11 +3,12 @@
     "description": "Description of project QuizMaker.",
     "authors": [
         {
-            "name": "jtfalkenstein",
-            "email": "your@email.here"
+            "name": "Jon Falkenstein",
+            "email": "jtfalkenstein@gmail.com"
         }
     ],
     "require": {
-        "katzgrau/klogger":"dev-master"
+        "katzgrau/klogger":"dev-master",
+        "php-di/php-di" : "dev-master"
     }
 }
