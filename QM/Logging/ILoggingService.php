@@ -19,11 +19,13 @@
 
 namespace QM\Logging;
 
+use Psr\Log\LoggerInterface;
+
 /**
  *
  * @author jtfalkenstein
  */
-interface ILoggingService {
+interface ILoggingService extends LoggerInterface{
     /**
      * Logs with an arbitrary level.
      *
@@ -32,7 +34,7 @@ interface ILoggingService {
      * @param array $context
      * @return null
      */
-    public function log($level, $message);
+    public function log($level, $message, array $context = array());
     /**
      * Writes a line to the log without prepending a status or timestamp
      *

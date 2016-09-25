@@ -19,20 +19,38 @@
 
 namespace QM\Logging;
 
+use Katzgrau\KLogger\Logger;
+use Psr\Log\AbstractLogger;
+use QM\ConfigManager\ConfigManager;
+
 /**
  * Description of KLoggerWrapper
  *
  * @author jtfalkenstein
  */
-class KLoggerWrapper {
+class KLoggerWrapper extends AbstractLogger implements ILoggingService {
     
     private $klogger;
-    
-    public function __construct(\Katzgrau\KLogger $logger) {
-        $this->klogger = $logger;
-        
-        
+    public function __construct(ConfigManager $config) {
+        $c = $config->GetValue('logging');
+        $this->klogger = new Logger(
+                $c['logDirectory'],
+                $c['logLevel'], 
+                [
+                    'logFormat' => $c['logFormat']
+                ]);
     }
-    
-    
+
+    public function getLastLogLine() {
+        return $this->klogger->getLastLogLine();
+    }
+
+    public function log($level, $message, array $context = array()) {
+        $this->klogger->log($level, $message);
+    }
+
+    public function write($message) {
+        $this->klogger->write($message);
+    }
+
 }
