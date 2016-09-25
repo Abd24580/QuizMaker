@@ -35,7 +35,7 @@ class KLoggerWrapper extends AbstractLogger implements ILoggingService {
         $c = $config->GetValue('logging');
         $this->klogger = new Logger(
                 $c['logDirectory'],
-                $c['logLevel'], 
+                constant('\Psr\Log\LogLevel::'.$c['logLevel']), 
                 [
                     'logFormat' => $c['logFormat']
                 ]);
@@ -46,7 +46,7 @@ class KLoggerWrapper extends AbstractLogger implements ILoggingService {
     }
 
     public function log($level, $message, array $context = array()) {
-        $this->klogger->log($level, $message);
+        $this->klogger->log($level, $message, $context);
     }
 
     public function write($message) {
