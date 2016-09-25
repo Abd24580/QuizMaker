@@ -1,0 +1,96 @@
+body {
+  background-image: url("../imgs/testbg.png");
+}
+
+hr {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 0;
+    border-top: 2px solid #1c6ca5;
+    width: 720px;
+}
+
+
+.test {
+  padding : 20px;
+}
+.currentQuestion{
+  font-size: 18px;
+  font-weight: bold;
+  padding:10px;
+  display: block;
+}
+.btnAnswers{
+  border:1px solid #1c6ca5;
+  display: block;
+  font-size: 16px;
+  width:720px;
+  padding: 9px;
+  margin:10px;
+
+}
+.btnAnswers:hover {
+  background-color: #1c6ca5;
+  color: azure;
+}
+
+.selectedAnswer {
+  background-color: #1c6ca5;
+  color:white;
+}
+
+.glyphicon-remove-circle{
+color:red;
+}
+.glyphicon-ok-circle{
+color:green;
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor:default;
+}
+
+.container {
+  width:780px;
+  margin: 0 auto;
+  margin-top:25px;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1c6ca5;
+}
+
+.btn-primary:hover {background-color:#d59a01;}
+
+.headerinfos{
+  padding-left:10px;
+}
+
+.answerList {
+  padding-left: 20px;
+}
+
+#logo {
+  height:33px;
+  position:relative;
+  left:280px;
+}
+
+
+#btnPrevious {
+  width:90px;
+  margin-left:10px;
+}
+
+#btnNext {
+  width:90px;
+  margin-right:10px;
+}
