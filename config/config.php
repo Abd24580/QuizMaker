@@ -1,11 +1,8 @@
 <?php
-$dataPath = ROOT . DS . 'data' . DS;
 return [
     'repositories' => [
         'json' => [
-            'questionsPath' =>  "{$dataPath}questions.json",
-            'testsPath' => "{$dataPath}tests.json",
-            'departments' => "{$dataPath}departments.json"
+            'dataFolder' => ROOT . DS . 'data'
         ]
     ],
     'logging' => [
