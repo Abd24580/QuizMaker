@@ -22,6 +22,6 @@
  */
 
 return [
-    '\QM\Logging\ILoggingService' => \DI\object(QM\Logging\KLoggerWrapper)
+    'QM\Logging\ILoggingService' => \DI\object('QM\Logging\KLoggerWrapper')
 ];
 
