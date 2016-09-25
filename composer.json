@@ -1,0 +1,13 @@
+{
+    "name": "jtfalkenstein/quiz-maker",
+    "description": "Description of project QuizMaker.",
+    "authors": [
+        {
+            "name": "jtfalkenstein",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "katzgrau/klogger":"dev-master"
+    }
+}
