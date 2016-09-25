@@ -28,12 +28,31 @@ use DI\Container;
  */
 class Application {
     private $container;
-    
-    public function __construct(Container $container) {
+    private $log;
+    public function __construct(Container $container, \QM\Logging\ILoggingService $logger) {
         $this->container = $container;
+        $this->log = $logger;
     }
     
     public function Run(){
-        
+       $this->logRequest();
+       try{
+           
+       } catch (Exception $ex) {
+           $this->log->logException($ex);
+       }
     }
+    
+    private function logRequest()
+    {
+        $this->log->info(
+                "New Request from {$_SERVER['REMOTE_ADDR']}",
+                [
+                    'Request Method' => $_SERVER['REQUEST_METHOD]'],
+                    'User Agent' => $_SERVER['HTTP_USER_AGENT']
+                ]);
+    }
+
+    
+
 }
