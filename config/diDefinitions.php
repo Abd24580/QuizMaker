@@ -21,5 +21,7 @@
  * This array contains the mappings of depencencies with concrete implementations.
  */
 
-return [];
+return [
+    '\QM\Logging\ILoggingService' => \DI\object(QM\Logging\KLoggerWrapper)
+];
 
