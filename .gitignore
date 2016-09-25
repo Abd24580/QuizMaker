@@ -2,3 +2,4 @@ bower_components/
 nbproject/private/
 vendor/
 .DS_Store
+logs/
