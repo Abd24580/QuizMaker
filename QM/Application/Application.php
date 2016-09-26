@@ -35,10 +35,6 @@ class Application {
     private $log;
     private $configManager;
     public function __construct() {
-        $this->init();
-    }
-    
-    private function init(){
         $this->configManager = new ConfigManager();
         $this->log = new KLoggerWrapper($this->configManager);
     }
@@ -50,6 +46,7 @@ class Application {
             $fac = new RequestDataFactory();
             // // 2. Get the request data from the factory
             $data = $fac->Package();
+            $this->log->debug("Request data:", (array)$data);
             // 3. Get the router
            $router = new RequestRouter($this);
            // 4. Route based upon the data
@@ -72,8 +69,8 @@ class Application {
                 ));
     }
     
-    public function GetHomePage(RequestData $data)
-    {
+    public function GetHomePage(RequestData $data){
+        $this->log->info("Requested Home page");
         
     }
     
@@ -124,6 +121,21 @@ class Application {
     }
     
     public function DeleteQuestion(RequestData $data)
+    {
+        
+    }
+    
+    public function CreateDepartment(RequestData $data)
+    {
+        
+    }
+    
+    public function DeleteDeparment(RequestData $data)
+    {
+        
+    }
+    
+    public function GetDepartmentList(RequestData $data)
     {
         
     }
