@@ -25,5 +25,15 @@ namespace QM\Quiz;
  * @author jtfalkenstein
  */
 class Quiz {
-    //put your code here
+    public $Id;
+    public $Name;
+    public $DepartmentId;
+    public $QuestionsArray;
+    
+    public function __construct($id = null) {
+        if(is_null($id)){
+            $id = uniqid('quiz');
+        }
+        $this->Id = $id;
+    }
 }
