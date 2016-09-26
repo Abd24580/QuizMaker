@@ -135,6 +135,11 @@ class Application {
         
     }
     
+    public function UpdateDepartment(RequestData $data)
+    {
+        
+    }
+    
     public function GetDepartmentList(RequestData $data)
     {
         

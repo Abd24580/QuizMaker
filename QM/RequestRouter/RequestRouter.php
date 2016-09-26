@@ -96,6 +96,9 @@ class RequestRouter {
             case 'delete':
                 $this->app->DeleteDeparment($data);
                 break;
+            case 'update':
+                $this->app->UpdateDepartment($data);
+                break;      
         }
     }
     
