@@ -1,6 +1,6 @@
 <?php 
 ob_start();
-
+error_reporting(E_ERROR);
 use QM\Application\Application;
 
 const DS = DIRECTORY_SEPARATOR;
