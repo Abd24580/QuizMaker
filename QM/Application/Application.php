@@ -19,9 +19,9 @@
 
 namespace QM\Application;
 
-use DI\Container;
 use Exception;
-use QM\Logging\ILoggingService;
+use QM\ConfigManager\ConfigManager;
+use QM\Logging\KLoggerWrapper;
 use QM\RequestRouter\RequestData;
 use QM\RequestRouter\RequestRouter;
 
@@ -31,11 +31,15 @@ use QM\RequestRouter\RequestRouter;
  * @author jtfalkenstein
  */
 class Application {
-    private $container;
     private $log;
-    public function __construct(Container $container, ILoggingService $logger) {
-        $this->container = $container;
-        $this->log = $logger;
+    private $configManager;
+    public function __construct() {
+        $this->init();
+    }
+    
+    private function init(){
+        $this->configManager = new ConfigManager();
+        $this->log = new KLoggerWrapper($this->configManager);
     }
     
     public function Run(){
@@ -58,11 +62,11 @@ class Application {
         $this->log->info("New Request from {$_SERVER['REMOTE_ADDR']}");
         $this->log->debug(
                 "Request Info:", 
-                [
+                array(
                     'Request Method' => $_SERVER['REQUEST_METHOD'],
                     'User Agent' => $_SERVER['HTTP_USER_AGENT'],
                     'Query String' => $_SERVER['QUERY_STRING']
-                ]);
+                ));
     }
     
     public function GetHomePage(RequestData $data)
