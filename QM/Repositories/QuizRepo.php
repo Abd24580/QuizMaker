@@ -19,11 +19,112 @@
 
 namespace QM\Repositories;
 
+use QM\ConfigManager\ConfigManager;
+use QM\Logging\KLoggerWrapper;
+use QM\Quiz\Question;
+use QM\Quiz\QuestionFactory;
+use QM\Quiz\Quiz;
+
 /**
- * Description of QuizRepo
+ * The central repository for quizzes and questions.
  *
  * @author jfalkenstein
  */
 class QuizRepo {
-    //put your code here
+    private $config;
+    private $qFac;
+    private $deptsRepo;
+    private $log;
+    public function __construct(ConfigManager $config, QuestionFactory $factory, DeptRepo $depts, KLoggerWrapper $log) {
+        $this->config = $config->GetValue(array('repositories', 'json'));
+        $this->qFac = $factory;
+        $this->deptsRepo = $depts;
+        $this->log = $log;
+    }
+    
+    public function GetQuiz($departmentId, $quizId, $rawJson = false){
+        $quizPath = $this->getQuizPath($departmentId, $quizId);
+        $json = $this->getJsonObject($quizPath, $rawJson);
+        if($rawJson){
+            return $json;
+        }
+        $quiz = new Quiz($json['Id']);
+        $quiz->DepartmentId = $json['DepartmentId'];
+        $quiz->Name = $json['Name'];
+        foreach($json['QuestionsArray'] as $key => $val){
+            $q = $this->qFac->GetPreExisting(
+                    $val['Id'], 
+                    $val['DepartmentId'],
+                    $val['QuizId'],
+                    $val['QuestionText'],
+                    $val['AnswersArray'],
+                    $val['CorrectIndex'],
+                    $val['IncorrectMessage']);
+            $quiz->QuestionsArray[$key] = $q;
+        }
+        $this->log->info("Obtaining Quiz ($quiz->Name) from $quizPath.");
+        return $quiz;
+        
+    }
+    
+    public function StoreQuiz(Quiz $quiz){
+        $this->storeToJson($quiz);
+        $this->deptsRepo->AddQuizToDepartment($quiz);
+    }
+    
+    public function DeleteQuiz($departmentId, $quizId){
+        $quizPath = $this->getQuizPath($departmentId, $quizId);
+        $this->log->notice("Deleting Quiz at $quizPath");
+        unlink($quizPath);
+        $this->deptsRepo->DeleteQuizFromDepartment($departmentId, $quizId);
+    }
+    
+    public function AddQuestionToQuiz(Question $question){
+        $this->log->info("Adding Question:",(array)$question);
+        $quiz = $this->GetQuiz($question->DepartmentId, $question->QuizId);
+        $quiz->QuestionsArray[$question->Id] = $question;
+        $this->storeToJson($quiz);
+        return $quiz;
+    }
+    
+    public function GetQuestion($departmentId, $quizId, $questionId){
+        $quiz = $this->GetQuiz($departmentId, $quizId);
+        $q = $quiz->QuestionsArray[$questionId];
+        return $q;
+    }
+    
+    public function DeleteQuestion($departmentId, $quizId, $questionId){
+        $quiz = $this->GetQuiz($departmentId, $quizId);
+        $this->log->info("Deleting question: ", (array)$quiz->QuestionsArray[$questionId]);
+        unset($quiz->QuestionsArray[$question->Id]);
+        $this->storeToJson($quiz);
+        return $quiz;
+    }
+    
+    private function getQuizPath($departmentId, $quizId){
+        $dataFolder = $this->config['dataFolder'];
+        $pathToQuiz = $dataFolder . DS . (string)$departmentId . DS . $quizId. ".json";
+        return $pathToQuiz;
+    }
+    
+    private function getJsonObject($filePath, $rawJson = false){
+        if(!file_exists($filePath)){
+            return null;
+        }
+        $str = file_get_contents($this->fileLocation);
+        if($rawJson){
+            return $str;
+        }
+        return json_decode($str);
+    }
+    
+    private function storeToJson(Quiz $quiz){
+        $quizPath = $this->getQuizPath($quiz->DepartmentId, $quiz->Id);
+        $this->log->info("Storing quiz $quiz->Name to $quizPath.");
+        $json = json_encode($object, JSON_PRETTY_PRINT);
+        if(!file_exists($quizPath)){
+            mkdir($quizPath, 0777, true);
+        }
+        file_put_contents($quizPath, $json, LOCK_EX);
+    }
 }

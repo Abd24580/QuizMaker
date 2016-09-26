@@ -20,7 +20,9 @@
 namespace QM\Repositories;
 
 use QM\ConfigManager\ConfigManager;
+use QM\Logging\KLoggerWrapper;
 use QM\Quiz\Department;
+use QM\Quiz\Quiz;
 
 /**
  * The central repository for departments.
@@ -30,9 +32,11 @@ use QM\Quiz\Department;
 class DeptRepo {
     private $config;
     private $fileLocation;
-    public function __construct(ConfigManager $config) {
+    private $log;
+    public function __construct(ConfigManager $config, KLoggerWrapper $log) {
         $this->config = $config->GetValue(array('repositories', 'json'));
         $this->fileLocation = $this->config['dataFolder'] . DS . 'departments.json';
+        $this->log = $log;
     }
     
     public function GetDepartments(){
@@ -41,9 +45,28 @@ class DeptRepo {
         foreach($json as $key => $val){
             $dep = new Department($key);
             $dep->Name = $val['Name'];
+            $dep->Quizzes = $val['Quizzes'];
             $depts[$key] = $dep;  
         }
         return $depts;
+    }
+    
+    public function AddQuizToDepartment(Quiz $quiz)
+    {
+        //TODO: Add null checking
+        $depts = $this->GetDepartments();
+        $dept = $depts[$quiz->DepartmentId];
+        $dept->Quizzes[$quiz->Id] = $quiz->Name;
+        $this->storeToJson($dept);
+        return $dept;
+    }
+    
+    public function DeleteQuizFromDepartment($departmentId, $quizId){
+        //TODO: Add null checking
+        $depts = $this->GetDepartments();
+        $dept = $depts[$departmentId];
+        unset($dept->Quizzes[$quizId]);
+        $this->storeToJson($dept);
     }
     
     public function StoreDepartment(Department $department){
@@ -67,11 +90,12 @@ class DeptRepo {
     }
     
     private function storeToJson($object){
+        $this->log->info("Storing department list to json.", (array)$object);
         $json = json_encode($object, JSON_PRETTY_PRINT);
         if(!file_exists($this->config['dataFolder'])){
-            mkdir($this->config['dataFolder']);
+            mkdir($this->config['dataFolder'], 0777, true);
         }
-        file_put_contents($this->fileLocation, LOCK_EX, $json);
+        file_put_contents($this->fileLocation, $json, LOCK_EX);
     }
     
 }
