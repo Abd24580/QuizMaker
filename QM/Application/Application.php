@@ -59,7 +59,7 @@ class Application {
     
     private function logRequest()
     {
-        $this->log->info("New Request from {$_SERVER['REMOTE_ADDR']}");
+        $this->log->notice("New Request from {$_SERVER['REMOTE_ADDR']}");
         $this->log->debug(
                 "Request Info:", 
                 array(
@@ -75,7 +75,7 @@ class Application {
     }
     
     
-    public function GetQuizData(RequestData $data)
+    public function GetQuiz(RequestData $data)
     {
         
     }
