@@ -25,5 +25,22 @@ namespace QM\Quiz;
  * @author jtfalkenstein
  */
 class QuestionFactory {
-    public function CreateNew()
+    public function CreateNew($deptId, $quizId, $questionText, array $answers, $correctIndex, $incorrectMessage = "")
+    {
+        $id = uniqid("question");
+        return $this->GetPreExisting($id, $deptId, $quizId, $questionText, $answers, $correctIndex, $incorrectMessage);
+    }
+    
+    public function GetPreExisting($id, $deptId, $quizId, $questionText, array $answers, $correctIndex, $incorrectMessage = "")
+    {
+        $q = new Question();
+        $q->Id = $id;
+        $q->DepartmentId = $deptId;
+        $q->QuizId = $quizId;
+        $q->QuestionText = $questionText;
+        $q->AnswersArray = $answers;
+        $q->IncorrectMessage = $incorrectMessage;
+        return $q;
+    }
+            
 }
