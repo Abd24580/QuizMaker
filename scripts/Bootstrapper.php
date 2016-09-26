@@ -13,7 +13,7 @@ function getContainer()
 
 function BootErUp(){
     $container = getContainer();
-    $app = new Application($container);
+    $app = $container->get('\QM\Application\Application');
     $app->Run();
 }
 
