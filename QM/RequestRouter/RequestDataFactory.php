@@ -30,6 +30,7 @@ class RequestDataFactory {
         $data->data = $_GET;
         $data->data = array_merge_recursive($data->data,$_POST);
         $data->action = $data->data['ACTION'];
+        $data->format = $data->data['FORMAT']; 
         $data->requestMethod = $_SERVER['REQUEST_METHOD'];
         return $data;
     }

@@ -27,5 +27,6 @@ namespace QM\RequestRouter;
 class RequestData {
     public $requestMethod;
     public $action;
+    public $format;
     public $data = array();
 }
