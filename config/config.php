@@ -1,11 +1,11 @@
 <?php
-return [
-    'repositories' => [
-        'json' => [
+return array(
+    'repositories' => array(
+        'json' => array(
             'dataFolder' => ROOT . DS . 'data'
-        ]
-    ],
-    'logging' => [
+        )
+    ),
+    'logging' => array(
         'logLevel' => "DEBUG",
         /*
          * Possible levels, in decreasing priority are:
@@ -25,7 +25,7 @@ return [
          * See https://github.com/katzgrau/KLogger for details on configuration.
          */
         
-    ]
+    )
     
-];
+);
 
