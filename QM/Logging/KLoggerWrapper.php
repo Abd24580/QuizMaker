@@ -28,7 +28,7 @@ use QM\ConfigManager\ConfigManager;
  *
  * @author jtfalkenstein
  */
-class KLoggerWrapper extends AbstractLogger implements ILoggingService {
+class KLoggerWrapper extends AbstractLogger {
     
     private $klogger;
     public function __construct(ConfigManager $config) {
@@ -36,9 +36,9 @@ class KLoggerWrapper extends AbstractLogger implements ILoggingService {
         $this->klogger = new Logger(
                 $c['logDirectory'],
                 constant('\Psr\Log\LogLevel::'.$c['logLevel']), 
-                [
+                array(
                     'logFormat' => $c['logFormat']
-                ]);
+                ));
     }
 
     public function getLastLogLine() {
@@ -54,12 +54,12 @@ class KLoggerWrapper extends AbstractLogger implements ILoggingService {
     }
 
     public function logException(\Exception $ex) {
-        $this->error("Exception: " . get_class($ex) ." {$ex->getMessage()}", [
+        $this->error("Exception: " . get_class($ex) ." {$ex->getMessage()}", array(
             'File of exception' => $ex->getFile(),
             'Line #' => $ex->getLine(),
             'Stack trace' => $ex->getTrace()
             
-        ]);
+        ));
     }
 
 }
