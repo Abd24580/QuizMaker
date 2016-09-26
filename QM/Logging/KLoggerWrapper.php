@@ -35,7 +35,7 @@ class KLoggerWrapper extends AbstractLogger {
         $c = $config->GetValue('logging');
         $this->klogger = new Logger(
                 $c['logDirectory'],
-                constant('\Psr\Log\LogLevel::'.$c['logLevel']), 
+                constant('\Psr\Log\LogLevel::'. strtoupper($c['logLevel'])), 
                 array(
                     'logFormat' => $c['logFormat']
                 ));
