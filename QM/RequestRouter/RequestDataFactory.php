@@ -25,5 +25,7 @@ namespace QM\RequestRouter;
  * @author jtfalkenstein
  */
 class RequestDataFactory {
-    //put your code here
+    public function Package(){
+        
+    }
 }
