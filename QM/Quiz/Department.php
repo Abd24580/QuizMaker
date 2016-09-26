@@ -25,5 +25,13 @@ namespace QM\Quiz;
  * @author jtfalkenstein
  */
 class Department {
-    //put your code here
+    public $Id;
+    public $Name;
+    
+    public function __construct($id) {
+        if(is_null($id)){
+            $id = uniqid('dept');
+        }
+        $this->Id = $id;
+    }
 }
