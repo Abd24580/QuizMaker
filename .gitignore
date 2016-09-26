@@ -3,3 +3,4 @@ nbproject/private/
 vendor/
 .DS_Store
 logs/
+composer.lock
