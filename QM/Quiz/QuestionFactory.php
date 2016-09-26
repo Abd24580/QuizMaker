@@ -27,7 +27,7 @@ namespace QM\Quiz;
 class QuestionFactory {
     public function CreateNew($deptId, $quizId, $questionText, array $answers, $correctIndex, $incorrectMessage = "")
     {
-        $id = uniqid("question");
+        $id = uniqid("ques");
         return $this->GetPreExisting($id, $deptId, $quizId, $questionText, $answers, $correctIndex, $incorrectMessage);
     }
     
