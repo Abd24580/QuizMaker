@@ -20,6 +20,10 @@
 namespace QM\Application;
 
 use DI\Container;
+use Exception;
+use QM\Logging\ILoggingService;
+use QM\RequestRouter\RequestData;
+use QM\RequestRouter\RequestRouter;
 
 /**
  * This is the highest level class that controls the operation of this application.
@@ -29,7 +33,7 @@ use DI\Container;
 class Application {
     private $container;
     private $log;
-    public function __construct(Container $container, \QM\Logging\ILoggingService $logger) {
+    public function __construct(Container $container, ILoggingService $logger) {
         $this->container = $container;
         $this->log = $logger;
     }
@@ -37,21 +41,87 @@ class Application {
     public function Run(){
        $this->logRequest();
        try{
-           
+           // 1. Get request factory
+           // 2. Get the request data from the factory
+           // 3. Get the router
+           $router = new RequestRouter($this);
+           // 4. Route based upon the data
+           $router->Route($data);
        } catch (Exception $ex) {
            $this->log->logException($ex);
+           //TODO: institute some kind of global exception handler
        }
     }
     
     private function logRequest()
     {
-        $this->log->info(
-                "New Request from {$_SERVER['REMOTE_ADDR']}",
+        $this->log->info("New Request from {$_SERVER['REMOTE_ADDR']}");
+        $this->log->debug(
+                "Request Info:", 
                 [
-                    'Request Method' => $_SERVER['REQUEST_METHOD]'],
-                    'User Agent' => $_SERVER['HTTP_USER_AGENT']
+                    'Request Method' => $_SERVER['REQUEST_METHOD'],
+                    'User Agent' => $_SERVER['HTTP_USER_AGENT'],
+                    'Query String' => $_SERVER['QUERY_STRING']
                 ]);
     }
+    
+    public function GetHomePage(RequestData $data)
+    {
+        
+    }
+    
+    
+    public function GetQuizData(RequestData $data)
+    {
+        
+    }
+    
+    public function CreateQuiz(RequestData $data)
+    {
+        
+    }
+    
+    public function DeleteQuiz(RequestData $data)
+    {
+        
+    }
+    
+    public function UpdateQuiz(RequestData $data)
+    {
+        
+    }
+    
+    public function ReorderQuiz(RequestData $data)
+    {
+        
+    }
+    
+    public function CloneQuiz(RequestData $data)
+    {
+        
+    }
+    
+    public function GetQuizList(RequestData $data)
+    {
+        
+    }
+    
+    public function CreateQuestion(RequestData $data)
+    {
+        
+    }
+    
+    public function UpdateQuestion(RequestData $data)
+    {
+        
+    }
+    
+    public function DeleteQuestion(RequestData $data)
+    {
+        
+    }
+    
+    
 
     
 
