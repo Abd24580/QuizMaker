@@ -25,5 +25,7 @@ namespace QM\RequestRouter;
  * @author jtfalkenstein
  */
 class RequestData {
-    //put your code here
+    public $requestMethod;
+    public $action;
+    public $data = array();
 }

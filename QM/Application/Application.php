@@ -23,6 +23,7 @@ use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
 use QM\RequestRouter\RequestData;
+use QM\RequestRouter\RequestDataFactory;
 use QM\RequestRouter\RequestRouter;
 
 /**
@@ -45,9 +46,11 @@ class Application {
     public function Run(){
        $this->logRequest();
        try{
-           // 1. Get request factory
-           // 2. Get the request data from the factory
-           // 3. Get the router
+            // 1. Get request factory
+            $fac = new RequestDataFactory();
+            // // 2. Get the request data from the factory
+            $data = $fac->Package();
+            // 3. Get the router
            $router = new RequestRouter($this);
            // 4. Route based upon the data
            $router->Route($data);
