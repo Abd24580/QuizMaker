@@ -63,7 +63,7 @@ class RequestRouter {
     
     private function routeQuiz(RequestData $data){
         if($data->requestMethod == "GET"){
-            $this->app->GetQuizData($data);
+            $this->app->GetQuiz($data);
             return;
         }
         switch(strtolower($data->action)){
