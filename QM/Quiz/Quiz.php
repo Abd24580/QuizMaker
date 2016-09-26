@@ -35,5 +35,6 @@ class Quiz {
             $id = uniqid('quiz');
         }
         $this->Id = $id;
+        $this->QuestionsArray = array();
     }
 }

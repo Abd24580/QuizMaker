@@ -27,11 +27,13 @@ namespace QM\Quiz;
 class Department {
     public $Id;
     public $Name;
+    public $Quizzes;
     
     public function __construct($id) {
         if(is_null($id)){
             $id = uniqid('dept');
         }
         $this->Id = $id;
-    }
+        $this->Quizzes = array();
+    }   
 }
