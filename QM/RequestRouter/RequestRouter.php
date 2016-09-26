@@ -36,6 +36,84 @@ class RequestRouter {
     }
     
     public function Route(RequestData $data){
+        //If no subject is specified, get the home page.
+        if(is_null($data->subject)){
+            $this->app->GetHomePage($data);
+        }
         
+        switch (strtolower($data->subject)) {
+            case 'quiz':
+                $this->routeQuiz($data);
+                break;
+            case 'quizlist':
+                $this->routeQuizList($data);
+                break;
+            case 'department':
+                $this->routeDepartment($data);
+                break;
+            case 'departmentlist':
+                $this->routeDepartmentList($data);
+                break;
+            case 'question':
+                $this->routeQuestion($data);
+                break;
+        }
+    }
+    
+    
+    private function routeQuiz(RequestData $data){
+        if($data->requestMethod == "GET"){
+            $this->app->GetQuizData($data);
+            return;
+        }
+        switch(strtolower($data->action)){
+            case 'create':
+                $this->app->CreateQuiz($data);
+                break;
+            case 'clone':
+                $this->app->CloneQuiz($data);
+                break;
+            case 'delete':
+                $this->app->DeleteQuiz($data);
+                break;
+            case 'reorder':
+                $this->app->ReorderQuiz($data);
+                break;
+            case 'update':
+                $this->app->UpdateQuiz($data);
+        }
+    }
+    
+    private function routeQuizList(RequestData $data){
+        $this->app->GetQuizList($data);
+    }
+    
+    private function routeDepartment(RequestData $data){
+        switch (strtolower($data)){
+            case 'create':
+                $this->app->CreateDepartment($data);
+                break;
+            case 'delete':
+                $this->app->DeleteDeparment($data);
+                break;
+        }
+    }
+    
+    private function routeDepartmentList(RequestData $data){
+        $this->app->GetDepartmentList($data);
+    }
+    
+    private function routeQuestion(RequestData $data){
+        switch (strtolower($data->action)){
+            case 'create':
+                $this->app->CreateQuestion($data);
+                break;
+            case 'update':
+                $this->app->UpdateQuestion($data);
+                break;
+            case 'delete':
+                $this->app->DeleteQuestion($data);
+                break;
+        }
     }
 }
