@@ -62,7 +62,7 @@ class QuizRepo {
                     $val['IncorrectMessage']);
             $quiz->QuestionsArray[$key] = $q;
         }
-        $this->log->info("Obtaining Quiz ($quiz->Name) from $quizPath.");
+        $this->log->info("Obtained Quiz ($quiz->Name) from $quizPath.");
         return $quiz;
         
     }

@@ -22,6 +22,9 @@ namespace QM\Application;
 use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
+use QM\Quiz\QuestionFactory;
+use QM\Repositories\DeptRepo;
+use QM\Repositories\QuizRepo;
 use QM\RequestRouter\RequestData;
 use QM\RequestRouter\RequestDataFactory;
 use QM\RequestRouter\RequestRouter;
@@ -34,9 +37,19 @@ use QM\RequestRouter\RequestRouter;
 class Application {
     private $log;
     private $configManager;
+    private $departmentsRepo;
+    private $quizRepo;
+    private $questionFactory;
     public function __construct() {
         $this->configManager = new ConfigManager();
         $this->log = new KLoggerWrapper($this->configManager);
+        $this->departmentsRepo = new DeptRepo($this->configManager,$this->log);
+        $this->questionFactory = new QuestionFactory();
+        $this->quizRepo = new QuizRepo(
+                $this->configManager,
+                $this->questionFactory,
+                $this->departmentsRepo,
+                $this->log);
     }
     
     public function Run(){
@@ -77,7 +90,14 @@ class Application {
     
     public function GetQuiz(RequestData $data)
     {
-        
+        $quizId = $data->data['QUIZID'];
+        $departmentId = $data->data['DEPARTMENTID'];
+        $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId, true);
+        if(is_null($quiz)){
+            
+        }
+        header('Content-Type: application/json');
+        echo $quiz;
     }
     
     public function CreateQuiz(RequestData $data)
