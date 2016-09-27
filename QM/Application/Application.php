@@ -102,7 +102,10 @@ class Application {
     
     public function CreateQuiz(RequestData $data)
     {
-        
+        $quiz = new \QM\Quiz\Quiz();
+        $quiz->DepartmentId=$data->data['DEPARTMENTID'];
+        $quiz->Name = $data->data['NAME'];
+        $this->quizRepo->StoreQuiz($quiz);
     }
     
     public function DeleteQuiz(RequestData $data)
@@ -147,10 +150,12 @@ class Application {
     
     public function CreateDepartment(RequestData $data)
     {
-        
+        $dept = new \QM\Quiz\Department();
+        $dept->Name = $data->data['NAME'];
+        $this->departmentsRepo->StoreDepartment($dept);
     }
     
-    public function DeleteDeparment(RequestData $data)
+    public function DeleteDepartment(RequestData $data)
     {
         
     }

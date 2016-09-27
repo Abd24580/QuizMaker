@@ -62,7 +62,7 @@ class RequestRouter {
     
     
     private function routeQuiz(RequestData $data){
-        if($data->requestMethod == "GET"){
+        if($data->requestMethod == "GET" && is_null($data->action)){
             $this->app->GetQuiz($data);
             return;
         }
@@ -84,17 +84,13 @@ class RequestRouter {
         }
     }
     
-    private function routeQuizList(RequestData $data){
-        $this->app->GetQuizList($data);
-    }
-    
     private function routeDepartment(RequestData $data){
-        switch (strtolower($data)){
+        switch (strtolower($data->action)){
             case 'create':
                 $this->app->CreateDepartment($data);
                 break;
             case 'delete':
-                $this->app->DeleteDeparment($data);
+                $this->app->DeleteDepartment($data);
                 break;
             case 'update':
                 $this->app->UpdateDepartment($data);
