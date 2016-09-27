@@ -44,8 +44,8 @@ class DeptRepo {
         $depts = array();
         foreach($json as $key => $val){
             $dep = new Department($key);
-            $dep->Name = $val['Name'];
-            $dep->Quizzes = $val['Quizzes'];
+            $dep->Name = $val->Name;
+            $dep->Quizzes = $val->Quizzes;
             $depts[$key] = $dep;  
         }
         return $depts;

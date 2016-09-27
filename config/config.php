@@ -9,14 +9,14 @@ return array(
         'logLevel' => "DEBUG",
         /*
          * Possible levels, in decreasing priority are:
-         * EMERGENCY;
-         * ALERT;
-         * CRITICAL;
-         * ERROR;
-         * WARNING;
-         * NOTICE;
-         * INFO;
-         * DEBUG;
+         * EMERGENCY
+         * ALERT
+         * CRITICAL
+         * ERROR
+         * WARNING
+         * NOTICE
+         * INFO
+         * DEBUG
          * For more info, see https://github.com/katzgrau/KLogger
          */
         'logFormat' => '[{date}]   [{level}]   {message}',

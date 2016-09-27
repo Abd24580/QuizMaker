@@ -102,8 +102,13 @@ class QuizRepo {
     }
     
     private function getQuizPath($departmentId, $quizId){
+        $pathToQuiz = $this->getQuizFolder($departmentId) . DS . $quizId. ".json";
+        return $pathToQuiz;
+    }
+    
+    private function getQuizFolder($departmentId){
         $dataFolder = $this->config['dataFolder'];
-        $pathToQuiz = $dataFolder . DS . (string)$departmentId . DS . $quizId. ".json";
+        $pathToQuiz = $dataFolder . DS . $departmentId;
         return $pathToQuiz;
     }
     
@@ -111,7 +116,7 @@ class QuizRepo {
         if(!file_exists($filePath)){
             return null;
         }
-        $str = file_get_contents($this->fileLocation);
+        $str = file_get_contents($filePath);
         if($rawJson){
             return $str;
         }
@@ -120,10 +125,11 @@ class QuizRepo {
     
     private function storeToJson(Quiz $quiz){
         $quizPath = $this->getQuizPath($quiz->DepartmentId, $quiz->Id);
+        $quizFolder = $this->getQuizFolder($quiz->DepartmentId);
         $this->log->info("Storing quiz $quiz->Name to $quizPath.");
-        $json = json_encode($object, JSON_PRETTY_PRINT);
-        if(!file_exists($quizPath)){
-            mkdir($quizPath, 0777, true);
+        $json = json_encode($quiz, JSON_PRETTY_PRINT);
+        if(!file_exists($quizFolder)){
+            mkdir($quizFolder, 0777, true);
         }
         file_put_contents($quizPath, $json, LOCK_EX);
     }
