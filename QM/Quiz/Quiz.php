@@ -29,6 +29,7 @@ class Quiz {
     public $Name;
     public $DepartmentId;
     public $QuestionsArray;
+    public $QuestionOrders;
     
     public function __construct($id = null) {
         if(is_null($id)){
@@ -36,5 +37,25 @@ class Quiz {
         }
         $this->Id = $id;
         $this->QuestionsArray = array();
+        $this->QuestionOrders = array();
+    }
+    
+    public function SaveQuestion(Question $question){
+        $position;
+        if(isset($this->QuestionsArray[$question->Id])){
+            $position = array_search($question->Id, $this->QuestionOrders);
+        }else{
+            $max = max(array_keys($this->QuestionOrders));
+            $position = $max === false ? 0 : $max;
+        }
+        
+        $this->QuestionsArray[$question->Id] = $question;
+        $this->QuestionOrders[$position] = $question->Id;
+    }
+    
+    public function DeleteQuestion($id){
+        unset($this->QuestionsArray[$id]);
+        $key = array_search($id, $this->QuestionOrders);
+        unset($this->QuestionOrders[$key]);
     }
 }
