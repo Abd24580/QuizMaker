@@ -23,8 +23,8 @@ use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
 use QM\Quiz\Department;
+use QM\Quiz\Question;
 use QM\Quiz\QuestionFactory;
-use QM\Quiz\QuestionOrder;
 use QM\Quiz\Quiz;
 use QM\Repositories\DeptRepo;
 use QM\Repositories\QuizRepo;
@@ -153,17 +153,38 @@ class Application {
     
     public function CreateQuestion(RequestData $data)
     {
-        
+        $d = $data->data;
+        $q = $this->questionFactory->CreateNew(
+                $d['DEPARTMENTID'],
+                $d['QUIZID'],
+                $d['TEXT'],
+                $d['ANSWERS'],
+                $d['CORRECTINDEX'],
+                $d['INCORRECTMESSAGE']);
+        $this->quizRepo->AddQuestionToQuiz($q);
     }
     
     public function UpdateQuestion(RequestData $data)
     {
-        
+        $d = $data->data;
+        $q = $this->questionFactory->GetPreExisting(
+                $d['QUESTIONID'], 
+                $d['DEPARTMENTID'], 
+                $d['QUIZID'], 
+                $d['QUESTIONTEXT'],
+                $d['ANSWERS'],
+                $d['CORRECTINDEX'], 
+                $d['INCORRECTMESSAGE']);
+        $this->quizRepo->AddQuestionToQuiz($q);
     }
     
     public function DeleteQuestion(RequestData $data)
     {
-        
+        $d = $data->data;
+        $this->quizRepo->DeleteQuestion(
+                $d['DEPARTMENTID'], 
+                $d['QUIZID'],
+                $d['QUESTIONID']);
     }
     
     public function CreateDepartment(RequestData $data)
