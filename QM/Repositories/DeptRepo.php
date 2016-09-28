@@ -71,6 +71,10 @@ class DeptRepo {
     
     public function StoreDepartment(Department $department){
         $depts = $this->GetDepartments();
+        if(isset($depts[$department->Id])){
+            $oldDept = $depts[$department->Id];
+            $department->Quizzes = $oldDept->Quizzes;
+        }
         $depts[$department->Id] = $department;
         $this->storeToJson($depts);
     }

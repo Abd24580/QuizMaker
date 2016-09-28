@@ -194,17 +194,20 @@ class Application {
     
     public function DeleteDepartment(RequestData $data)
     {
-        
+        $id = $data->data['Id'];
+        $this->departmentsRepo->DeleteDepartment($id);
     }
     
     public function UpdateDepartment(RequestData $data)
     {
-        
+        $dept = new Department($data->data['Id']);
+        $dept->Name = $data->data['Name'];
+        $this->departmentsRepo->StoreDepartment($department);
     }
     
     public function GetDepartmentList(RequestData $data)
     {
-        
+        $departments = $this->departmentsRepo->GetDepartments();
     }
     
     
