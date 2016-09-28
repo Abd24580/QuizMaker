@@ -25,7 +25,8 @@ return array(
          * See https://github.com/katzgrau/KLogger for details on configuration.
          */
         
-    )
+    ),
+    'devMode' => true
     
 );
 
