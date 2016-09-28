@@ -93,21 +93,19 @@ class Application {
     
     public function GetQuiz(RequestData $data)
     {
-        $quizId = $data->data['QUIZID'];
-        $departmentId = $data->data['DEPARTMENTID'];
+        $quizId = $data->data['Id'];
+        $departmentId = $data->data['DepartmentId'];
         $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId, true);
         if(is_null($quiz)){
             
         }
-        header('Content-Type: application/json');
-        echo $quiz;
     }
     
     public function CreateQuiz(RequestData $data)
     {
         $quiz = new Quiz();
-        $quiz->DepartmentId=$data->data['DEPARTMENTID'];
-        $quiz->Name = $data->data['NAME'];
+        $quiz->DepartmentId=$data->data['DepartmentId'];
+        $quiz->Name = $data->data['Name'];
         $this->quizRepo->StoreQuiz($quiz);
     }
     
@@ -120,15 +118,15 @@ class Application {
     
     public function UpdateQuiz(RequestData $data)
     {
-        $quiz = new Quiz($data->data['QUIZID']);
-        $quiz->Name = $data->data['NAME'];
-        $quiz->DepartmentId = $data->data['DEPARTMENTID'];
+        $quiz = new Quiz($data->data['Id']);
+        $quiz->Name = $data->data['Name'];
+        $quiz->DepartmentId = $data->data['DepartmentId'];
         $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
     }
     
     public function ReorderQuiz(RequestData $data)
     {
-        $quiz = $this->quizRepo->GetQuiz($data->data['DEPARTMENTID'], $data->data['QUIZID']);
+        $quiz = $this->quizRepo->GetQuiz($data->data['DepartmentId'], $data->data['Id']);
         $order = $data->data['NEWORDER'];
         foreach($order as $i => $id){
             $quiz->QuestionOrders[$i] = $id;
@@ -138,8 +136,8 @@ class Application {
     
     public function CloneQuiz(RequestData $data)
     {
-        $deptId = $data->data['DEPARTMENTID'];
-        $quizId = $data->data['QUIZID'];
+        $deptId = $data->data['DepartmentId'];
+        $quizId = $data->data['Id'];
         $quiz = $this->quizRepo->GetQuiz($deptId, $quizId);
         $newQuiz = new Quiz();
         foreach($quiz as $prop => $val){
@@ -155,12 +153,12 @@ class Application {
     {
         $d = $data->data;
         $q = $this->questionFactory->CreateNew(
-                $d['DEPARTMENTID'],
-                $d['QUIZID'],
-                $d['TEXT'],
-                $d['ANSWERS'],
-                $d['CORRECTINDEX'],
-                $d['INCORRECTMESSAGE']);
+                $d['DepartmentId'],
+                $d['QuizId'],
+                $d['QuestionText'],
+                $d['AnswersArray'],
+                $d['CorrectIndex'],
+                $d['IncorrectMessage']);
         $this->quizRepo->AddQuestionToQuiz($q);
     }
     
@@ -168,13 +166,13 @@ class Application {
     {
         $d = $data->data;
         $q = $this->questionFactory->GetPreExisting(
-                $d['QUESTIONID'], 
-                $d['DEPARTMENTID'], 
-                $d['QUIZID'], 
-                $d['QUESTIONTEXT'],
-                $d['ANSWERS'],
-                $d['CORRECTINDEX'], 
-                $d['INCORRECTMESSAGE']);
+                $d['Id'], 
+                $d['DepartmentId'], 
+                $d['QuizId'], 
+                $d['QuestionText'],
+                $d['AnswersArray'],
+                $d['CorrectIndex'], 
+                $d['IncorrectMessage']);
         $this->quizRepo->AddQuestionToQuiz($q);
     }
     
@@ -182,15 +180,15 @@ class Application {
     {
         $d = $data->data;
         $this->quizRepo->DeleteQuestion(
-                $d['DEPARTMENTID'], 
-                $d['QUIZID'],
-                $d['QUESTIONID']);
+                $d['DepartmentId'], 
+                $d['QuizId'],
+                $d['Id']);
     }
     
     public function CreateDepartment(RequestData $data)
     {
         $dept = new Department();
-        $dept->Name = $data->data['NAME'];
+        $dept->Name = $data->data['Name'];
         $this->departmentsRepo->StoreDepartment($dept);
     }
     
