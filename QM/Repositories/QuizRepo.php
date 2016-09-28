@@ -51,6 +51,7 @@ class QuizRepo {
         $quiz = new Quiz($json['Id']);
         $quiz->DepartmentId = $json['DepartmentId'];
         $quiz->Name = $json['Name'];
+        $quiz->QuestionOrders = $json['QuestionOrders'];
         foreach($json['QuestionsArray'] as $key => $val){
             $q = $this->qFac->GetPreExisting(
                     $val['Id'], 
@@ -60,7 +61,7 @@ class QuizRepo {
                     $val['AnswersArray'],
                     $val['CorrectIndex'],
                     $val['IncorrectMessage']);
-            $quiz->QuestionsArray[$key] = $q;
+            $quiz->SaveQuestion($q);
         }
         $this->log->info("Obtained Quiz ($quiz->Name) from $quizPath.");
         return $quiz;
@@ -68,8 +69,25 @@ class QuizRepo {
     }
     
     public function StoreQuiz(Quiz $quiz){
+        if($this->QuizExists($quiz->DepartmentId, $quiz->Id)){
+            $oldQuiz = $this->GetQuiz($quiz->DepartmentId, $quiz->Id);
+            $quiz->QuestionsArray = $oldQuiz->QuestionsArray;
+            $quiz->QuestionOrders = $oldQuiz;
+        }
         $this->storeToJson($quiz);
         $this->deptsRepo->AddQuizToDepartment($quiz);
+        return $quiz;
+    }
+    
+    private function QuizExists($departmentId, $quizId){
+        $depts = $this->deptsRepo->GetDepartments();
+        $dept = $depts[$departmentId];
+        if(is_null($dept)){
+            return false;
+        }
+        /* @var $dept \QM\Quiz\Department */
+        $quiz = $dept->Quizzes[$quizId];
+        return isset($quiz);
     }
     
     public function DeleteQuiz($departmentId, $quizId){
@@ -82,7 +100,7 @@ class QuizRepo {
     public function AddQuestionToQuiz(Question $question){
         $this->log->info("Adding Question:",(array)$question);
         $quiz = $this->GetQuiz($question->DepartmentId, $question->QuizId);
-        $quiz->QuestionsArray[$question->Id] = $question;
+        $quiz->SaveQuestion($question);
         $this->storeToJson($quiz);
         return $quiz;
     }
@@ -96,7 +114,7 @@ class QuizRepo {
     public function DeleteQuestion($departmentId, $quizId, $questionId){
         $quiz = $this->GetQuiz($departmentId, $quizId);
         $this->log->info("Deleting question: ", (array)$quiz->QuestionsArray[$questionId]);
-        unset($quiz->QuestionsArray[$question->Id]);
+        $quiz->DeleteQuestion($questionId);
         $this->storeToJson($quiz);
         return $quiz;
     }
