@@ -45,9 +45,6 @@ class RequestRouter {
             case 'quiz':
                 $this->routeQuiz($data);
                 break;
-            case 'quizlist':
-                $this->routeQuizList($data);
-                break;
             case 'department':
                 $this->routeDepartment($data);
                 break;
