@@ -22,7 +22,10 @@ namespace QM\Application;
 use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
+use QM\Quiz\Department;
 use QM\Quiz\QuestionFactory;
+use QM\Quiz\QuestionOrder;
+use QM\Quiz\Quiz;
 use QM\Repositories\DeptRepo;
 use QM\Repositories\QuizRepo;
 use QM\RequestRouter\RequestData;
@@ -102,7 +105,7 @@ class Application {
     
     public function CreateQuiz(RequestData $data)
     {
-        $quiz = new \QM\Quiz\Quiz();
+        $quiz = new Quiz();
         $quiz->DepartmentId=$data->data['DEPARTMENTID'];
         $quiz->Name = $data->data['NAME'];
         $this->quizRepo->StoreQuiz($quiz);
@@ -110,27 +113,42 @@ class Application {
     
     public function DeleteQuiz(RequestData $data)
     {
-        
+        $id = $data->data['QUIZID'];
+        $dept = $data->data['DEPARTMENTID'];
+        $this->quizRepo->DeleteQuiz($dept, $id);
     }
     
     public function UpdateQuiz(RequestData $data)
     {
-        
+        $quiz = new Quiz($data->data['QUIZID']);
+        $quiz->Name = $data->data['NAME'];
+        $quiz->DepartmentId = $data->data['DEPARTMENTID'];
+        $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
     }
     
     public function ReorderQuiz(RequestData $data)
     {
-        
+        $quiz = $this->quizRepo->GetQuiz($data->data['DEPARTMENTID'], $data->data['QUIZID']);
+        $order = $data->data['NEWORDER'];
+        foreach($order as $i => $id){
+            $quiz->QuestionOrders[$i] = $id;
+        }
+        $this->quizRepo->StoreQuiz($quiz);
     }
     
     public function CloneQuiz(RequestData $data)
     {
-        
-    }
-    
-    public function GetQuizList(RequestData $data)
-    {
-        
+        $deptId = $data->data['DEPARTMENTID'];
+        $quizId = $data->data['QUIZID'];
+        $quiz = $this->quizRepo->GetQuiz($deptId, $quizId);
+        $newQuiz = new Quiz();
+        foreach($quiz as $prop => $val){
+            if($prop === "Id"){
+                continue;
+            }
+            $newQuiz->$prop = $val;
+        }
+        $this->quizRepo->StoreQuiz($newQuiz);
     }
     
     public function CreateQuestion(RequestData $data)
@@ -150,7 +168,7 @@ class Application {
     
     public function CreateDepartment(RequestData $data)
     {
-        $dept = new \QM\Quiz\Department();
+        $dept = new Department();
         $dept->Name = $data->data['NAME'];
         $this->departmentsRepo->StoreDepartment($dept);
     }
