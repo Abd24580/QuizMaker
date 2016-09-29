@@ -48,8 +48,8 @@ class JsonPackager {
         $this->output($this->toJson('exception', $e));
     }
     
-    public function SendData($data){
-        $this->output($this->toJson("success", $data));
+    public function SendData($data, $status = "success"){
+        $this->output($this->toJson($status, $data));
     }
     
     private function toJson($status, $data){
