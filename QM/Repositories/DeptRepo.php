@@ -77,6 +77,7 @@ class DeptRepo {
         }
         $depts[$department->Id] = $department;
         $this->storeToJson($depts);
+        return $depts;
     }
     
     public function DeleteDepartment($id){
