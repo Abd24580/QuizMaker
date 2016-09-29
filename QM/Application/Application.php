@@ -95,7 +95,7 @@ class Application {
     
     public function GetHomePage(RequestData $data){
         $this->log->info("Requested Home page");
-        
+        include ROOT . DS . 'tmpl' . homepage.php;
     }
     
     
