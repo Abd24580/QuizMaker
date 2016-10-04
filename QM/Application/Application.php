@@ -30,7 +30,7 @@ use QM\Repositories\QuizRepo;
 use QM\RequestRouter\RequestData;
 use QM\RequestRouter\RequestDataFactory;
 use QM\RequestRouter\RequestRouter;
-use Responses\JsonPackager;
+use QM\Responses\JsonPackager;
 
 /**
  * This is the highest level class that controls the operation of this application.
@@ -95,7 +95,9 @@ class Application {
     
     public function GetHomePage(RequestData $data){
         $this->log->info("Requested Home page");
-        include ROOT . DS . 'tmpl' . DS . homepage.php;
+        $departments = $this->departmentsRepo->GetDepartments();
+        
+        include(ROOT . DS . 'tmpl' . DS . 'homepage.php');
     }
     
     
