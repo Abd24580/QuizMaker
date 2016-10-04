@@ -23,6 +23,21 @@
 <html>
     <head>
         <title>QuizMaker</title>
-        <script src="../js/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/additional.css">
+        <script type="text/javascript">
+            var depts = <?php echo json_encode($departments); ?>;
+        </script>
     </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <ul class="dropdown-menu" id="deptsDropDown">
+                
+            </ul>
+        </nav>
+        <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/quizMaker.js" type="text/javascript"></script>
+    </body>
 </html>
