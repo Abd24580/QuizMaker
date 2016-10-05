@@ -20,7 +20,7 @@ $(function(){
     
 });
 
-(function($, win){
+(function($){
     
     function department(params){
         this.Id = params.Id;
@@ -38,19 +38,115 @@ $(function(){
         this.IncorrectMessage = params.IncorrectMessage;
     }    
     
-    function quizMaker(){};
+    function quiz(params){
+        this.Id = params.Id;
+        this.Name = params.Name;
+        this.DepartmentId = params.DepartmentId;
+        this.QuestionOrders = params.QuestionOrders;
+        this.Questions = {};
+        this.parseParamsToQuestions(params);
+    }
     
-    quizMaker.prototype = {
-        refreshDepartments: function(){
-            
-        },
-        
-        getDepartments: function(){
+    quiz.prototype = {
+        parseParamsToQuestions: function(params){
+            var self = this;
+            $.each(params.QuestionsArray, function(p, o){
+                self.Questions[p] = new question(o);
+            });
+        }
+    };
+    
+    function repository(qm){
+        this.qm = qm;
+        function displayLoading(){
             
         }
+        
+        function stopLoading(){
+            
+        }
+        
+        function getDepartments(){
+            var parameters = {
+                data: {
+                    SUBJECT: 'departmentlist'
+                },
+                callback: function(data){
+                    for(var d in data.data){
+                        this.departments[d] = new department(data);
+                    }
+                }
+            };
+            
+            
+            getData(parameters);
+        }
+        
+        function getData(parameters){
+            displayLoading();
+            sendAjaxRequest(
+                parameters.data, 
+                'GET', 
+                parameters.callback,
+                this.qm
+            );
+        }
+        
+        function sendAjaxRequest(data, method, callback, context){
+            $.ajax({
+                data: data,
+                dataType: 'json',
+                method: method,
+                url: 'index.php',
+                context: context
+            }).done(callback);
+        }
+        
+        return {
+            stopLoading: stopLoading,
+            getDepartments: getDepartments
+        };
     }
     
     
-    win.qm = new quizMaker();
     
-})(jquery, window);
+    function quizMaker(){
+        this._repository = new repository(this);
+        this._departments = {};
+        this.stopLoading = this._repository.stopLoading;
+        this._bindings = {};
+    };
+    
+    quizMaker.prototype = {
+        get departments(){
+            return this._departments;
+        },
+        set departments(x){
+            this._departments = x;
+        },
+        
+        setBinding: function(propertyName, func){
+            if(!this.bindings[propertyName])
+                this.bindings[propertyName] = [];
+            this._bindings[propertyName].push(func);
+        },
+        
+        updateBindings: function(propertyName){
+            var bindings = this._bindings[propertyName];
+            if(!bindings) return;
+            for(var f in bindings){
+                bindings[f](this[propertyName]);
+            }
+        },
+        
+        
+        
+        refreshDepartments: function(){
+            this._repository.getDepartments();
+        },
+    }
+    
+    
+    qm = new quizMaker();
+    
+})(jQuery);
