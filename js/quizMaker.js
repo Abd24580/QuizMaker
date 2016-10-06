@@ -18,25 +18,25 @@
 
 $(function(){
     qm.bind('departments').to(function(depts){
-                    var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
-                    deptsDropDown.find('li').not('[data-keep]').remove();
-                    for(var d in depts){
-                        var li = $('<li></li>');
-                        var a = $('<a href=#>' + depts[d].Name + '</a>');
-                        a.data('Id', depts[d].Id);
-                        a.data('Name', depts[d].Name);
-                        a.click(function(){
-                            var jq = $(this);
-                            qm.currentDepartment = qm.departments[jq.data('Id')];
-                        });
-                        li.append(a);    
-                        deptsDropDown.prepend(li);
-                    }
-                });
+        var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
+        deptsDropDown.find('li').not('[data-keep]').remove();
+        for(var d in depts){
+            var li = $('<li></li>');
+            var a = $('<a href=#>' + depts[d].Name + '</a>');
+            a.data('Id', depts[d].Id);
+            a.data('Name', depts[d].Name);
+            a.click(function(){
+                var jq = $(this);
+                qm.currentDepartment = qm.departments[jq.data('Id')];
+            });
+            li.append(a);    
+            deptsDropDown.prepend(li);
+        }
+    });
                 
-                qm.bind('currentDepartment').to(function (dept){
-                    $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
-                });
+    qm.bind('currentDepartment').to(function (dept){
+        $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
+    });
 });
 
 (function($){
