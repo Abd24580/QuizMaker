@@ -131,38 +131,72 @@ $(function(){
         };
     }
     
-    
+    function dataBinder(qm){
+        this.qm = qm;
+        this.bindings = {};
+        var self = this;
+        function bind(prop){
+            return {
+                to: function(binding){
+                    if(!self.bindings[prop])
+                        self.bindings[prop] = [];
+                    self.bindings[prop].push(binding);
+                }
+            };
+        }
+        
+        function update(prop){
+            var bindings = self.bindings[prop];
+            if(!bindings) return;
+            for(var f in bindings){
+                bindings[f](self.qm.prop(prop));
+            }
+        }
+        
+        return {
+            bind: bind,
+            update: update
+        };
+    }
     
     function quizMaker(){
         this._repository = new repository(this);
-        this._departments = {};
+        this._dataBinder = new dataBinder(this);
         this.stopLoading = this._repository.stopLoading;
-        this._bindings = {};
     };
     
     quizMaker.prototype = {
+        //Getters and setters
+        
         get departments(){
-            return this._departments;
+            return this.prop('departments');
         },
         set departments(x){
-            this._departments = x;
-            this.updateBindings('departments');
+            this.prop('departments',x);
         },
         
-        
-        
-        setBinding: function(propertyName, func){
-            if(!this._bindings[propertyName])
-                this._bindings[propertyName] = [];
-            this._bindings[propertyName].push(func);
+        get currentDepartment(){
+            return this.prop('currentDepartment');
         },
+        set currentDepartment(x){
+            this.prop('currentDepartment',x);
+        },
+        
+        prop:function(propName, value){
+            if(!value){
+                return this['__'+ propName];
+            }
+            this['__'+propName] = value;
+            this.updateBindings(propName);
+        },
+        
+        bind: function (propertyName){
+            return this._dataBinder.bind(propertyName);
+        },
+        
         
         updateBindings: function(propertyName){
-            var bindings = this._bindings[propertyName];
-            if(!bindings) return;
-            for(var f in bindings){
-                bindings[f](this[propertyName]);
-            }
+            this._dataBinder.update(propertyName);
         },
         
         
