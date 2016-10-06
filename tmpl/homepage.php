@@ -32,10 +32,18 @@
         <script type="text/javascript">
             $(function(){
                 qm.setBinding('departments', function(depts){
-                    var deptsDropDown = $('#deptsDropDown');
-                    deptsDropDown.html('');
+                    var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
+                    deptsDropDown.find('li').not('[data-keep]').remove();
                     for(var d in depts){
-                        deptsDropDown.append('<li><a href=# id=' + depts[d].Id + '>' + depts[d].Name + '</a></li>');
+                        var li = $('<li></li>');
+                        var a = $('<a href=# id=' + depts[d].Id + '>' + depts[d].Name + '</a>');
+                        a.data('Id', depts[d].Id);
+                        a.data('Name', depts[d].Name);
+                        a.click(function(){
+                            var jq = $(this);
+                        });
+                        li.append(a);    
+                        deptsDropDown.prepend(li);
                     }
                 });
             
@@ -47,12 +55,29 @@
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu" id="deptsDropDown">
-
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                <span class="navbar-brand">QuizMaker</span>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Select Department 
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" id="deptsDropDown">
+                                <li data-keep role="separator" class="divider"></li>
+                                <li data-keep><a href="#" id="createDepartment">Create new department</a></li>
+                            </ul>
+                        </li>
+                        <li><p class="navbar-text">No department currently selected.</p></li>
                     </ul>
-                </li>
+                </div>
             </div>
             
         </nav>
