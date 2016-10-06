@@ -66,20 +66,31 @@ $(function(){
             
         }
         
+        function applyDepartments(data){
+            for(var d in data.data){
+                this.departments[d] = new department(data.data[d]);
+                this.stopLoading();
+            }
+        }
+        
         function getDepartments(){
             var parameters = {
                 data: {
                     SUBJECT: 'departmentlist'
                 },
-                callback: function(data){
-                    for(var d in data.data){
-                        this.departments[d] = new department(data);
-                    }
-                }
+                callback: applyDepartments
             };
-            
-            
             getData(parameters);
+        }
+        
+        function storeDepartment(department){
+            var parameters = {
+                data: department,
+                callback: applyDepartments
+            };
+            parameters.data['SUBJECT'] = 'department';
+            parameters.data['ACTION'] = (department.Id) ? 'update' : 'create';
+            postData(parameters);
         }
         
         function getData(parameters){
@@ -87,6 +98,16 @@ $(function(){
             sendAjaxRequest(
                 parameters.data, 
                 'GET', 
+                parameters.callback,
+                this.qm
+            );
+        }
+        
+        function postData(parameters){
+            displayLoading();
+            sendAjaxRequest(
+                parameters.data,
+                'POST',
                 parameters.callback,
                 this.qm
             );
@@ -104,7 +125,8 @@ $(function(){
         
         return {
             stopLoading: stopLoading,
-            getDepartments: getDepartments
+            getDepartments: getDepartments,
+            storeDepartment: storeDepartment
         };
     }
     
@@ -123,11 +145,14 @@ $(function(){
         },
         set departments(x){
             this._departments = x;
+            this.updateBindings('departments');
         },
         
+        
+        
         setBinding: function(propertyName, func){
-            if(!this.bindings[propertyName])
-                this.bindings[propertyName] = [];
+            if(!this._bindings[propertyName])
+                this._bindings[propertyName] = [];
             this._bindings[propertyName].push(func);
         },
         
@@ -144,7 +169,13 @@ $(function(){
         refreshDepartments: function(){
             this._repository.getDepartments();
         },
-    }
+        createDepartment: function(name){
+            var dept = new department({Name: name});
+            this._repository.storeDepartment(dept);
+        }
+        
+        
+    };
     
     
     qm = new quizMaker();
