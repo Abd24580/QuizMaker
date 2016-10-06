@@ -36,17 +36,22 @@
                     deptsDropDown.find('li').not('[data-keep]').remove();
                     for(var d in depts){
                         var li = $('<li></li>');
-                        var a = $('<a href=# id=' + depts[d].Id + '>' + depts[d].Name + '</a>');
+                        var a = $('<a href=#>' + depts[d].Name + '</a>');
                         a.data('Id', depts[d].Id);
                         a.data('Name', depts[d].Name);
                         a.click(function(){
                             var jq = $(this);
+                            qm.currentDepartment = qm.departments[jq.data('Id')];
                         });
                         li.append(a);    
                         deptsDropDown.prepend(li);
                     }
                 });
-            
+                
+                qm.setBinding('currentDepartment', function (dept){
+                    $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
+                });
+                
                 qm.departments = <?php echo json_encode($departments); ?>;
             });
             
@@ -56,7 +61,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -66,7 +71,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                                 Select Department 
                                 <span class="caret"></span>
                             </a>
@@ -75,7 +80,7 @@
                                 <li data-keep><a href="#" id="createDepartment">Create new department</a></li>
                             </ul>
                         </li>
-                        <li><p class="navbar-text">No department currently selected.</p></li>
+                        <li><p class="navbar-text" id="currentDepartment">No department currently selected.</p></li>
                     </ul>
                 </div>
             </div>
