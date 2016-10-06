@@ -31,7 +31,7 @@
         <script src="../js/quizMaker.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(function(){
-                qm.setBinding('departments', function(depts){
+                qm.bind('departments').to(function(depts){
                     var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
                     deptsDropDown.find('li').not('[data-keep]').remove();
                     for(var d in depts){
@@ -48,7 +48,7 @@
                     }
                 });
                 
-                qm.setBinding('currentDepartment', function (dept){
+                qm.bind('currentDepartment').to(function (dept){
                     $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
                 });
                 
