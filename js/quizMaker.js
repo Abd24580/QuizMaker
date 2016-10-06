@@ -70,6 +70,7 @@ $(function(){
             for(var d in data.data){
                 this.departments[d] = new department(data.data[d]);
                 this.stopLoading();
+                this.updateBindings('departments');
             }
         }
         

@@ -26,18 +26,35 @@
         <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" type="text/css" href="../css/additional.css">
+        <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/quizMaker.js" type="text/javascript"></script>
         <script type="text/javascript">
-            var depts = <?php echo json_encode($departments); ?>;
+            $(function(){
+                qm.setBinding('departments', function(depts){
+                    var deptsDropDown = $('#deptsDropDown');
+                    deptsDropDown.html('');
+                    for(var d in depts){
+                        deptsDropDown.append('<li><a href=# id=' + depts[d].Id + '>' + depts[d].Name + '</a></li>');
+                    }
+                });
+            
+                qm.departments = <?php echo json_encode($departments); ?>;
+            });
+            
         </script>
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
-            <ul class="dropdown-menu" id="deptsDropDown">
-                
-            </ul>
+            <div class="container-fluid">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="deptsDropDown">
+
+                    </ul>
+                </li>
+            </div>
+            
         </nav>
-        <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-        <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
-        <script src="../js/quizMaker.js" type="text/javascript"></script>
     </body>
 </html>
