@@ -36,6 +36,40 @@ $(function(){
     
     
     
+    function deptEditor(department){
+        this.model = department;
+        this.template = Handlebars.compile($('#deptEditor-template').html());
+        
+        this.dom = this.getDom();
+        this.dom.find('.saveButton').click(this.dom,function(e){
+            
+        });
+        
+    }
+    
+    deptEditor.prototype = mainCanvas();
+    
+    function mainCanvas(){
+        function getDom(){
+            var html = this.template(this.model);
+            return $(html);
+        }
+        
+        function render(){
+            $('#mainCanvas').html('').append(this.dom);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -69,6 +103,13 @@ $(function(){
                 qm.getQuiz(jq.data('Id'));
             });
         }
+    });
+    
+    
+    $('#createDepartment').click(function(){
+        var de = new deptEditor();
+        var editor = de.render();
+        
     });
     
     
