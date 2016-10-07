@@ -10,10 +10,6 @@ hr {
     width: 720px;
 }
 
-
-.test {
-  padding : 20px;
-}
 .currentQuestion{
   font-size: 18px;
   font-weight: bold;
@@ -55,13 +51,13 @@ color:green;
     cursor:default;
 }
 
-.container {
+/*.container {
   width:780px;
   margin: 0 auto;
   margin-top:25px;
   border-radius: 10px;
   background-color: #ffffff;
-}
+}*/
 
 .btn-primary {
     color: #fff;
@@ -93,4 +89,13 @@ color:green;
 #btnNext {
   width:90px;
   margin-right:10px;
+}
+
+#mainCanvas{
+    margin-top: 90px;
+}
+#mainCanvas div{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
 }
