@@ -90,10 +90,7 @@
         </nav>
         
         <div class="container">
-            
-            <!-- sidebar -->
-            <div class="col-sm-2 col-xs-3" id="sidebar"></div>
-            <div class="col-sm-10 col-xs-7" id="mainCanvas"></div>
+            <div class="col-sm-6 col-sm-offset-3" id="mainCanvas"></div>
         </div>
         
     </body>
