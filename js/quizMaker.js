@@ -15,8 +15,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 $(function(){
+    
+    Handlebars.registerPartial('question-patial', $('#question-partial').html());
+    Handlebars.registerHelper("listAnswers", function(question, options){
+        var answersArray = question.AnswersArray;
+        var lis = [];
+        for(var a in answersArray){
+            if(a === question.CorrectIndex){
+                lis.push(options.fn('<strong>' + answersArray[a] + '</strong>'));
+                continue;
+            }
+            lis.push(options.fn(answersArray[a]));
+        }
+        return lis.join(' ');
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     qm.bind('departments').to(function(depts){
         var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
         deptsDropDown.find('li').not('[data-keep]').remove();
@@ -36,11 +60,25 @@ $(function(){
                 
     qm.bind('currentDepartment').to(function (dept){
         $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
+        for(var q in dept.Quizzes){
+            var li = $('<li></li>');
+            var a = $('<a href=#>' + dept.Quizzes[q] + '</a>');
+            a.data('Id', q);
+            a.click(function(){
+                var jq = $(this);
+                qm.getQuiz(jq.data('Id'));
+            });
+        }
+    });
+    
+    
+    qm.bind('currentQuiz').to(function(quiz){
+        
     });
 });
 
 (function($){
-    
+    //Central data objects
     function department(params){
         this.Id = params.Id;
         this.Name = params.Name;
@@ -72,8 +110,23 @@ $(function(){
             $.each(params.QuestionsArray, function(p, o){
                 self.Questions[p] = new question(o);
             });
+        },
+        addQuestion: function(question){
+            this.Questions[question.Id] = question;
+        },
+        deleteQuestion: function(id){
+            delete this.Questions[id];
         }
+        
     };
+    
+    function quizCanvas(quiz){
+        this.quiz = quiz;
+        
+        
+    }
+    
+    
     
     function repository(qm){
         this.qm = qm;
@@ -193,13 +246,22 @@ $(function(){
         set departments(x){
             this.prop('departments',x);
         },
-        
         get currentDepartment(){
             return this.prop('currentDepartment');
         },
         set currentDepartment(x){
             this.prop('currentDepartment',x);
         },
+        get currentQuiz(){
+            return this.prop('currentQuiz');
+        },
+        set currentQuiz(x){
+            this.prop('currentQuiz', x);
+        },
+        
+        
+        
+        
         
         prop:function(propName, value){
             if(!value){
@@ -208,6 +270,11 @@ $(function(){
             this['__'+propName] = value;
             this.updateBindings(propName);
         },
+        
+        
+        
+        
+        
         
         bind: function (propertyName){
             return this._dataBinder.bind(propertyName);
@@ -220,13 +287,44 @@ $(function(){
         
         
         
+        
+        
+        
+        
+        
+        
+        
         refreshDepartments: function(){
             this._repository.getDepartments();
         },
         createDepartment: function(name){
             var dept = new department({Name: name});
             this._repository.storeDepartment(dept);
+        },
+        updateDepartment: function(department){
+            
+        },
+        deleteDepartment: function(id){
+            
+        },
+        
+        
+        getQuiz: function(id){
+            
+        },
+        createQuiz: function(parameters){
+            
+        },
+        updateQuiz: function(quiz){
+            
+        },
+        deleteQuiz: function(id){
+            
+        },
+        reorderQuiz:function(order){
+            
         }
+        
         
         
     };
