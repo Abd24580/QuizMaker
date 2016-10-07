@@ -30,6 +30,7 @@
             <input type="text" name="Name" value="{{Name}}">
         </label>
     </div>
+    <input type="hidden" name="Id" value="{{Id}}">
     <button class="saveButton btn btn-primary">Save</button>
     <button class="deleteButton btn btn-danger">Delete</button>
 </div>

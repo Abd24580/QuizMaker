@@ -42,23 +42,34 @@ $(function(){
         
         this.dom = this.getDom();
         this.dom.find('.saveButton').click(this.dom,function(e){
-            
+            var dom = e.data;
+            var val = dom.find('input[name="Name"]').val();
+            qm.createDepartment(val);
+            qm.refreshDepartments();
+            dom.hide(500);
+        });
+        this.dom.find('deleteButton').click(this.dom, function(e){
+            var dom = e.data;
+            var val = dom.find('input[name="Id"]').val();
+            qm.deleteDepartment(val);
+            qm.refreshDepartments();
+            dom.hide(500);
         });
         
     }
     
-    deptEditor.prototype = mainCanvas();
+    deptEditor.prototype = mainCanvas;
     
-    function mainCanvas(){
-        function getDom(){
+    var mainCanvas = {
+        getDom: function(){
             var html = this.template(this.model);
             return $(html);
-        }
+        },
         
-        function render(){
+        render: function(){
             $('#mainCanvas').html('').append(this.dom);
         }
-    }
+    };
     
     
     
@@ -109,7 +120,6 @@ $(function(){
     $('#createDepartment').click(function(){
         var de = new deptEditor();
         var editor = de.render();
-        
     });
     
     
