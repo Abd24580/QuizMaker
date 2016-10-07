@@ -15,32 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(function(){
-    
-    Handlebars.registerPartial('question-patial', $('#question-partial').html());
-    Handlebars.registerHelper("listAnswers", function(question, options){
-        var answersArray = question.AnswersArray;
-        var lis = [];
-        for(var a in answersArray){
-            if(a === question.CorrectIndex){
-                lis.push(options.fn('<strong>' + answersArray[a] + '</strong>'));
-                continue;
-            }
-            lis.push(options.fn(answersArray[a]));
-        }
-        return lis.join(' ');
-    });
-    
-    
-    
-    
-    
+
+
+(function($){
     
     function deptEditor(department){
         this.model = department;
         this.template = Handlebars.compile($('#deptEditor-template').html());
         
-        this.dom = this.getDom();
+        this.dom = this.prototype.getDom();
         this.dom.find('.saveButton').click(this.dom,function(e){
             var dom = e.data;
             var val = dom.find('input[name="Name"]').val();
@@ -78,57 +61,6 @@ $(function(){
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    qm.bind('departments').to(function(depts){
-        var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
-        deptsDropDown.find('li').not('[data-keep]').remove();
-        for(var d in depts){
-            var li = $('<li></li>');
-            var a = $('<a href=#>' + depts[d].Name + '</a>');
-            a.data('Id', depts[d].Id);
-            a.data('Name', depts[d].Name);
-            a.click(function(){
-                var jq = $(this);
-                qm.currentDepartment = qm.departments[jq.data('Id')];
-            });
-            li.append(a);    
-            deptsDropDown.prepend(li);
-        }
-    });
-                
-    qm.bind('currentDepartment').to(function (dept){
-        $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
-        for(var q in dept.Quizzes){
-            var li = $('<li></li>');
-            var a = $('<a href=#>' + dept.Quizzes[q] + '</a>');
-            a.data('Id', q);
-            a.click(function(){
-                var jq = $(this);
-                qm.getQuiz(jq.data('Id'));
-            });
-        }
-    });
-    
-    
-    $('#createDepartment').click(function(){
-        var de = new deptEditor();
-        var editor = de.render();
-    });
-    
-    
-    qm.bind('currentQuiz').to(function(quiz){
-        
-    });
-});
-
-(function($){
     //Central data objects
     function department(params){
         this.Id = params.Id;
@@ -383,4 +315,65 @@ $(function(){
     
     qm = new quizMaker();
     
+    
+    
+    $(function(){
+    
+        Handlebars.registerPartial('question-patial', $('#question-partial').html());
+        Handlebars.registerHelper("listAnswers", function(question, options){
+            var answersArray = question.AnswersArray;
+            var lis = [];
+            for(var a in answersArray){
+                if(a === question.CorrectIndex){
+                    lis.push(options.fn('<strong>' + answersArray[a] + '</strong>'));
+                    continue;
+                }
+                lis.push(options.fn(answersArray[a]));
+            }
+            return lis.join(' ');
+        });
+
+        qm.bind('departments').to(function(depts){
+            var deptsDropDown = $('#deptsDropDown').not('#createDepartment');
+            deptsDropDown.find('li').not('[data-keep]').remove();
+            for(var d in depts){
+                var li = $('<li></li>');
+                var a = $('<a href=#>' + depts[d].Name + '</a>');
+                a.data('Id', depts[d].Id);
+                a.data('Name', depts[d].Name);
+                a.click(function(){
+                    var jq = $(this);
+                    qm.currentDepartment = qm.departments[jq.data('Id')];
+                });
+                li.append(a);    
+                deptsDropDown.prepend(li);
+            }
+        });
+
+        qm.bind('currentDepartment').to(function (dept){
+            $('#currentDepartment').html('Current Department: <strong>' + dept.Name + '</strong>.');
+            for(var q in dept.Quizzes){
+                var li = $('<li></li>');
+                var a = $('<a href=#>' + dept.Quizzes[q] + '</a>');
+                a.data('Id', q);
+                a.click(function(){
+                    var jq = $(this);
+                    qm.getQuiz(jq.data('Id'));
+                });
+            }
+        });
+
+
+        $('#createDepartment').click(function(){
+            var de = new deptEditor();
+            var editor = de.render();
+        });
+
+
+        qm.bind('currentQuiz').to(function(quiz){
+
+        });
+    });
+    
+
 })(jQuery);
