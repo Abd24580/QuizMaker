@@ -18,7 +18,7 @@
  */
 ?>
 
-<div class="deptEditor container">
+<div class="deptEditor">
     {{#if Id}}
     <h2>Edit department</h2>
     {{else}}
@@ -31,6 +31,8 @@
         </label>
     </div>
     <input type="hidden" name="Id" value="{{Id}}">
-    <button class="saveButton btn btn-primary">Save</button>
-    <button class="deleteButton btn btn-danger">Delete</button>
+    <div class="btn-group">
+        <button class="saveButton btn btn-primary">Save</button>
+        {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
+    </div>
 </div>
