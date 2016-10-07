@@ -28,6 +28,20 @@
         <link rel="stylesheet" type="text/css" href="../css/additional.css">
         <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+        <script src="../bower_components/handlebars/handlebars.min.js" type="text/javascript"></script>
+        <script id="quiz-template" type="text/x-handlers-template">
+            <?php include 'quiz.hb.php';?>
+        </script>
+        <script id="question-partial" type="text/x-handlers-template">
+            <?php include 'question.hb.php';?>
+        </script>
+        <script id="deptEditor-template" type="text/x-handlers-template">
+            <?php include 'deptEditor.hb.php';?>
+        </script>
+        
+        
+        
+        
         <script src="../js/quizMaker.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(function(){
@@ -40,14 +54,14 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsingMenu">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
                 <span class="navbar-brand">QuizMaker</span>
                 </div>
-                <div class="collapse navbar-collapse">
+                <div class="collapse navbar-collapse" id="collapsingMenu">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
@@ -60,10 +74,27 @@
                             </ul>
                         </li>
                         <li><p class="navbar-text" id="currentDepartment">No department currently selected.</p></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                                Select Quiz
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" id="quizDropDown">
+                                <li data-keep role="separator" class="divider"></li>
+                                <li data-keep><a href="#" id="createDepartment">Create new quiz</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
-            
         </nav>
+        
+        <div class="container">
+            
+            <!-- sidebar -->
+            <div class="col-sm-2 col-xs-3" id="sidebar"></div>
+            <div class="col-sm-10 col-xs-7" id="mainCanvas"></div>
+        </div>
+        
     </body>
 </html>
