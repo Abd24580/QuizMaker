@@ -22,37 +22,71 @@
     function deptEditor(department){
         this.model = department;
         this.template = Handlebars.compile($('#deptEditor-template').html());
-        
-        this.dom = this.prototype.getDom();
-        this.dom.find('.saveButton').click(this.dom,function(e){
-            var dom = e.data;
-            var val = dom.find('input[name="Name"]').val();
+        this.saveButton.click(this.data,function(e){
+            var val = e.data['name'];
             qm.createDepartment(val);
             qm.refreshDepartments();
             dom.hide(500);
         });
-        this.dom.find('deleteButton').click(this.dom, function(e){
-            var dom = e.data;
-            var val = dom.find('input[name="Id"]').val();
+        this.deleteButton.click(this.data, function(e){
+            var val = e.data['Id'];
             qm.deleteDepartment(val);
             qm.refreshDepartments();
             dom.hide(500);
         });
+    }
+    
+    function quizCreator(quiz){
+        this.model = quiz;
+        this.template = Handlebars.compile($('#quizCreator-template').html());
+        
+        this.dom = this.getDom();
         
     }
     
-    deptEditor.prototype = mainCanvas;
+    
     
     var mainCanvas = {
-        getDom: function(){
-            var html = this.template(this.model);
-            return $(html);
+        get model(){
+            return this._model;
         },
-        
+        set model(x){
+            this._model = x;
+        },
+        get template(){
+            return this._template;
+        },
+        set template(x){
+            this._template = x;
+        },
+        get dom(){
+            if(!this._dom){
+                var html = this.template(this.model);
+                this._dom = $(html);
+            }
+            return this._dom;
+        },
+        get saveButton(){
+            return this.dom.find('.saveButton');
+        },
+        get deleteButton(){
+            return this.dom.find('.deleteButton');
+        },
+        get data(){
+            var data = {};
+            var inputs = this.dom.find('input, textarea, select');
+            inputs.each(function(i, el){
+                data[el.name] = $(el).val();
+            });
+        },
         render: function(){
             $('#mainCanvas').html('').append(this.dom);
-        }
+        },
     };
+    
+    deptEditor.prototype = mainCanvas;
+    quizCreator.prototype = mainCanvas;
+    
     
     
     
@@ -103,11 +137,7 @@
         
     };
     
-    function quizCanvas(quiz){
-        this.quiz = quiz;
-        
-        
-    }
+
     
     
     
