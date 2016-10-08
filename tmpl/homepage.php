@@ -38,56 +38,18 @@
         <script id="deptEditor-template" type="text/x-handlers-template">
             <?php include 'deptEditor.hb.php';?>
         </script>
+        <script id="navBar-template" type="text/x-handlebars-template">
+            <?php include 'navbar.hb.php'; ?>
+        </script>
+        <script data-main="../js/app" src="../js/require.js"></script>
         
         
-        
-        
-        <script src="../js/quizMaker.js" type="text/javascript"></script>
         <script type="text/javascript">
-            $(function(){
-                qm.departments = <?php echo json_encode($departments); ?>;
-            });
             
         </script>
     </head>
     <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsingMenu">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                <span class="navbar-brand">QuizMaker</span>
-                </div>
-                <div class="collapse navbar-collapse" id="collapsingMenu">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                                Select Department 
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" id="deptsDropDown">
-                                <li data-keep role="separator" class="divider"></li>
-                                <li data-keep><a href="#" id="createDepartment">Create new department</a></li>
-                            </ul>
-                        </li>
-                        <li><p class="navbar-text" id="currentDepartment">No department currently selected.</p></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                                Select Quiz
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" id="quizDropDown">
-                                <li data-keep role="separator" class="divider"></li>
-                                <li data-keep><a href="#" id="createDepartment">Create new quiz</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <div id="navBarContainer"></div>
         
         <div class="container">
             <div class="col-sm-6 col-sm-offset-3" id="mainCanvas"></div>

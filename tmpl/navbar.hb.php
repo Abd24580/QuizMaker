@@ -32,15 +32,15 @@
                 <li class="dropdown" id="deptDropDown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                         {{#if currentDepartment}}
-                            Select Department                            
+                            <strong>{{currentDepartment.Name}}</strong>                            
                         {{else}}
-                        <strong>{{currentDepartment.Name}}</strong>
+                            Select Department
                         {{/if}}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" id="deptsDropDown">
                         {{#each departments}}
-                            <li><a href="#" data-department data-Id="{{Id}}" data-Name="{{Name}}">{{Name}}</a></li>
+                            <li><a href="#" data-department data-id="{{Id}}" data-name="{{Name}}">{{Name}}</a></li>
                         {{/each}}
                         <li role="separator" class="divider"></li>
                         <li><a href="#" id="createDepartment">Create New Department</a></li>
@@ -53,7 +53,7 @@
                             <strong>{{currentQuiz.Name}}</strong>
                             {{else}}
                             Select Quiz
-                            {{#/if}}
+                            {{/if}}
                         {{else}}
                         Select department first
                         {{/if}}
@@ -61,14 +61,14 @@
                     </a>
                     <ul class="dropdown-menu" id="quizDropDown">
                         {{#each currentDepartment.Quizzes}}
-                        <li><a href="#" data-quiz data-Id="{{@key}}" data-Name="{{this}}">{{this}}</a></li>
+                        <li><a href="#" data-quiz data-id="{{@key}}" data-name="{{this}}">{{this}}</a></li>
                         {{/each}}
                         <li role="separator" class="divider"></li>
                         <li><a href="#" id="createQuiz">Create new quiz</a></li>
                     </ul>
                 </li>
                 {{#if currentDepartment}}
-                <li><a href="link" id="editDept">Edit Department</a></li>
+                <li><a href="#" id="editDept">Edit Department</a></li>
                 {{/if}}
             </ul>
         </div>

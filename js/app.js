@@ -1,7 +1,5 @@
-<?php
-
 /* 
- * Copyright (C) 2016 Jon
+ * Copyright (C) 2016 jtfalkenstein
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-?>
 
-<div class="deptEditor">
-    {{#if Id}}
-    <h2>Edit department</h2>
-    {{else}}
-    <h2>Create department</h2>
-    {{/if}}
-    <div class="form-group">
-        <label for="newDeptName">Department Name:</label>
-        <input type="text" id="newDeptName" name="Name" value="{{Name}}">
-    </div>
-    <input type="hidden" name="Id" value="{{Id}}">
-    <button class="saveButton btn btn-primary">Save</button>
-    {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
-</div>
+
+requirejs.config({
+    baseUrl: 'js'
+});
+
+
+requirejs(['quizMaker', 'templating'], function(qm, templating){
+    
+    templating.initialize(qm);
+
+});

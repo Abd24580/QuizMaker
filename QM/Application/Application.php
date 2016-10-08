@@ -225,7 +225,7 @@ class Application {
     {
         $dept = new Department($data->data['Id']);
         $dept->Name = $data->data['Name'];
-        $depts = $this->departmentsRepo->StoreDepartment($department);
+        $depts = $this->departmentsRepo->StoreDepartment($dept);
         $this->jsonPackager->SendData($depts);
     }
     
