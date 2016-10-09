@@ -17,7 +17,7 @@
 
 
 
-define(function(){
+define(['underscore'],function(_){
     
    
     
@@ -65,10 +65,15 @@ define(function(){
             return {
                 to: function(binding){
                     if(!self.bindings[propertyName])
-                        self.bindings[propertyName] = [];
-                    self.bindings[propertyName].push(binding);
+                        self.bindings[propertyName] = {};
+                    var id = _.uniqueId(propertyName);
+                    self.bindings[propertyName][id] = binding;
+                    return id;
                 }
             };
+        },
+        unbind: function(propertyName, id){
+            delete this.bindings[propertyName][id];
         },
         updateBindings: function(propertyName){
             if(!this.bindings) return;
