@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['repository', 'dataObjects', 'quizMaker'],function(repository, dos, qm){
+define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],function(repository, dos, qm, _, hb){
     
-    var deptEditorTemplate = Handlebars.compile($('#deptEditor-template').html());
+    var deptEditorTemplate = hb.compile($('#deptEditor-template').html());
     //var quizCreatorTemplate = Handlebars.compile($('#quizCreator-template').html());
-    var navBarTemplate = Handlebars.compile($('#navBar-template').html());
+    var navBarTemplate = hb.compile($('#navBar-template').html());
 
     
     function deptEditor(department){
@@ -27,12 +27,17 @@ define(['repository', 'dataObjects', 'quizMaker'],function(repository, dos, qm){
         this.template = deptEditorTemplate;
         this.saveButton.click(this,function(e){
             var dept = new dos.department(e.data.data);
+            var id = qm.bind('departments').to(function(depts){
+                var d = _.findWhere(depts, {Name: dept.Name});
+                if(!!d) qm.currentDepartment = d;
+                qm.unbind('departments', id);
+            });
             repository.storeDepartment(dept);
             e.data.hide();
         });
         this.deleteButton.click(this, function(e){
             var val = e.data.data['Id'];
-            qm.deleteDepartment(val);
+            repository.deleteDepartment(val);
             e.data.hide();
         });
         //TODO: add cancel button
@@ -98,30 +103,32 @@ define(['repository', 'dataObjects', 'quizMaker'],function(repository, dos, qm){
     
     var navProto = {
         render: function(){
-            $('#navBarContainer').html('').append(this.dom);
-            $('[data-department]').click(this,function(e){
+            delete this._dom;
+            this.dom.find('[data-department]').click(this,function(e){
                 var jq = $(this);
                 qm.currentDepartment = qm.departments[jq.data('id')];
-                e.data.render();
             });
-            $('[data-quiz]').click(function(){
+            this.dom.find('[data-quiz]').click(function(){
                 var jq = $(this);
                 qm.setQuiz(jq.data('id'));
             }); 
-            $('#createDepartment').click(function(){
-                var de = new deptEditor(qm);
+            this.dom.find('#createDepartment').click(function(){
+                var de = new deptEditor();
                 de.render();
             });
-            $('#editDept').click(function(){
+            this.dom.find('#editDept').click(function(){
                 var dept = qm.currentDepartment;
                 var de = new deptEditor(dept);
                 de.render();
             });
+            $('#navBarContainer').html('').append(this.dom);
             
         },
         get dom(){
-            var html = this.template(this.model);
-            return $(html);
+            if(!this._dom){
+                this._dom = $(this.template(this.model));
+            }
+            return this._dom;
         },
         get template(){
             return this._template;
