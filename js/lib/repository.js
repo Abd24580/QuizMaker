@@ -83,12 +83,25 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         postData(parameters);
     }
     
+    function deleteDepartment(id){
+        var parameters = {
+            data: {
+                Id: id,
+                SUBJECT: 'department',
+                ACTION: 'delete'
+            },
+            callback: applyDepartments
+        };
+        postData(parameters);
+    }
+    
     
    return {
         displayLoading: displayLoading,
         stopLoading: stopLoading,
         getDepartments: getDepartments,
-        storeDepartment: storeDepartment
+        storeDepartment: storeDepartment,
+        deleteDepartment: deleteDepartment
     };
 });
 
