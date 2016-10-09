@@ -28,7 +28,6 @@
         <link rel="stylesheet" type="text/css" href="../css/additional.css">
         <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
-        <script src="../bower_components/handlebars/handlebars.min.js" type="text/javascript"></script>
         <script id="quiz-template" type="text/x-handlers-template">
             <?php include 'quiz.hb.php';?>
         </script>
