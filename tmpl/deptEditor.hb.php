@@ -31,4 +31,5 @@
     <input type="hidden" name="Id" value="{{Id}}">
     <button class="saveButton btn btn-primary">Save</button>
     {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
+    <button class="cancelButton btn btn-default">Cancel</button>
 </div>

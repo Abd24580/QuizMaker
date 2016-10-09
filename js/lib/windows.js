@@ -26,13 +26,15 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
         this.model = department;
         this.template = deptEditorTemplate;
         this.saveButton.click(this,function(e){
-            var dept = new dos.department(e.data.data);
-            var id = qm.bind('departments').to(function(depts){
-                var d = _.findWhere(depts, {Name: dept.Name});
-                if(!!d) qm.currentDepartment = d;
-                qm.unbind('departments', id);
-            });
-            repository.storeDepartment(dept);
+            if(e.data.model.Name !== e.data.data['Name']){
+                var dept = new dos.department(e.data.data);
+                var id = qm.bind('departments').to(function(depts){
+                    var d = _.findWhere(depts, {Name: dept.Name});
+                    if(!!d) qm.currentDepartment = d;
+                    qm.unbind('departments', id);
+                 });
+                repository.storeDepartment(dept);
+            }
             e.data.hide();
         });
         this.deleteButton.click(this, function(e){
@@ -40,7 +42,9 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
             repository.deleteDepartment(val);
             e.data.hide();
         });
-        //TODO: add cancel button
+        this.cancelButton.click(this, function(e){
+            e.data.hide();
+        });
     }
     
     function quizCreator(quiz){
@@ -57,6 +61,9 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
         get deleteButton(){
             return this.dom.find('.deleteButton');
         },
+        get cancelButton(){
+            return this.dom.find('.cancelButton');
+        },
         get data(){
             var data = {};
             var inputs = this.dom.find('input, textarea, select');
@@ -66,13 +73,16 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
             return data;
         },
         render: function(){
-            $('#mainCanvas').html('').append(this.dom);
+            var mc = $('#mainCanvas');
+            mc.hide();
+            mc.html('').append(this.dom);
+            mc.show('fade', 500);
         },
         hide: function(){
-            this.dom.hide(500);
+            this.dom.hide('fade',400);
         },
         show: function(){
-            this.dom.show(500);
+            this.dom.show('fade',400);
         },
         get dom(){
             if(!this._dom){
