@@ -17,12 +17,26 @@
 
 
 requirejs.config({
-    baseUrl: 'js'
+    baseUrl: 'js/lib'
 });
 
 
-requirejs(['quizMaker', 'templating'], function(qm, templating){
+requirejs(['quizMaker', 'templating', 'windows', 'repository'], function(qm, templating, windows, repo){
     
-    templating.initialize(qm);
+    templating.initialize();
+    
+    var navBar = new windows.navBar();
+    
+    qm.bind('departments').to(function(){
+        navBar.render();
+    });
+    qm.bind('currentQuiz').to(function(){
+        navBar.render();
+    });
+    qm.bind('currentQuiz').to(function(quiz){
+
+    });
+    repo.getDepartments();
+    
 
 });

@@ -17,12 +17,12 @@
 
 
 
-define(['dataBinder', 'repository', 'dataObjects'],function(dataBinder, repository, dos){
+define(function(){
+    
+   
     
     function quizMaker(){
-        this._repository = new repository(this);
-        this._dataBinder = new dataBinder(this);
-        this.stopLoading = this._repository.stopLoading;
+        this.bindings = {};
     };
     
     quizMaker.prototype = {
@@ -52,10 +52,6 @@ define(['dataBinder', 'repository', 'dataObjects'],function(dataBinder, reposito
             this.prop('currentQuiz', x);
         },
         
-        
-        
-        
-        
         prop:function(propName, value){
             if(!value){
                 return this['__'+ propName];
@@ -64,50 +60,62 @@ define(['dataBinder', 'repository', 'dataObjects'],function(dataBinder, reposito
             this.updateBindings(propName);
         },
         
-        
-        
-        
-        
-        
         bind: function (propertyName){
-            return this._dataBinder.bind(propertyName);
+            var self = this;
+            return {
+                to: function(binding){
+                    if(!self.bindings[propertyName])
+                        self.bindings[propertyName] = [];
+                    self.bindings[propertyName].push(binding);
+                }
+            };
         },
-        
-        
         updateBindings: function(propertyName){
-            this._dataBinder.update(propertyName);
+            if(!this.bindings) return;
+            var bindings = this.bindings[propertyName];
+            for(var f in bindings){
+                if(bindings[f]){
+                    bindings[f](this.prop(propertyName));
+                }
+            }
         },
         
         
-        refreshDepartments: function(){
-            this._repository.getDepartments();
-        },
-        storeDepartment: function(data){
-            var dept = new dos.department(data);
-            this._repository.storeDepartment(dept);
-        },
-        deleteDepartment: function(id){
-            
-        },
-        
-        
-        setQuiz: function(id){
-            
-        },
-        createQuiz: function(data){
-            
-        },
-        updateQuiz: function(quiz){
-            
-        },
-        deleteQuiz: function(id){
-            
-        },
-        reorderQuiz:function(order){
-            
-        }
+//        refreshDepartments: function(){
+//            this._repository.getDepartments();
+//        },
+//        storeDepartment: function(data){
+//            var dept = new dos.department(data);
+//            this._repository.storeDepartment(dept);
+//        },
+//        deleteDepartment: function(id){
+//            
+//        },
+//        
+//        
+//        setQuiz: function(id){
+//            
+//        },
+//        createQuiz: function(data){
+//            
+//        },
+//        updateQuiz: function(quiz){
+//            
+//        },
+//        deleteQuiz: function(id){
+//            
+//        },
+//        reorderQuiz:function(order){
+//            
+//        }
+
     };
-    
-    return new quizMaker();
+    var instance;
+    return (function(){
+        if(!instance){
+            instance = new quizMaker();
+        }
+        return instance;
+    })();
     
 });
