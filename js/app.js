@@ -17,7 +17,19 @@
 
 
 requirejs.config({
-    baseUrl: 'js/lib'
+    baseUrl: 'js/lib',
+    paths:{
+        handlebars: '/bower_components/handlebars/handlebars.min',
+        underscore: '/bower_components/underscore/underscore-min'
+    },
+    shim:{
+        'handlebars':{
+            exports: 'Handlebars'
+        },
+        'underscore':{
+            exports: '_'
+        }
+    }
 });
 
 
@@ -31,6 +43,9 @@ requirejs(['quizMaker', 'templating', 'windows', 'repository'], function(qm, tem
         navBar.render();
     });
     qm.bind('currentQuiz').to(function(){
+        navBar.render();
+    });
+    qm.bind('currentDepartment').to(function(){
         navBar.render();
     });
     qm.bind('currentQuiz').to(function(quiz){
