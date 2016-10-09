@@ -15,12 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['windows'],function(windows){
+define(function(windows){
     
     return {
-        initialize: function (qm){
+        initialize: function (){
             
-            var navBarTemplate = Handlebars.compile($('#navBar-template').html());
+            
+            
             Handlebars.registerPartial('question-patial', $('#question-partial').html());
             Handlebars.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
@@ -34,37 +35,6 @@ define(['windows'],function(windows){
                 }
                 return lis.join(' ');
             });
-
-            function renderNavBar(){
-                var html = navBarTemplate(qm);
-                $('#navBarContainer').html(html);
-                $('[data-department]').click(function(){
-                    var jq = $(this);
-                    qm.currentDepartment = qm.departments[jq.data('id')];
-                    renderNavBar();
-                });
-                $('[data-quiz]').click(function(){
-                    var jq = $(this);
-                    qm.setQuiz(jq.data('id'));
-                }); 
-                $('#createDepartment').click(function(){
-                    var de = new windows.deptEditor(qm);
-                    de.render();
-                });
-                $('#editDept').click(function(){
-                    var dept = qm.currentDepartment;
-                    var de = new windows.deptEditor(qm,dept);
-                    de.render();
-                });
-            }
-
-
-            qm.bind('departments').to(renderNavBar);
-            qm.bind('currentQuiz').to(renderNavBar);
-            qm.bind('currentQuiz').to(function(quiz){
-
-            });
-            qm.refreshDepartments();
         }
     };
 });

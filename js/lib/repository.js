@@ -15,73 +15,80 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['dataObjects'], function(dos){
-    
-    function repository(qm){
-        this.qm = qm;
+define(['dataObjects', 'quizMaker'], function(dos, qm){
+   
+    //Called with the context of qm
+    function applyDepartments(data){
+        for(var d in data.data){
+            this.departments[d] = new dos.department(data.data[d]);
+            stopLoading();
+        }
+        this.updateBindings('departments');
+    }
+      
+    function postData(parameters){
+        displayLoading();
+        sendAjaxRequest(
+            parameters.data,
+            'POST',
+            parameters.callback,
+            qm
+        );
+    }  
+      
+    function getData(parameters){
+        displayLoading();
+        sendAjaxRequest(
+            parameters.data, 
+            'GET', 
+            parameters.callback,
+            qm
+        );
     }
     
-    repository.prototype = {
-        displayLoading: function(){
-            
-        },
-        stopLoading: function(){
-            
-        },
-        applyDepartments: function(data){
-            for(var d in data.data){
-                this.departments[d] = new dos.department(data.data[d]);
-                this.stopLoading();
-            }
-            this.updateBindings('departments');
-        },
-        getDepartments: function(){
-            var parameters = {
-                data: {
-                    SUBJECT: 'departmentlist'
-                },
-                callback: this.applyDepartments
-            };
-            this.getData(parameters);
-        },
-        storeDepartment: function(department){
-            var parameters = {
-                data: department,
-                callback: this.applyDepartments
-            };
-            parameters.data['SUBJECT'] = 'department';
-            parameters.data['ACTION'] = (department.Id) ? 'update' : 'create';
-            this.postData(parameters);
-        },
-        getData: function(parameters){
-            this.displayLoading();
-            this.sendAjaxRequest(
-                parameters.data, 
-                'GET', 
-                parameters.callback,
-                this.qm
-            );
-        },
-        postData: function(parameters){
-            this.displayLoading();
-            this.sendAjaxRequest(
-                parameters.data,
-                'POST',
-                parameters.callback,
-                this.qm
-            );
-        },
-        sendAjaxRequest: function(data, method, callback, context){
-            $.ajax({
-                data: data,
-                dataType: 'json',
-                method: method,
-                url: 'index.php',
-                context: context
-            }).done(callback);
-        } 
-    };
     
-    return repository;
+    function sendAjaxRequest(data, method, callback, context){
+        $.ajax({
+            data: data,
+            dataType: 'json',
+            method: method,
+            url: 'index.php',
+            context: context
+        }).done(callback);
+    } 
+    
+    function displayLoading(){
+            
+    }
+    function stopLoading (){
+
+    }
+
+    function getDepartments (){
+        var parameters = {
+            data: {
+                SUBJECT: 'departmentlist'
+            },
+            callback: applyDepartments
+        };
+        getData(parameters);
+    }
+    function storeDepartment (department){
+        var parameters = {
+            data: department,
+            callback: applyDepartments
+        };
+        parameters.data['SUBJECT'] = 'department';
+        parameters.data['ACTION'] = (department.Id) ? 'update' : 'create';
+        postData(parameters);
+    }
+    
+    
+   return {
+        displayLoading: displayLoading,
+        stopLoading: stopLoading,
+        getDepartments: getDepartments,
+        storeDepartment: storeDepartment
+    };
 });
 

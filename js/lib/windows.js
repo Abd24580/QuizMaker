@@ -15,12 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(function(){
-    function deptEditor(qm, department){
+define(['repository', 'dataObjects', 'quizMaker'],function(repository, dos, qm){
+    
+    var deptEditorTemplate = Handlebars.compile($('#deptEditor-template').html());
+    //var quizCreatorTemplate = Handlebars.compile($('#quizCreator-template').html());
+    var navBarTemplate = Handlebars.compile($('#navBar-template').html());
+
+    
+    function deptEditor(department){
         this.model = department;
-        this.template = Handlebars.compile($('#deptEditor-template').html());
+        this.template = deptEditorTemplate;
         this.saveButton.click(this,function(e){
-            qm.storeDepartment(e.data.data);
+            var dept = new dos.department(e.data.data);
+            repository.storeDepartment(dept);
             e.data.hide();
         });
         this.deleteButton.click(this, function(e){
@@ -28,37 +35,17 @@ define(function(){
             qm.deleteDepartment(val);
             e.data.hide();
         });
+        //TODO: add cancel button
     }
     
     function quizCreator(quiz){
         this.model = quiz;
-        this.template = Handlebars.compile($('#quizCreator-template').html());
-        
+        this.template = quizCreatorTemplate;
         this.dom = this.getDom();
-        
     }
     
     
-    var mainCanvas = {
-        get model(){
-            return this._model;
-        },
-        set model(x){
-            this._model = x;
-        },
-        get template(){
-            return this._template;
-        },
-        set template(x){
-            this._template = x;
-        },
-        get dom(){
-            if(!this._dom){
-                var html = this.template(this.model);
-                this._dom = $(html);
-            }
-            return this._dom;
-        },
+    var mainWindow = {
         get saveButton(){
             return this.dom.find('.saveButton');
         },
@@ -81,14 +68,84 @@ define(function(){
         },
         show: function(){
             this.dom.show(500);
+        },
+        get dom(){
+            if(!this._dom){
+                var html = this.template(this.model);
+                this._dom = $(html);
+            }
+            return this._dom;
+        },
+        get template(){
+            return this._template;
+        },
+        set template(x){
+            this._template = x;
+        },
+        get model(){
+            return this._model;
+        },
+        set model(x){
+            this._model = x;
         }
     };
     
-    deptEditor.prototype = mainCanvas;
-    quizCreator.prototype = mainCanvas;
+    function navBar(){
+        this.template = navBarTemplate;
+        this.model = qm;
+    }
+    
+    
+    var navProto = {
+        render: function(){
+            $('#navBarContainer').html('').append(this.dom);
+            $('[data-department]').click(this,function(e){
+                var jq = $(this);
+                qm.currentDepartment = qm.departments[jq.data('id')];
+                e.data.render();
+            });
+            $('[data-quiz]').click(function(){
+                var jq = $(this);
+                qm.setQuiz(jq.data('id'));
+            }); 
+            $('#createDepartment').click(function(){
+                var de = new deptEditor(qm);
+                de.render();
+            });
+            $('#editDept').click(function(){
+                var dept = qm.currentDepartment;
+                var de = new deptEditor(dept);
+                de.render();
+            });
+            
+        },
+        get dom(){
+            var html = this.template(this.model);
+            return $(html);
+        },
+        get template(){
+            return this._template;
+        },
+        set template(x){
+            this._template = x;
+        },
+        get model(){
+            return this._model;
+        },
+        set model(x){
+            this._model = x;
+        }
+    };
+    
+    deptEditor.prototype = mainWindow;
+    quizCreator.prototype = mainWindow;
+    
+    navBar.prototype = navProto;
+    
     
     return {
         deptEditor: deptEditor,
-        quizCreator: quizCreator
+        quizCreator: quizCreator,
+        navBar: navBar
     };
 });
