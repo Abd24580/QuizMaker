@@ -15,15 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(function(windows){
+define(['handlebars'],function(hb){
     
     return {
         initialize: function (){
-            
-            
-            
-            Handlebars.registerPartial('question-patial', $('#question-partial').html());
-            Handlebars.registerHelper("listAnswers", function(question, options){
+            hb.registerPartial('question-patial', $('#question-partial').html());
+            hb.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
                 var lis = [];
                 for(var a in answersArray){
