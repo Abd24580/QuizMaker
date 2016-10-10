@@ -17,13 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 ?>
-<div class=question id="{{Id}}">
-    <h4>{{QuestionText}}</h4>
-    <p class="answers">Answers:</span>
+<div class=question data-id="{{Id}}" data-department="{{DepartmentId}}" data-quiz="{{QuizId}}">
+    <div class="row">
+        <div class="col-sm-10">
+            <h4>{{QuestionText}}</h4>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success editQuestion" data-id="{{Id}}"><span class="glyphicon glyphicon-edit"></span></button>
+        </div>
+    </div>
+    <p class="answers">Answers:</p>
     <ol class="answerList">
         {{#listAnswers this}}
         <li>{{this}}</li>
         {{/listAnswers}}
     </ol>
-    <p class="incorrectMessage">{{IncorrectMessage}}</span>
+    <p class="incorrectMessage">{{IncorrectMessage}}
 </div>

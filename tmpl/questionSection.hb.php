@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * Copyright (C) 2016 Jon
+ * Copyright (C) 2016 jfalkenstein
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 ?>
-<div class="quizEditor" data-id="{{Id}}" data-department="{{DepartmentId}}">
-    <div class="form-group lead">
-        <label for="Name">Quiz Name:</label>
-        <input type="text" name="Name" id="Name" value="{{Name}}" >
-    </div>
-    {{>questionSection-partial Questions}}
+<div class="questionsList">
+    <h3>Questions:</h3>
+    {{#each Questions}}
+        {{> question-partial this}}
+    {{/each}}
+    <button class="btn btn-success createQuestion">Add new Question</button>
 </div>
-

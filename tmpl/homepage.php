@@ -41,6 +41,9 @@
         <script id="navBar-template" type="text/x-handlebars-template">
             <?php include 'navbar.hb.php'; ?>
         </script>
+        <script id="questionSection-partial" type="text/x-handlebars-template">
+            <?php include 'questionSection.hb.php'; ?>
+        </script>
         <script data-main="../js/app" src="../js/require.js"></script>
         
         
