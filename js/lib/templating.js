@@ -20,6 +20,8 @@ define(['handlebars'],function(hb){
     return {
         initialize: function (){
             hb.registerPartial('question-partial', $('#question-partial').html());
+            hb.registerPartial('questionSection-partial', $('#questionSection-partial').html());
+            
             hb.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
                 var lis = [];

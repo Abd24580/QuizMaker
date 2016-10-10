@@ -49,7 +49,6 @@ requirejs(['quizMaker', 'templating', 'windows', 'repository'], function(qm, tem
         navBar.render();
     });
     qm.bind('currentQuiz').to(function(quiz){
-
     });
     repo.getDepartments();
     
