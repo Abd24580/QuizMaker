@@ -15,11 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],function(repository, dos, qm, _, hb){
+define([
+    'repository', 
+    'dataObjects', 
+    'quizMaker',
+    'underscore', 
+    'handlebars', 
+    'text!templates/deptEditor.hbs',
+    'text!templates/navbar.hbs',
+    'text!templates/quiz.hbs'
+],function(repository, dos, qm, _, hb, tDeptEdit, tNavBar, tQuiz){
     
-    var deptEditorTemplate = hb.compile($('#deptEditor-template').html());
-    var quizEditorTemplate = hb.compile($('#quiz-template').html());
-    var navBarTemplate = hb.compile($('#navBar-template').html());
+    var deptEditorTemplate = hb.compile(tDeptEdit);
+    var quizEditorTemplate = hb.compile(tQuiz);
+    var navBarTemplate = hb.compile(tNavBar);
 
     var mainWindow = {
         get saveButton(){
