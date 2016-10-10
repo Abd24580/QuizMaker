@@ -28,7 +28,6 @@
     <h3>Questions:</h3>
     {{#each Questions}}
         {{> question-partial this}}
-    {{/each}}
-    
+    {{/each}}   
 </div>
 
