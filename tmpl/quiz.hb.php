@@ -18,11 +18,17 @@
  */
 
 ?>
-<div class="quiz-template">
-    <h2>{{Name}}</h2>
+<div class="quizEditor">
+    <input type="hidden" name="Id" value="{{Id}}">
+    <input type="hidden" name="DepartmentId" value="{{DepartmentId}}">
+    <div class="form-group lead">
+        <label for="Name">Quiz Name:</label>
+        <input type="text" name="Name" id="Name" value="{{Name}}" >
+    </div>
     <h3>Questions:</h3>
     {{#each Questions}}
         {{> question-partial this}}
     {{/each}}
+    
 </div>
 
