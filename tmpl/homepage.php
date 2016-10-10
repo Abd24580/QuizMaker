@@ -29,27 +29,7 @@
         <script src="../bower_components/jQuery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
         <script src="../bower_components/jquery-ui/jquery-ui.js" type="text/javascript"></script>
-        <script id="quiz-template" type="text/x-handlers-template">
-            <?php include 'quiz.hb.php';?>
-        </script>
-        <script id="question-partial" type="text/x-handlers-template">
-            <?php include 'question.hb.php';?>
-        </script>
-        <script id="deptEditor-template" type="text/x-handlers-template">
-            <?php include 'deptEditor.hb.php';?>
-        </script>
-        <script id="navBar-template" type="text/x-handlebars-template">
-            <?php include 'navbar.hb.php'; ?>
-        </script>
-        <script id="questionSection-partial" type="text/x-handlebars-template">
-            <?php include 'questionSection.hb.php'; ?>
-        </script>
         <script data-main="../js/app" src="../js/require.js"></script>
-        
-        
-        <script type="text/javascript">
-            
-        </script>
     </head>
     <body>
         <div id="navBarContainer"></div>

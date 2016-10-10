@@ -15,12 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['handlebars'],function(hb){
+define([
+    'handlebars',
+    'text!templates/question.hbs',
+    'text!templates/questionSection.hbs'
+],function(hb, tQuestion, tQuestionSection ){
     
     return {
         initialize: function (){
-            hb.registerPartial('question-partial', $('#question-partial').html());
-            hb.registerPartial('questionSection-partial', $('#questionSection-partial').html());
+            hb.registerPartial('question-partial', tQuestion);
+            hb.registerPartial('questionSection-partial', tQuestionSection);
             
             hb.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
