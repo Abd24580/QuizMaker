@@ -17,13 +17,18 @@
 
 define(['dataObjects', 'quizMaker'], function(dos, qm){
    
-    //Called with the context of qm
     function applyDepartments(data){
         for(var d in data.data){
-            this.departments[d] = new dos.department(data.data[d]);
+            qm.departments[d] = new dos.department(data.data[d]);
             stopLoading();
         }
-        this.updateBindings('departments');
+        qm.updateBindings('departments');
+    }
+    function applyQuiz(data){
+        var quiz = new dos.quiz(data.data);
+        stopLoading();
+        qm.departments[quiz.DepartmentId].Quizzes[quiz.Id] = quiz.Name;
+        qm.currentQuiz = quiz;
     }
       
     function postData(parameters){
@@ -31,8 +36,7 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         sendAjaxRequest(
             parameters.data,
             'POST',
-            parameters.callback,
-            qm
+            parameters.callback
         );
     }  
       
@@ -41,19 +45,17 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         sendAjaxRequest(
             parameters.data, 
             'GET', 
-            parameters.callback,
-            qm
+            parameters.callback
         );
     }
     
     
-    function sendAjaxRequest(data, method, callback, context){
+    function sendAjaxRequest(data, method, callback){
         $.ajax({
             data: data,
             dataType: 'json',
             method: method,
             url: 'index.php',
-            context: context
         }).done(callback);
     } 
     
@@ -93,6 +95,33 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
             callback: applyDepartments
         };
         postData(parameters);
+    }
+    
+    function getQuiz(id){
+        var parameters = {
+            data: {
+                Id: id,
+                SUBJECT: 'quiz'
+            },
+            callback: applyQuiz
+        };
+        getData(parameters);
+    }
+    
+    function storeQuiz(quiz){
+        
+    }
+    
+    function deleteQuiz(id){
+        
+    }
+    
+    function cloneQuiz(id){
+        
+    }
+    
+    function reorderQuiz(){
+        
     }
     
     
