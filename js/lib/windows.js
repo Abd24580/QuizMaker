@@ -29,7 +29,7 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
             if(e.data.model.Name !== e.data.data['Name']){
                 var dept = new dos.department(e.data.data);
                 var id = qm.bind('departments').to(function(depts){
-                    var d = _.findWhere(depts, {Name: dept.Name});
+                    var d = _.findWhere(depts, {Name: e.data.data.Name});
                     if(!!d) qm.currentDepartment = d;
                     qm.unbind('departments', id);
                  });
@@ -45,9 +45,10 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
         this.cancelButton.click(this, function(e){
             e.data.hide();
         });
+        
     }
     
-    function quizCreator(quiz){
+    function quizEditor(quiz){
         this.model = quiz;
         this.template = quizCreatorTemplate;
         this.dom = this.getDom();
@@ -65,7 +66,7 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
             return this.dom.find('.cancelButton');
         },
         get data(){
-            var data = {};
+            var data = this.model;
             var inputs = this.dom.find('input, textarea, select');
             inputs.each(function(i, el){
                 data[el.name] = $(el).val();
@@ -155,14 +156,14 @@ define(['repository', 'dataObjects', 'quizMaker','underscore', 'handlebars'],fun
     };
     
     deptEditor.prototype = mainWindow;
-    quizCreator.prototype = mainWindow;
+    quizEditor.prototype = mainWindow;
     
     navBar.prototype = navProto;
     
     
     return {
         deptEditor: deptEditor,
-        quizCreator: quizCreator,
+        quizCreator: quizEditor,
         navBar: navBar
     };
 });
