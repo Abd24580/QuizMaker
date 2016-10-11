@@ -94,7 +94,8 @@ class QuizRepo {
         $quizPath = $this->getQuizPath($departmentId, $quizId);
         $this->log->notice("Deleting Quiz at $quizPath");
         unlink($quizPath);
-        $this->deptsRepo->DeleteQuizFromDepartment($departmentId, $quizId);
+        $depts = $this->deptsRepo->DeleteQuizFromDepartment($departmentId, $quizId);
+        return $depts;
     }
     
     public function AddQuestionToQuiz(Question $question){
