@@ -7,10 +7,10 @@ data/
 composer.lock
 
 
-!bower_components/bootstrap/dist/css/bootstrap-theme.min.css
-!bower_components/bootstrap/dist/css/bootstrap.css
-!bower_components/bootstrap/dist/js/bootstrap.min.js
-!bower_components/handlebars/handlebars.min.js
-!bower_components/jQuery/dist/jquery.min.js
-!bower_components/jquery-ui/jquery-ui.min.js
-!bower_components/underscore/underscore-min.js
+!bootstrap-theme.min.css
+!bootstrap.css
+!bootstrap.min.js
+!handlebars.min.js
+!jquery.min.js
+!jquery-ui.min.js
+!underscore-min.js
