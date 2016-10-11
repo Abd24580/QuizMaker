@@ -119,8 +119,17 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         postData(parameters);
     }
     
-    function deleteQuiz(id){
-        
+    function deleteQuiz(id, departmentId){
+        var parameters = {
+            data:{
+                Id: id,
+                DepartmentId: departmentId,
+                SUBJECT: 'quiz',
+                ACTION: 'delete'
+            },
+            callback: applyDepartments
+        };
+        postData(parameters);
     }
     
     function cloneQuiz(id){
@@ -139,7 +148,8 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         storeDepartment: storeDepartment,
         deleteDepartment: deleteDepartment,
         getQuiz: getQuiz,
-        storeQuiz: storeQuiz
+        storeQuiz: storeQuiz,
+        deleteQuiz: deleteQuiz
     };
 });
 
