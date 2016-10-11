@@ -44,8 +44,10 @@
                         {{#each currentDepartment.Quizzes}}
                         <li><a href="#" data-quiz data-id="{{@key}}" data-name="{{this}}">{{this}}</a></li>
                         {{/each}}
+                        {{#if currentDepartment}}
                         <li role="separator" class="divider"></li>
                         <li><a href="#" id="createQuiz">Create new quiz</a></li>
+                        {{/if}}
                     </ul>
                 </li>
                 {{#if currentDepartment}}

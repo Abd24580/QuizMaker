@@ -18,9 +18,7 @@
 
 
 define(['underscore'],function(_){
-    
-   
-    
+
     function quizMaker(){
         this.bindings = {};
     };
@@ -62,13 +60,30 @@ define(['underscore'],function(_){
         
         bind: function (propertyName){
             var self = this;
+            var onceOnly = false;
+            
+            function addRemovalFunction(propertyName, id){
+                var newId = _.uniqueId(id);
+                self.bindings[propertyName][newId] = function(){
+                    self.unbind(propertyName, id);
+                    self.unbind(propertyName, newId);
+                };
+            }
+            
             return {
                 to: function(binding){
                     if(!self.bindings[propertyName])
                         self.bindings[propertyName] = {};
                     var id = _.uniqueId(propertyName);
                     self.bindings[propertyName][id] = binding;
+                    if(onceOnly){
+                        addRemovalFunction(propertyName, id);
+                    }
                     return id;
+                },
+                get once() {
+                    onceOnly = true;
+                    return this;
                 }
             };
         },

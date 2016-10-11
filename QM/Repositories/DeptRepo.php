@@ -56,7 +56,8 @@ class DeptRepo {
         //TODO: Add null checking
         $depts = $this->GetDepartments();
         $dept = $depts[$quiz->DepartmentId];
-        $dept->Quizzes[$quiz->Id] = $quiz->Name;
+        $id = $quiz->Id;
+        $dept->Quizzes->$id = $quiz->Name;
         $this->storeToJson($depts);
         return $dept;
     }

@@ -98,10 +98,9 @@ define([
             this.saveButton.click(this,function(e){
                 if(!e.data.model || e.data.model.Name !== e.data.data['Name']){
                     var dept = new dos.department(e.data.data);
-                    var id = qm.bind('departments').to(function(depts){
+                    qm.bind('departments').once.to(function(depts){
                         var d = _.findWhere(depts, {Name: e.data.data.Name});
                         if(!!d) qm.currentDepartment = d;
-                        qm.unbind('departments', id);
                      });
                     repository.storeDepartment(dept);
                 }
@@ -144,10 +143,9 @@ define([
             this.saveButton.click(this, function(e){
                 var quiz = new dos.quiz(e.data.data);
                 quiz.DepartmentId = qm.currentDepartment.Id;
-                var id = qm.bind('currentQuiz').to(function(quiz){
+                qm.bind('currentQuiz').once.to(function(quiz){
                     e.data.model = quiz;
                     e.data.rerender();
-                    qm.unbind('currentQuiz', id);
                 });
                 repository.storeQuiz(quiz);
             });
