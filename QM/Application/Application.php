@@ -98,7 +98,6 @@ class Application {
         include(ROOT . DS . 'tmpl' . DS . 'homepage.php');
     }
     
-    
     public function GetQuiz(RequestData $data)
     {
         $quizId = $data->data['Id'];
@@ -124,8 +123,8 @@ class Application {
     {
         $id = $data->data['QUIZID'];
         $dept = $data->data['DEPARTMENTID'];
-        $this->quizRepo->DeleteQuiz($dept, $id);
-        $this->jsonPackager->SendData("");
+        $depts = $this->quizRepo->DeleteQuiz($dept, $id);
+        $this->jsonPackager->SendData($depts);
     }
     
     public function UpdateQuiz(RequestData $data)
