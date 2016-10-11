@@ -38,6 +38,11 @@ define([
                 }
                 return lis.join(' ');
             });
+            
+            
+            hb.registerHelper('listQuestions', function(quiz, options){
+                
+            });
         }
     };
 });

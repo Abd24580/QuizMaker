@@ -94,8 +94,12 @@ color:green;
 #mainCanvas{
     margin-top: 90px;
 }
-#mainCanvas div{
+#mainCanvas > div{
     background-color: white;
     border-radius: 10px;
     padding: 20px;
+}
+.questionsList{
+    margin-top:20px;
+    margin-bottom: 20px;
 }

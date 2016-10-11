@@ -3,5 +3,8 @@
         <label for="Name">Quiz Name:</label>
         <input type="text" name="Name" id="Name" value="{{Name}}" >
     </div>
-    {{>questionSection-partial Questions}}
+    {{>questionSection-partial this}}
+    <button class="saveButton btn btn-primary">Save</button>
+    {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
+    <button class="cancelButton btn btn-default">Cancel</button>
 </div>

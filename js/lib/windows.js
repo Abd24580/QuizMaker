@@ -43,8 +43,15 @@ define([
         render: function(){
             var mc = $('#mainCanvas');
             mc.hide();
+            this.attachHandlers();
             mc.html('').append(this.dom);
             mc.show('fade', 500);
+        },
+        rerender: function(){
+            delete this._dom;
+            var mc = $('#mainCanvas');
+            this.attachHandlers();
+            mc.html('').append(this.dom);
         },
         hide: function(){
             this.dom.hide('fade',400);
@@ -75,7 +82,7 @@ define([
     
     
     function deptEditor(department){
-        this.model = department;
+        this.model = department || {};
         this.template = deptEditorTemplate;
         Object.defineProperty(this,'data', {
             get: function data(){
@@ -87,27 +94,28 @@ define([
                 return data;
             }
         });
-        this.saveButton.click(this,function(e){
-            if(e.data.model.Name !== e.data.data['Name']){
-                var dept = new dos.department(e.data.data);
-                var id = qm.bind('departments').to(function(depts){
-                    var d = _.findWhere(depts, {Name: e.data.data.Name});
-                    if(!!d) qm.currentDepartment = d;
-                    qm.unbind('departments', id);
-                 });
-                repository.storeDepartment(dept);
-            }
-            e.data.hide();
-        });
-        this.deleteButton.click(this, function(e){
-            var val = e.data.data['Id'];
-            repository.deleteDepartment(val);
-            e.data.hide();
-        });
-        this.cancelButton.click(this, function(e){
-            e.data.hide();
-        });
-        
+        this.attachHandlers = function(){
+            this.saveButton.click(this,function(e){
+                if(!e.data.model || e.data.model.Name !== e.data.data['Name']){
+                    var dept = new dos.department(e.data.data);
+                    var id = qm.bind('departments').to(function(depts){
+                        var d = _.findWhere(depts, {Name: e.data.data.Name});
+                        if(!!d) qm.currentDepartment = d;
+                        qm.unbind('departments', id);
+                     });
+                    repository.storeDepartment(dept);
+                }
+                e.data.hide();
+            });
+            this.deleteButton.click(this, function(e){
+                var val = e.data.data['Id'];
+                repository.deleteDepartment(val);
+                e.data.hide();
+            });
+            this.cancelButton.click(this, function(e){
+                e.data.hide();
+            });
+        };
     }
     
     deptEditor.prototype = mainWindow;
@@ -118,16 +126,36 @@ define([
     
     
     function quizEditor(quiz){
-        this.model = quiz;
+        this.model = quiz || {};
         this.template = quizEditorTemplate;
-        Object.defineProperty(this, 'data',{
-            get: function data(){
-                
+        Object.defineProperties(this,{
+            'data':{
+                get: function data(){
+                    this.model['Name'] = this.dom.find('[name="Name"]').val();
+                    return this.model;
+                }
+            },'addQuestion':{
+                get: function addQuestion(){
+                    return this.dom.find('.addQuestion');
+                }
             }
         });
+        this.attachHandlers = function(){
+            this.saveButton.click(this, function(e){
+                var quiz = new dos.quiz(e.data.data);
+                quiz.DepartmentId = qm.currentDepartment.Id;
+                var id = qm.bind('currentQuiz').to(function(quiz){
+                    e.data.model = quiz;
+                    e.data.rerender();
+                    qm.unbind('currentQuiz', id);
+                });
+                repository.storeQuiz(quiz);
+            });
+        };
+        
     }
     
-    
+    quizEditor.prototype = mainWindow;
     
     
     function navBar(){
@@ -145,7 +173,12 @@ define([
             });
             this.dom.find('[data-quiz]').click(function(){
                 var jq = $(this);
-                qm.setQuiz(jq.data('id'));
+                var id = qm.bind('currentQuiz').to(function(quiz){
+                    var win = new quizEditor(quiz);
+                    win.render();
+                    qm.unbind('currentQuiz', id);
+                });
+                repository.getQuiz(jq.data('id'), qm.currentDepartment.Id);
             }); 
             this.dom.find('#createDepartment').click(function(){
                 var de = new deptEditor();
@@ -182,9 +215,6 @@ define([
             this._model = x;
         }
     };
-    
-    
-    quizEditor.prototype = mainWindow;
     
     navBar.prototype = navProto;
     

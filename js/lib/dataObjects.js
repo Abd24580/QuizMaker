@@ -44,6 +44,7 @@ define(function(){
     }
     quiz.prototype = {
         parseParamsToQuestions: function(params){
+            if(!params || !params.QuestionsArray) return;
             var self = this;
             $.each(params.QuestionsArray, function(p, o){
                 self.Questions[p] = new question(o);
@@ -54,7 +55,18 @@ define(function(){
         },
         deleteQuestion: function(id){
             delete this.Questions[id];
-        }  
+        },
+        toObject: function(){
+            var self = this;
+            var obj = {
+                Id: self.Id,
+                Name: self.Name,
+                DepartmentId: self.DepartmentId,
+                QuestionOrders: self.QuestionOrders,
+                Questions: self.Questions
+            };
+            return obj;
+        }
     };
     
     return {

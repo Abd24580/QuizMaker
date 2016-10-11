@@ -50,6 +50,8 @@ requirejs(['quizMaker', 'templating', 'windows', 'repository'], function(qm, tem
     });
     qm.bind('currentQuiz').to(function(quiz){
     });
+    
+    
     repo.getDepartments();
     
 

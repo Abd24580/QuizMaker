@@ -94,9 +94,7 @@ class Application {
     }
     
     public function GetHomePage(RequestData $data){
-        $this->log->info("Requested Home page");
-        $departments = $this->departmentsRepo->GetDepartments();
-        
+        $this->log->info("Requested Home page");        
         include(ROOT . DS . 'tmpl' . DS . 'homepage.php');
     }
     
@@ -105,7 +103,7 @@ class Application {
     {
         $quizId = $data->data['Id'];
         $departmentId = $data->data['DepartmentId'];
-        $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId, true);
+        $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId);
         if(is_null($quiz)){
             $this->jsonPackager->SendData("No quiz was found with the id of $quizId", 'failure');
             return;

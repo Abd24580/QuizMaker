@@ -97,10 +97,11 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         postData(parameters);
     }
     
-    function getQuiz(id){
+    function getQuiz(id, departmentId){
         var parameters = {
             data: {
                 Id: id,
+                DepartmentId: departmentId,
                 SUBJECT: 'quiz'
             },
             callback: applyQuiz
@@ -109,7 +110,13 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
     }
     
     function storeQuiz(quiz){
-        
+        var parameters = {
+            data: quiz.toObject(),
+            callback: applyQuiz
+        };
+        parameters.data['SUBJECT'] = 'quiz';
+        parameters.data['ACTION'] = (quiz.Id) ? 'update' : 'create';
+        postData(parameters);
     }
     
     function deleteQuiz(id){
@@ -130,7 +137,9 @@ define(['dataObjects', 'quizMaker'], function(dos, qm){
         stopLoading: stopLoading,
         getDepartments: getDepartments,
         storeDepartment: storeDepartment,
-        deleteDepartment: deleteDepartment
+        deleteDepartment: deleteDepartment,
+        getQuiz: getQuiz,
+        storeQuiz: storeQuiz
     };
 });
 

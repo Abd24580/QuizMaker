@@ -86,7 +86,7 @@ class QuizRepo {
             return false;
         }
         /* @var $dept \QM\Quiz\Department */
-        $quiz = $dept->Quizzes[$quizId];
+        $quiz = $dept->Quizzes->$quizId;
         return isset($quiz);
     }
     
@@ -138,7 +138,7 @@ class QuizRepo {
         if($rawJson){
             return $str;
         }
-        return json_decode($str);
+        return json_decode($str, true);
     }
     
     private function storeToJson(Quiz $quiz){
