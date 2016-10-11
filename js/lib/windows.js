@@ -149,6 +149,41 @@ define([
                 });
                 repository.storeQuiz(quiz);
             });
+            
+            this.cancelButton.click(this, function(e){
+                e.data.hide();
+            });
+            
+            this.deleteButton.click(this, function(e){
+                var div = $('<div class="dialog">Are you sure you want to delete this quiz? This cannot be undone.</div>');
+                div.addClass('dialog');
+                var id = e.data.data['Id'];
+                var deptId = e.data.data['DepartmentId'];
+                
+                div.dialog({
+                    resizable: false,
+                    height: 'auto',
+                    width: 400,
+                    modal: true,
+                    show: 400,
+                    buttons:[
+                        {
+                            text: "Delete this permanently.",
+                            click:function(){
+                                e.data.hide();
+                                $(this).dialog('close');
+                                repository.deleteQuiz(id, deptId);
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            click: function(){
+                                $(this).dialog('close');
+                            }
+                        }
+                    ]
+                });
+            });
         };
         
     }
