@@ -1,0 +1,23 @@
+<div class=question data-id="{{Id}}" data-department="{{DepartmentId}}" data-quiz="{{QuizId}}">
+    <div class="row">
+        <div class="col-sm-10 form-horizontal">
+            <label>Question:</label>
+            <input class="form-control" type="text" name="QuestionText" value="{{QuestionText}}">
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-primary saveQuestion" data-id="{{Id}}"><span class="glyphicon glyphicon-save"></span></button>
+        </div>
+    </div>
+    <p class="answers">Answers:</p>
+    <ol class="answerList">
+        {{#listAnswers this}}
+        <li>
+            <input type="text" name="{{questionId}}Answer" value="{{answer}}">
+            <label>Correct?</label>
+            <input type="radio" name="{{questionId}}Correct" class="correctAnswer" data-index="{{index}}">
+        </li>
+        {{/listAnswers}}
+    </ol>
+    <button class="btn btn-default btn-sm addAnswer" data-id="{{Id}}">Add answer</button>
+    <p class="incorrectMessage">Incorrect Message: <input type="text" class="form-control" name="IncorrectMessage" value="{{IncorrectMessage}}">
+</div>
