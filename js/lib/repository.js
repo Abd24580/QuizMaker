@@ -22,7 +22,9 @@ define(['dataObjects', 'quizMaker', 'underscore'], function(dos, qm, _){
             qm.departments[d] = new dos.department(data.data[d]);
             stopLoading();
         }
-        qm.currentDepartment = _.findWhere(qm.departments, {Id: qm.currentDepartment.Id});
+        var dept = _.findWhere(qm.departments, {Id: qm.currentDepartment.Id});
+        if(dept) qm.currentDepartment = dept;
+        else qm.unset('currentDepartment');
         qm.updateBindings('departments');
     }
     function applyQuiz(data){
