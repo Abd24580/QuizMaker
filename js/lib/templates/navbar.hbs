@@ -27,16 +27,13 @@
                         <li><a href="#" id="createDepartment">Create New Department</a></li>
                     </ul>
                 </li>
+                {{#if currentDepartment}}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        {{#if currentDepartment}}
-                            {{#if currentQuiz}}
-                            <strong>{{currentQuiz.Name}}</strong>
-                            {{else}}
-                            Select Quiz
-                            {{/if}}
+                        {{#if currentQuiz}}
+                        <strong>{{currentQuiz.Name}}</strong>
                         {{else}}
-                        Select department first
+                        Select Quiz
                         {{/if}}
                         <span class="caret"></span>
                     </a>
@@ -50,6 +47,7 @@
                         {{/if}}
                     </ul>
                 </li>
+                {{/if}}
                 {{#if currentDepartment}}
                 <li><a href="#" id="editDept">Edit Department</a></li>
                 {{/if}}
