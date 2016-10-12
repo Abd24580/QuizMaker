@@ -20,14 +20,17 @@ requirejs.config({
     baseUrl: 'js/lib',
     paths:{
         handlebars: '/bower_components/handlebars/handlebars.min',
-        underscore: '/bower_components/underscore/underscore-min'
+        underscore: '/bower_components/underscore/underscore-min',
+        "jquery-ui": '/bower_components/jquery-ui/jquery-ui.min',
+        "jquery":'/bower_components/jquery/dist/jquery.min',
+        bootstrap:'/bower_components/bootstrap/dist/js/bootstrap.min'
     },
     shim:{
-        'handlebars':{
-            exports: 'Handlebars'
-        },
         'underscore':{
             exports: '_'
+        },
+        bootstrap: {
+            deps: ['jquery']
         }
     }
 });
