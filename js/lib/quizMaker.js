@@ -49,7 +49,10 @@ define(['underscore'],function(_){
         set currentQuiz(x){
             this.prop('currentQuiz', x);
         },
-        
+        unset: function(propName){
+            delete this['__' + propName];
+            this.updateBindings(propName);
+        },
         prop:function(propName, value){
             if(!value){
                 return this['__'+ propName];
@@ -99,37 +102,10 @@ define(['underscore'],function(_){
                 }
             }
         },
-        
-        
-//        refreshDepartments: function(){
-//            this._repository.getDepartments();
-//        },
-//        storeDepartment: function(data){
-//            var dept = new dos.department(data);
-//            this._repository.storeDepartment(dept);
-//        },
-//        deleteDepartment: function(id){
-//            
-//        },
-//        
-//        
-//        setQuiz: function(id){
-//            
-//        },
-//        createQuiz: function(data){
-//            
-//        },
-//        updateQuiz: function(quiz){
-//            
-//        },
-//        deleteQuiz: function(id){
-//            
-//        },
-//        reorderQuiz:function(order){
-//            
-//        }
-
     };
+    
+    
+    
     var instance;
     return (function(){
         if(!instance){
