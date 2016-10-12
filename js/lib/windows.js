@@ -109,6 +109,7 @@ define([
             this.deleteButton.click(this, function(e){
                 var val = e.data.data['Id'];
                 repository.deleteDepartment(val);
+                qm.unset('currentDepartment');
                 e.data.hide();
             });
             this.cancelButton.click(this, function(e){
@@ -173,6 +174,7 @@ define([
                                 e.data.hide();
                                 $(this).dialog('close');
                                 repository.deleteQuiz(id, deptId);
+                                qm.unset('currentQuiz');
                             }
                         },
                         {
