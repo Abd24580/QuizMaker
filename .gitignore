@@ -1,17 +1,14 @@
-bower_components/
+
 nbproject/private/
-vendor/
 .DS_Store
 logs/
 data/
 composer.lock
 
-
-!bootstrap-theme.min.css
-!bootstrap.css
-!bootstrap.min.js
-!handlebars.min.js
-!jquery.min.js
-!jquery-ui.min.js
-!underscore-min.js
-!base/all.css
+bower_components/*/*
+!bower_components/bootstrap/dist/
+!bower_components/handlebars/handlebars*.js
+!bower_components/jquery/dist/jquery*.js
+!bower_components/jquery-ui/jquery-ui*.js
+!bower_components/jquery-ui/themes/base/
+!bower_components/underscore/underscore*.js
