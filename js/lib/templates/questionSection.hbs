@@ -2,6 +2,12 @@
     <h3>Questions:</h3>
     {{#listQuestions this}}
         {{> question-partial this}}
+    {{else}}
+        {{> questionEditor-partial this}}
     {{/listQuestions}}
-    <button class="btn btn-success btn-sm addQuestion">Add new Question</button>
+    {{#if Id}}
+        <button class="btn btn-success btn-sm addQuestion">Add new Question</button>
+      {{else}}
+        <p>You must first save the quiz before you can add any questions.</p>
+    {{/if}}
 </div>
