@@ -15,13 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['dataObjects', 'quizMaker'], function(dos, qm){
+define(['dataObjects', 'quizMaker', 'underscore'], function(dos, qm, _){
    
     function applyDepartments(data){
         for(var d in data.data){
             qm.departments[d] = new dos.department(data.data[d]);
             stopLoading();
         }
+        qm.currentDepartment = _.findWhere(qm.departments, {Id: qm.currentDepartment.Id});
         qm.updateBindings('departments');
     }
     function applyQuiz(data){
