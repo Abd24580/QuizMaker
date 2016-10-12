@@ -20,8 +20,11 @@ define([
     'dataObjects', 
     'quizMaker',
     'underscore', 
-    'templating'
-],function(repository, dos, qm, _, templating){
+    'templating',
+    'jquery',
+    'jquery-ui',
+    'bootstrap'
+],function(repository, dos, qm, _, templating,$){
 
     var mainWindow = {
         get saveButton(){
@@ -179,6 +182,7 @@ define([
             
             this.cancelButton.click(this, function(e){
                 e.data.hide();
+                qm.unset('currentQuiz');
             });
             
             this.deleteButton.click(this, function(e){
