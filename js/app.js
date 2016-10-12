@@ -36,20 +36,20 @@ requirejs.config({
 });
 
 
-requirejs(['quizMaker', 'templating', 'windows', 'repository'], function(qm, templating, windows, repo){
+requirejs(['quizMaker', 'templating', 'windows/navBar', 'repository'], function(qm, templating, navBar, repo){
     
     templating.initialize();
     
-    var navBar = new windows.navBar();
+    var nb = new navBar();
     
     qm.bind('departments').to(function(){
-        navBar.render();
+        nb.render();
     });
     qm.bind('currentQuiz').to(function(){
-        navBar.render();
+        nb.render();
     });
     qm.bind('currentDepartment').to(function(){
-        navBar.render();
+        nb.render();
     });
     
     
