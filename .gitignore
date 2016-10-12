@@ -14,3 +14,4 @@ composer.lock
 !jquery.min.js
 !jquery-ui.min.js
 !underscore-min.js
+!base/all.css
