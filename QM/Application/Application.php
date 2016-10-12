@@ -121,8 +121,8 @@ class Application {
     
     public function DeleteQuiz(RequestData $data)
     {
-        $id = $data->data['QUIZID'];
-        $dept = $data->data['DEPARTMENTID'];
+        $id = $data->data['Id'];
+        $dept = $data->data['DepartmentId'];
         $depts = $this->quizRepo->DeleteQuiz($dept, $id);
         $this->jsonPackager->SendData($depts);
     }
