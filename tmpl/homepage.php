@@ -26,6 +26,7 @@
         <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" type="text/css" href="../css/additional.css">
+        <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/base/all.css">
         <script src="../bower_components/jQuery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
         <script src="../bower_components/jquery-ui/jquery-ui.js" type="text/javascript"></script>

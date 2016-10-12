@@ -81,6 +81,22 @@ define([
     };
     
     
+    function showDialog(options, dialogText){
+        var div = $('<div class="dialog">' + dialogText + '</div>');
+        var modalDialogOptions = {
+            resizable: false,
+            height: 'auto',
+            width: 400,
+            modal: true,
+            show: 400,
+            hide: 400
+        };
+        var selectedOptions = _.extend(modalDialogOptions, options);
+        div.dialog(selectedOptions);       
+    }
+    
+    
+    
     function deptEditor(department){
         this.model = department || {};
         this.template = deptEditorTemplate;
@@ -107,10 +123,27 @@ define([
                 e.data.hide();
             });
             this.deleteButton.click(this, function(e){
-                var val = e.data.data['Id'];
-                repository.deleteDepartment(val);
-                qm.unset('currentDepartment');
-                e.data.hide();
+                
+                var options = {
+                    title: "Are you sure?",
+                    buttons:{
+                        "Yes": function(){
+                            var val = e.data.data['Id'];
+                            repository.deleteDepartment(val);
+                            qm.unset('currentDepartment');
+                            e.data.hide('fade', 400);
+                            $(this).dialog('close');
+                        },
+                        "Cancel": function(){
+                            $(this).dialog('close');
+                        }
+                    }
+                };
+                var message = "Are you sure you want to delete this department? "
+                            + "Doing so would delete all quizzes it contains as well. "
+                            + "<strong>This <em>CANNOT</em> be undone.</strong>";
+                    
+                showDialog(options, message);
             });
             this.cancelButton.click(this, function(e){
                 e.data.hide();
@@ -156,17 +189,11 @@ define([
             });
             
             this.deleteButton.click(this, function(e){
-                var div = $('<div class="dialog">Are you sure you want to delete this quiz? This cannot be undone.</div>');
-                div.addClass('dialog');
+                var message = "Are you sure you want to delete this quiz? This cannot be undone.";
                 var id = e.data.data['Id'];
                 var deptId = e.data.data['DepartmentId'];
-                
-                div.dialog({
-                    resizable: false,
-                    height: 'auto',
-                    width: 400,
-                    modal: true,
-                    show: 400,
+                var options =  {
+                    title: "Are you sure?",
                     buttons:[
                         {
                             text: "Delete this permanently.",
@@ -184,11 +211,16 @@ define([
                             }
                         }
                     ]
-                });
+                };
+                
+                showDialog(options, message);
             });
         };
         
     }
+    
+    
+    
     
     quizEditor.prototype = mainWindow;
     
