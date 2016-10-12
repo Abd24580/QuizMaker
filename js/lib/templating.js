@@ -18,8 +18,15 @@
 define([
     'handlebars',
     'text!templates/question.hbs',
-    'text!templates/questionSection.hbs'
-],function(hb, tQuestion, tQuestionSection ){
+    'text!templates/questionSection.hbs',
+    'text!templates/deptEditor.hbs',
+    'text!templates/navbar.hbs',
+    'text!templates/quiz.hbs'
+],function(hb, tQuestion, tQuestionSection, tDeptEdit,tNavBar, tQuiz){
+    
+    var deptEditorTemplate;
+    var quizEditorTemplate;
+    var navBarTemplate;
     
     return {
         initialize: function (){
@@ -43,6 +50,24 @@ define([
             hb.registerHelper('listQuestions', function(quiz, options){
                 
             });
+        }, 
+        get deptEditor(){
+            if(!deptEditorTemplate){
+                deptEditorTemplate = hb.compile(tDeptEdit);
+            }
+            return deptEditorTemplate;
+        },
+        get quizEditor(){
+            if(!quizEditorTemplate){
+                quizEditorTemplate = hb.compile(tQuiz);
+            }
+            return quizEditorTemplate;
+        },
+        get navBar(){
+            if(!navBarTemplate){
+                navBarTemplate = hb.compile(tNavBar);
+            }
+            return navBarTemplate;
         }
     };
 });

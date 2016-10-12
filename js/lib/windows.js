@@ -20,15 +20,8 @@ define([
     'dataObjects', 
     'quizMaker',
     'underscore', 
-    'handlebars', 
-    'text!templates/deptEditor.hbs',
-    'text!templates/navbar.hbs',
-    'text!templates/quiz.hbs'
-],function(repository, dos, qm, _, hb, tDeptEdit, tNavBar, tQuiz){
-    
-    var deptEditorTemplate = hb.compile(tDeptEdit);
-    var quizEditorTemplate = hb.compile(tQuiz);
-    var navBarTemplate = hb.compile(tNavBar);
+    'templating'
+],function(repository, dos, qm, _, templating){
 
     var mainWindow = {
         get saveButton(){
@@ -99,7 +92,7 @@ define([
     
     function deptEditor(department){
         this.model = department || {};
-        this.template = deptEditorTemplate;
+        this.template = templating.deptEditor;
         Object.defineProperty(this,'data', {
             get: function data(){
                 var data = this.model;
@@ -160,7 +153,7 @@ define([
     
     function quizEditor(quiz){
         this.model = quiz || {};
-        this.template = quizEditorTemplate;
+        this.template = templating.quizEditor;
         Object.defineProperties(this,{
             'data':{
                 get: function data(){
@@ -226,7 +219,7 @@ define([
     
     
     function navBar(){
-        this.template = navBarTemplate;
+        this.template = templating.navBar;
         this.model = qm;
     }
     
