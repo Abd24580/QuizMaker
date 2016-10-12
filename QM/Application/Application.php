@@ -189,7 +189,7 @@ class Application {
                 $d['CorrectIndex'], 
                 $d['IncorrectMessage']);
         $newQuiz = $this->quizRepo->AddQuestionToQuiz($q);
-        $this->jsonPackager->SendData($quiz);
+        $this->jsonPackager->SendData($newQuiz);
     }
     
     public function DeleteQuestion(RequestData $data)
