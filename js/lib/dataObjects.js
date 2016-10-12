@@ -19,26 +19,30 @@
 define(function(){
    
     function department(params){
-        this.Id = params.Id;
-        this.Name = params.Name;
-        this.Quizzes = params.Quizzes;
+        var params = params || {};
+        this.Id = params.Id || null;
+        this.Name = params.Name || null;
+        this.Quizzes = params.Quizzes || {};
     }
     
     function question(params){
-        this.Id = params.Id;
-        this.DepartmentId = params.DepartmentId;
-        this.QuizId = params.QuizId;
-        this.QuestionText = params.QuestionText;
-        this.AnswersArray = params.AnswersArray;
-        this.CorrectIndex = params.CorrectIndex;
-        this.IncorrectMessage = params.IncorrectMessage;
+        var params = params || {};
+        this.Id = params.Id || null;
+        this.DepartmentId = params.DepartmentId || null;
+        this.QuizId = params.QuizId || null;
+        this.QuestionText = params.QuestionText || null;
+        this.AnswersArray = params.AnswersArray || [];
+        this.CorrectIndex = params.CorrectIndex || null;
+        this.IncorrectMessage = params.IncorrectMessage || null;
+        this.editing = false;
     }    
     
     function quiz(params){
-        this.Id = params.Id;
-        this.Name = params.Name;
-        this.DepartmentId = params.DepartmentId;
-        this.QuestionOrders = params.QuestionOrders;
+        var params = params || {};
+        this.Id = params.Id || null;
+        this.Name = params.Name || null;
+        this.DepartmentId = params.DepartmentId || null;
+        this.QuestionOrders = params.QuestionOrders || [];
         this.Questions = {};
         this.parseParamsToQuestions(params);
     }
