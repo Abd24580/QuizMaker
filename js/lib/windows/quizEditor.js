@@ -22,9 +22,11 @@ define([
     'repository',
     './utils',
     './mainWindow',
+    'dataObjects',
+    'underscore',
     'jquery',
     'jquery-ui'
-],function(templating, dos, qm, repository, utils, mainWindow, $){
+],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
     
     function quizEditor(quiz){
         this.model = quiz || {};
@@ -35,7 +37,7 @@ define([
                     this.model['Name'] = this.dom.find('[name="Name"]').val();
                     return this.model;
                 }
-            },'addQuestion':{
+            },'addQuestionButton':{
                 get: function addQuestion(){
                     return this.dom.find('.addQuestion');
                 }
@@ -84,6 +86,54 @@ define([
                 
                 utils.showDialog(options, message);
             });
+            
+            this.addQuestionButton.click(this, function(e){
+                var q = new dos.question();
+                var id = _.uniqueId('NewQuestion');
+                q.Id = id;
+                e.data.model.addQuestion(q);
+                e.data.rerender();
+            });
+            
+            this.dom.find('button.editQuestion').click(this, function(e){
+                var jqThis = $(this);
+                var id = jqThis.data('id');
+                e.data.model.Questions[id].editing = true;
+            });
+            
+            this.dom.find('button.saveQuestion').click(this, function(e){
+                var jqThis = $(this);
+                var id = jqThis.data('id');
+                var isNewQuestion = id.indexOf('NewQuestion') === 0;
+                var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
+                var answerInputs = questionDiv.find('[name="' + id + 'Answer"]');
+                var answers = [];
+                answerInputs.each(function(i, el){
+                    answers.push(el.value);
+                });
+                var corrAnswer = questionDiv.find('[name="' + id + 'Correct"]:checked').data('index');
+                var questionParams = {
+                    DepartmentId: qm.currentDepartment.Id,
+                    QuizId: qm.currentQuiz.Id,
+                    QuestionText: questionDiv.find('[name="QuestionText"]').val(),
+                    AnswersArray: answers,
+                    CorrectIndex: corrAnswer,
+                    IncorrectMessage: questionDiv.find('[name="IncorrectMessage"]').val()
+                };
+                var question = new dos.question(questionParams);
+                question.Id = isNewQuestion ? null : id;
+                repository.storeQuestion(question);
+            });
+            
+            this.dom.find('button.addAnswer').click(this, function(e){
+                var jqThis = $(this);
+                var id = jqThis.data('id');
+                var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
+                //Add new input grouping here...
+            });
+            
+            
+            
         };
     }
     
