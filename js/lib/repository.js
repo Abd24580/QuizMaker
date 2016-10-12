@@ -145,6 +145,15 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _
         
     }
     
+    function storeQuestion(question){
+        var parameters = {
+            data: question,
+            callback: applyQuiz
+        };
+        parameters.data['SUBJECT'] = 'question';
+        parameters.data['ACTION'] = (question.Id) ? 'update' : 'create';
+        postData(parameters);
+    }
     
    return {
         displayLoading: displayLoading,
@@ -154,7 +163,8 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _
         deleteDepartment: deleteDepartment,
         getQuiz: getQuiz,
         storeQuiz: storeQuiz,
-        deleteQuiz: deleteQuiz
+        deleteQuiz: deleteQuiz,
+        storeQuestion: storeQuestion,
     };
 });
 
