@@ -45,10 +45,9 @@ define(function(){
     quiz.prototype = {
         parseParamsToQuestions: function(params){
             if(!params || !params.QuestionsArray) return;
-            var self = this;
-            $.each(params.QuestionsArray, function(p, o){
-                self.Questions[p] = new question(o);
-            });
+            for(var q in params.QuestionsArray){
+                this.Questions[q] = new question(params.QuestionsArray[q]);
+            }
         },
         addQuestion: function(question){
             this.Questions[question.Id] = question;
