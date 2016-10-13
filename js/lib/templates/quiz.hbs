@@ -1,10 +1,30 @@
 <div class="quizEditor" data-id="{{Id}}" data-department="{{DepartmentId}}">
     <div class="form-group lead">
         <label for="Name">Quiz Name:</label>
-        <input type="text" name="Name" id="Name" value="{{Name}}" >
+        <input type="text" name="Name" value="{{Name}}" >
     </div>
-    {{>questionSection-partial this}}
-    <button class="saveButton btn btn-primary">Save</button>
-    {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
-    <button class="cancelButton btn btn-default">Cancel</button>
+    <div class="questionsList">
+        <h3>Questions:</h3>
+        {{#listQuestions this}}
+            {{> question-partial this}}
+        {{else}}
+            {{> questionEditor-partial this}}
+        {{/listQuestions}}
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{#if Id}}
+                <button class="btn btn-success btn-sm addQuestion">Add new Question</button>
+              {{else}}
+                <p>You must first save the quiz before you can add any questions.</p>
+            {{/if}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="saveButton btn btn-primary">Save</button>
+            {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
+            <button class="cancelButton btn btn-default">Cancel</button>
+        </div>
+    </div>
 </div>
