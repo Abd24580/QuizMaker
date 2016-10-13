@@ -54,13 +54,13 @@ define([
                 }
                 
                 for(var i in answersArray){
-                    if(i === question.CorrectIndex){
+                    if(i == question.CorrectIndex){
                         push(i, answersArray[i], '<strong>' + answersArray[i] + '</strong>',true);
                         continue;
                     }
                     push(i, answersArray[i]);
                 }
-                return lis.join(' ');
+                return new hb.SafeString(lis.join(' '));
                 
                 
             });
