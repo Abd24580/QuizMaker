@@ -109,3 +109,29 @@ color:green;
     padding: 20px;
     box-shadow: 10px 10px 10px black;
 }
+
+.answerList .answerText{
+    width:100%;
+}
+
+.answer{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.question{
+    border-color: #1c6ca5;
+    border-width: 2px;
+    border-style: solid;
+    padding: 10px;
+    margin-bottom:10px;
+}
+
+.deleteAnswerButton{
+    margin-left: 5px;
+}
+
+.row{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
