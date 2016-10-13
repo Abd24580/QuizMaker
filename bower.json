@@ -12,13 +12,15 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    ".gitignore"
   ],
   "dependencies": {
     "jquery-ui": "1.12.1",
     "bootstrap": "3.3.7",
     "jQuery": "3.1.1",
     "handlebars": "^4.0.5",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "navigo": "^3.0.0"
   }
 }
