@@ -18,33 +18,44 @@
 define([
     'handlebars',
     'text!templates/question.hbs',
-    'text!templates/questionSection.hbs',
     'text!templates/deptEditor.hbs',
     'text!templates/navbar.hbs',
     'text!templates/quiz.hbs',
-    'text!templates/questionEditor.hbs'
-],function(hb,tQuestion, tQuestionSection, tDeptEdit,tNavBar, tQuiz,tQuestionEditor){
+    'text!templates/questionEditor.hbs',
+    'text!templates/answerEditor.hbs'
+],function(hb,tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor){
     
     var deptEditorTemplate;
     var quizEditorTemplate;
     var navBarTemplate;
+    var answerEditorTemplate;
+    var questionTemlate;
     
     return {
         initialize: function (){
             hb.registerPartial('question-partial', tQuestion);
-            hb.registerPartial('questionSection-partial', tQuestionSection);
             hb.registerPartial('questionEditor-partial', tQuestionEditor);
+            hb.registerPartial('answerEditor-partial', tAnswerEditor);
             hb.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
                 var lis = [];
                 
-                function push(index, answer){
-                    lis.push(options.fn({index:index, answer:answer, questionId: question.Id}));
+                function push(index, answer, answerText, correct){
+                    lis.push(
+                        options.fn(
+                            {
+                                index:index, 
+                                answer:answer,
+                                answerText: answerText || answer, 
+                                questionId: question.Id,
+                                correct: !!correct
+                            })
+                        );
                 }
                 
                 for(var a in answersArray){
                     if(a === question.CorrectIndex){
-                        push(a, '<strong>' + answersArray[a] + '</strong>' );
+                        push(a, answersArray[a], '<strong>' + answersArray[a] + '</strong>',true);
                         continue;
                     }
                     push(options.fn(answersArray[a]));
@@ -90,6 +101,18 @@ define([
                 navBarTemplate = hb.compile(tNavBar);
             }
             return navBarTemplate;
+        },
+        get answerEditor(){
+            if(!answerEditorTemplate){
+                answerEditorTemplate = hb.compile(tAnswerEditor);
+            }
+            return answerEditorTemplate;
+        },
+        get questionEditor(){
+            if(!questionTemlate){
+                questionTemlate = hb.compile(tQuestionEditor);
+            }
+            return questionTemlate;
         }
     };
 });
