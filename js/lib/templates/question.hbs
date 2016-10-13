@@ -1,7 +1,7 @@
 <div class=question data-id="{{Id}}" data-department="{{DepartmentId}}" data-quiz="{{QuizId}}">
     <div class="row">
         <div class="col-sm-9">
-            <h4>{{QuestionText}}</h4>
+            <h4>{{QuestionNumber}}. {{QuestionText}}</h4>
         </div>
         <div class="col-sm-3">
             <button class="btn btn-success btn-sm editQuestion" data-id="{{Id}}"><span class="glyphicon glyphicon-edit"></span></button>
@@ -18,5 +18,5 @@
             </div>
         </div>
     </div>
-    <p class="incorrectMessage">{{IncorrectMessage}}
+    <p class="incorrectMessage"><strong>Answer if incorrect:</strong> {{IncorrectMessage}}
 </div>
