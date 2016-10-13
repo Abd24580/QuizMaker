@@ -106,7 +106,7 @@ define([
         answerInputs.each(function(i, el){
             answers.push(el.value);
         });
-        var corrAnswer = questionDiv.find('[name="' + id + 'Correct"][checked]').data('index');
+        var corrAnswer = questionDiv.find('[name="' + id + 'Correct"]:checked').data('index');
         var questionParams = {
             DepartmentId: qm.currentDepartment.Id,
             QuizId: qm.currentQuiz.Id,
