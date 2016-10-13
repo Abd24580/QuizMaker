@@ -70,7 +70,8 @@ define([
                 var lis = [], qos = quiz.QuestionOrders;
                 for(var o in qos){
                     var question = quiz.Questions[qos[o]];
-                    lis.push(options.fn(quiz.Questions[qos[o]]));
+                    question.QuestionNumber = parseInt(o) + 1;
+                    lis.push(options.fn(question));
                 }
                 return lis.join('\n');
             });
