@@ -29,13 +29,14 @@ define([
     var quizEditorTemplate;
     var navBarTemplate;
     var answerEditorTemplate;
-    var questionTemlate;
+    var questionEditorTemplate;
+    var questionTemplate;
     
     return {
         initialize: function (){
-            hb.registerPartial('question-partial', tQuestion);
-            hb.registerPartial('questionEditor-partial', tQuestionEditor);
-            hb.registerPartial('answerEditor-partial', tAnswerEditor);
+            hb.registerPartial('question-partial', this.question);
+            hb.registerPartial('questionEditor-partial', this.questionEditor);
+            hb.registerPartial('answerEditor-partial', this.answerEditor);
             hb.registerHelper("listAnswers", function(question, options){
                 var answersArray = question.AnswersArray;
                 var lis = [];
@@ -61,11 +62,7 @@ define([
                     push(i, answersArray[i]);
                 }
                 return new hb.SafeString(lis.join('\n'));
-                
-                
             });
-            
-            
             hb.registerHelper('listQuestions', function(quiz, options){
                 var lis = [], qos = quiz.QuestionOrders;
                 for(var o in qos){
@@ -101,10 +98,16 @@ define([
             return answerEditorTemplate;
         },
         get questionEditor(){
-            if(!questionTemlate){
-                questionTemlate = hb.compile(tQuestionEditor);
+            if(!questionEditorTemplate){
+                questionEditorTemplate = hb.compile(tQuestionEditor);
             }
-            return questionTemlate;
+            return questionEditorTemplate;
+        },
+        get question(){
+            if(!questionTemplate){
+                questionTemplate = hb.compile(tQuestion);
+            }
+            return questionTemplate;
         }
     };
 });
