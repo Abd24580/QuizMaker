@@ -12,7 +12,7 @@
             <p class="answers">Answers:</p>
             <div class="answerList">
                 {{#listAnswers this}}
-                <div class="row">{{{answerText}}}</div>
+                <div class="col-md-3 col-sm-4">{{plusOne index}}. {{{answerText}}}</div>
                 {{/listAnswers}}
             </div>
         </div>
