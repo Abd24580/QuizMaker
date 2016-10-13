@@ -23,7 +23,8 @@ requirejs.config({
         underscore: '/bower_components/underscore/underscore-min',
         "jquery-ui": '/bower_components/jquery-ui/jquery-ui.min',
         "jquery":'/bower_components/jquery/dist/jquery.min',
-        bootstrap:'/bower_components/bootstrap/dist/js/bootstrap.min'
+        bootstrap:'/bower_components/bootstrap/dist/js/bootstrap.min',
+        templates:'/tmpl'
     },
     shim:{
         'underscore':{
