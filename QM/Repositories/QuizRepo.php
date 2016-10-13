@@ -72,7 +72,6 @@ class QuizRepo {
         if($this->QuizExists($quiz->DepartmentId, $quiz->Id)){
             $oldQuiz = $this->GetQuiz($quiz->DepartmentId, $quiz->Id);
             $quiz->QuestionsArray = $oldQuiz->QuestionsArray;
-            $quiz->QuestionOrders = $oldQuiz;
         }
         $this->storeToJson($quiz);
         $this->deptsRepo->AddQuizToDepartment($quiz);

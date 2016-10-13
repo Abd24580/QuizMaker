@@ -155,6 +155,16 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _
         postData(parameters);
     }
     
+    function deleteQuestion(question){
+        var parameters = {
+            data: question,
+            callback: applyQuiz
+        };
+        parameters.data['SUBJECT'] = 'question';
+        parameters.data['ACTION'] = 'delete';
+        postData(parameters);
+    }
+    
    return {
         displayLoading: displayLoading,
         stopLoading: stopLoading,
@@ -165,6 +175,7 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _
         storeQuiz: storeQuiz,
         deleteQuiz: deleteQuiz,
         storeQuestion: storeQuestion,
+        deleteQuestion: deleteQuestion
     };
 });
 

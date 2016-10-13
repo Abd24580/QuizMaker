@@ -29,14 +29,8 @@
         <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/base/all.css">
         <script data-main="../js/app" src="../js/require.js"></script>
     </head>
-    <body>
+    <body class="container">
         <div id="navBarContainer"></div>
-        
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="mainCanvas"></div>
-            </div>
-        </div>
-        
+        <div class="col-lg-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="mainCanvas"></div>        
     </body>
 </html>

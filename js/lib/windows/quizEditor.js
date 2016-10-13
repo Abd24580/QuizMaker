@@ -28,6 +28,16 @@ define([
     'jquery-ui'
 ],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
 
+    function showAlert(message){
+        var alert = $('<div class="alert alert-info pull-right" id="alertBox" role="alert">' + message + '</div>');
+        $('#alertSpot').html('').append(alert);
+        
+    }
+
+    function hideAlert(){
+        $('#alertSpot').html('');
+    }
+
     function getParentQuestionInfo(element, model){
         if(!(element instanceof jQuery)) var element = $(element);
         var id = element.data('id');
@@ -89,12 +99,13 @@ define([
             QuizId: qm.currentQuiz.Id,
             Id: _.uniqueId('NewQuestion')
         });
-        //e.data.model.addQuestion(q);
+        e.data.model.addQuestion(q);
         var temp = templating.questionEditor(q);
         var jqTemp = $(temp);
         var qList = e.data.dom.find('.questionsList');
         qList.append(jqTemp);
         attachHandlers(jqTemp, e.data);
+        e.data.editing = true;
     }
     
     function editQuestionEvent(e){
@@ -103,6 +114,7 @@ define([
         var jqEl = $(temp);
         qInfo.questionDiv.html(jqEl.html());
         attachHandlers(qInfo.questionDiv, e.data);
+        e.data.editing = true;
     }
     
     function saveQuestionEvent(e){
@@ -150,23 +162,78 @@ define([
     
     function cancelEditEvent(e){
         var qInfo = getParentQuestionInfo(this, e.data.model);
-//        var question = e.data.model.Questions[qInfo.Id];
-        var temp = templating.question(qInfo.question);
-        var jqEl = $(temp);
-        qInfo.questionDiv.html(jqEl.html());
-        attachHandlers(qInfo.questionDiv, e.data);
+        if(qInfo.id.indexOf('NewQuestion') !== 0){
+            var temp = templating.question(qInfo.question);
+            var jqEl = $(temp);
+            qInfo.questionDiv.html(jqEl.html());
+            attachHandlers(qInfo.questionDiv, e.data);
+        }else{
+            qInfo.questionDiv.remove();
+            delete e.data.model[qInfo.id];
+        }
+        e.data.editing = false;
     }
     
+    function deleteQuestionEvent(e){
+        var qInfo = getParentQuestionInfo(this, e.data.model);
+        var message = "Are you sure you want to delete this question? This cannot be undone.";
+        var question = qInfo.question;
+        var options =  {
+            title: "Are you sure?",
+            buttons:[
+                {
+                    text: "Delete this permanently.",
+                    click:function(){
+                        $(this).dialog('close');
+                        qm.intercept('currentQuiz').once.withFunc(function(quiz){
+                            e.data.model = quiz;
+                            qInfo.questionDiv.remove();
+                            return true;
+                        });
+                        repository.deleteQuestion(question);
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function(){
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        };
+        
+        utils.showDialog(options, message);
+        
+        e.data.editing = false;
+    }
     
-    function attachHandlers(element, data){
-        element.find('button.saveButton').click(data, saveButtonEvent);
-        element.find('button.cancelButton').click(data,cancelButtonEvent);
-        element.find('button.deleteButton').click(data,deleteButtonEvent);
-        element.find('button.addQuestion').click(data,addQuestionEvent);
-        element.find('button.editQuestion').click(data, editQuestionEvent);
-        element.find('button.saveQuestion').click(data, saveQuestionEvent);
-        element.find('button.addAnswer').click(data, addAnswerEvent);
-        element.find('button.cancelEdit').click(data,cancelEditEvent);
+    function attachHandlers(element, quizEditor){
+        element.find('button.saveButton').click(quizEditor, saveButtonEvent);
+        element.find('button.cancelButton').click(quizEditor,cancelButtonEvent);
+        element.find('button.deleteButton').click(quizEditor,deleteButtonEvent);
+        element.find('button.addQuestion').click(quizEditor,addQuestionEvent);
+        element.find('button.editQuestion').click(quizEditor, editQuestionEvent);
+        element.find('button.saveQuestion').click(quizEditor, saveQuestionEvent);
+        element.find('button.deleteQuestion').click(quizEditor,deleteQuestionEvent);
+        element.find('button.addAnswer').click(quizEditor, addAnswerEvent);
+        element.find('button.cancelEdit').click(quizEditor,cancelEditEvent);
+        
+        element.find('.questionsList').sortable({
+            handle:'.moveBlock',
+            items: '.question',
+            containment: 'parent',
+            axis: 'y',
+            update: function(){
+                var newOrder = [];
+                var questions = $(this).find('.question');
+                questions.each(function(i, el){
+                    var jqEl = $(el);
+                    newOrder.push(jqEl.data('id'));
+                });
+                quizEditor.model.QuestionOrders = newOrder;
+                showAlert('The new order of your questions will not be saved until you click the save button.');
+            }
+        });
         element.tooltip();
     }
     
@@ -181,6 +248,29 @@ define([
                     this.model['Name'] = this.dom.find('[name="Name"]').val();
                     this.model['DeparmentId'] = qm.currentDepartment.Id;
                     return this.model;
+                }
+            },
+            'editing':{
+                get: function editing(){
+                    if(this._editing == null){
+                        this._editing = false;
+                    }
+                    return this._editing;
+                },
+                set: function editing(x){
+                    this._editing = x;
+                    this.saveButton.prop('disabled',x);
+                    var editButtons = this.dom.find('.editQuestion, .addQuestion').prop('disabled',x);
+                    this.dom.find('.questionsList').sortable('option','disabled', x);
+                    if(x){
+                        this.saveButton.prop('title',"You must finish with the question you're editing before you save the quiz.");
+                        editButtons.prop('title', "You must finish with the question you're editing before you edit another.");
+                        this.dom.find('.moveBlock').hide();
+                    }else{ 
+                        this.saveButton.prop('title',"");
+                        editButtons.prop('title', '');
+                        this.dom.find('.moveBlock').show();
+                    }
                 }
             }
         })

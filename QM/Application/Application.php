@@ -132,6 +132,7 @@ class Application {
         $quiz = new Quiz($data->data['Id']);
         $quiz->Name = $data->data['Name'];
         $quiz->DepartmentId = $data->data['DepartmentId'];
+        $quiz->QuestionOrders = $data->data['QuestionOrders'];
         $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($loadedQuiz);
     }
@@ -231,9 +232,4 @@ class Application {
         $departments = $this->departmentsRepo->GetDepartments();
         $this->jsonPackager->SendData($departments);
     }
-    
-    
-
-    
-
 }

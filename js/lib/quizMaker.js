@@ -21,6 +21,7 @@ define(['underscore'],function(_){
 
     function quizMaker(){
         this.bindings = {};
+        this.interceptions = {};
     };
     
     quizMaker.prototype = {
@@ -74,7 +75,7 @@ define(['underscore'],function(_){
             }
             
             return {
-                to: function(binding){
+                to: function(binding){ //binding = function(property)
                     if(!self.bindings[propertyName])
                         self.bindings[propertyName] = {};
                     var id = _.uniqueId(propertyName);
@@ -93,9 +94,51 @@ define(['underscore'],function(_){
         unbind: function(propertyName, id){
             delete this.bindings[propertyName][id];
         },
+        /**
+         * // func = 
+         * @param {type} propertyName
+         * @param {function} Signature: function (property) => boolean,
+         * where true allows the 
+         * @returns {undefined}
+         */
+        intercept: function(propertyName){ 
+            if(!this.interceptions[propertyName])
+                this.interceptions[propertyName] = {};
+            if(!this.interceptions.onesies)
+                this.interceptions.onesies = {};
+            var self = this;
+            var onceOnly = false;;
+            return {
+                get once(){
+                    onceOnly = true;
+                    return this;
+                },
+                withFunc: function(func){
+                    var id = _.uniqueId(propertyName);
+                    self.interceptions[propertyName][id] = func;
+                    if(onceOnly){
+                        self.interceptions.onesies[id] = true;
+                    }
+                    return id;
+                }
+            };
+        },
         updateBindings: function(propertyName){
             if(!this.bindings) return;
             var bindings = this.bindings[propertyName];
+            var interceptions = this.interceptions[propertyName];
+            var intercepted = false;
+            if(interceptions && !_.isEmpty(interceptions)){
+                for(var id in interceptions){
+                    var func = interceptions[id];
+                    intercepted = func(this.prop(propertyName));
+                    if(this.interceptions.onesies[id]){
+                        delete interceptions[id];
+                        delete this.interceptions.onesies[id];
+                    }
+                    if(intercepted) return;
+                }
+            }
             for(var f in bindings){
                 if(bindings[f]){
                     bindings[f](this.prop(propertyName));
