@@ -40,6 +40,7 @@ class QuestionFactory {
         $q->QuestionText = $questionText;
         $q->AnswersArray = $answers;
         $q->IncorrectMessage = $incorrectMessage;
+        $q->CorrectIndex = $correctIndex;
         return $q;
     }
             
