@@ -32,7 +32,7 @@ define(function(){
         this.QuizId = params.QuizId || null;
         this.QuestionText = params.QuestionText || null;
         this.AnswersArray = params.AnswersArray || [];
-        this.CorrectIndex = params.CorrectIndex || null;
+        this.CorrectIndex = params.CorrectIndex != null ? params.CorrectIndex : null;
         this.IncorrectMessage = params.IncorrectMessage || null;
         this.editing = false;
     }    
