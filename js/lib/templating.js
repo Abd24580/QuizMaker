@@ -53,12 +53,12 @@ define([
                         );
                 }
                 
-                for(var a in answersArray){
-                    if(a === question.CorrectIndex){
-                        push(a, answersArray[a], '<strong>' + answersArray[a] + '</strong>',true);
+                for(var i in answersArray){
+                    if(i === question.CorrectIndex){
+                        push(i, answersArray[i], '<strong>' + answersArray[i] + '</strong>',true);
                         continue;
                     }
-                    push(options.fn(answersArray[a]));
+                    push(i, answersArray[i]);
                 }
                 return lis.join(' ');
                 
