@@ -10,7 +10,7 @@ hr {
     width: 720px;
 }
 
-.currentQuestion{
+/*.currentQuestion{
   font-size: 18px;
   font-weight: bold;
   padding:10px;
@@ -51,13 +51,13 @@ color:green;
     cursor:default;
 }
 
-/*.container {
+.container {
   width:780px;
   margin: 0 auto;
   margin-top:25px;
   border-radius: 10px;
   background-color: #ffffff;
-}*/
+}
 
 .btn-primary {
     color: #fff;
@@ -68,12 +68,12 @@ color:green;
 
 .headerinfos{
   padding-left:10px;
-}
+}*/
 
 .answerList {
   padding-left: 20px;
 }
-
+/*
 #logo {
   height:33px;
   position:relative;
@@ -89,7 +89,7 @@ color:green;
 #btnNext {
   width:90px;
   margin-right:10px;
-}
+}*/
 
 #mainCanvas{
     margin-top: 90px;
@@ -134,4 +134,8 @@ color:green;
 .row{
     padding-top: 5px;
     padding-bottom: 5px;
+}
+.buttonRight{
+    float:right;
+    margin-left:2px;
 }
