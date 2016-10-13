@@ -55,7 +55,7 @@ define([
                 
                 for(var i in answersArray){
                     if(i == question.CorrectIndex){
-                        push(i, answersArray[i], '<strong>' + answersArray[i] + '</strong>',true);
+                        push(i, answersArray[i], '<strong>' + answersArray[i] + ' (<em>correct</em>)</strong>',true);
                         continue;
                     }
                     push(i, answersArray[i]);
