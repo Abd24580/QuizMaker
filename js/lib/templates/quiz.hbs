@@ -1,14 +1,12 @@
 <div class="quizEditor" data-id="{{Id}}" data-department="{{DepartmentId}}">
     <div class="form-group lead">
         <label for="Name">Quiz Name:</label>
-        <input type="text" name="Name" value="{{Name}}" >
+        <input class="form-control" type="text" name="Name" value="{{Name}}" >
     </div>
     <div class="questionsList">
         <h3>Questions:</h3>
         {{#listQuestions this}}
             {{> question-partial this}}
-        {{else}}
-            {{> questionEditor-partial this}}
         {{/listQuestions}}
     </div>
     <div class="row">
