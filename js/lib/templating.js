@@ -72,6 +72,11 @@ define([
                 }
                 return lis.join('\n');
             });
+            hb.registerHelper('plusOne', function(item){
+                var num = parseInt(item);
+                if(isNaN(num)) return "";
+                return (++num).toString();
+            });
         }, 
         get deptEditor(){
             if(!deptEditorTemplate){
