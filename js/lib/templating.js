@@ -60,7 +60,7 @@ define([
                     }
                     push(i, answersArray[i]);
                 }
-                return new hb.SafeString(lis.join(' '));
+                return new hb.SafeString(lis.join('\n'));
                 
                 
             });
@@ -70,18 +70,9 @@ define([
                 var lis = [], qos = quiz.QuestionOrders;
                 for(var o in qos){
                     var question = quiz.Questions[qos[o]];
-                    if(question.editing){
-                        lis.push(options.inverse(question));
-                        continue;
-                    }
                     lis.push(options.fn(quiz.Questions[qos[o]]));
                 }
-                for(var q in quiz.Questions){
-                    if(q.indexOf('NewQuestion') === 0){
-                        lis.push(options.inverse(quiz.Questions[q]));
-                    }
-                }
-                return lis.join(' ');
+                return lis.join('\n');
             });
         }, 
         get deptEditor(){
