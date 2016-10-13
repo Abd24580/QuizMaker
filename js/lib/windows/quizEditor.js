@@ -27,7 +27,19 @@ define([
     'jquery',
     'jquery-ui'
 ],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
-    
+
+    function getParentQuestionInfo(element, model){
+        if(!(element instanceof jQuery)) var element = $(element);
+        var id = element.data('id');
+        var questionDiv = element.parents('[class="question"][data-id="' + id + '"]');
+        var question = model.Questions[id];
+        return {
+            id: id,
+            questionDiv: questionDiv,
+            question: question
+        };
+    }
+
     function saveButtonEvent(e){
         var quiz = new dos.quiz(e.data.data);
         quiz.DepartmentId = qm.currentDepartment.Id;
@@ -77,7 +89,7 @@ define([
             QuizId: qm.currentQuiz.Id,
             Id: _.uniqueId('NewQuestion')
         });
-        e.data.model.addQuestion(q);
+        //e.data.model.addQuestion(q);
         var temp = templating.questionEditor(q);
         var jqTemp = $(temp);
         var qList = e.data.dom.find('.questionsList');
@@ -86,14 +98,11 @@ define([
     }
     
     function editQuestionEvent(e){
-        var jqThis = $(this);
-        var id = jqThis.data('id');
-        var questionDiv = jqThis.parents('[class="question"][data-id="' + id + '"]');
-        var question = e.data.model.Questions[id];
-        var temp = templating.questionEditor(question);
+        var qInfo = getParentQuestionInfo(this, e.data.model);
+        var temp = templating.questionEditor(qInfo.question);
         var jqEl = $(temp);
-        questionDiv.html(jqEl.html());
-        attachHandlers(questionDiv, e.data);
+        qInfo.questionDiv.html(jqEl.html());
+        attachHandlers(qInfo.questionDiv, e.data);
     }
     
     function saveQuestionEvent(e){
@@ -139,15 +148,25 @@ define([
         answersList.append(temp);  
     }
     
+    function cancelEditEvent(e){
+        var qInfo = getParentQuestionInfo(this, e.data.model);
+//        var question = e.data.model.Questions[qInfo.Id];
+        var temp = templating.question(qInfo.question);
+        var jqEl = $(temp);
+        qInfo.questionDiv.html(jqEl.html());
+        attachHandlers(qInfo.questionDiv, e.data);
+    }
+    
+    
     function attachHandlers(element, data){
-        
-        element.find('.saveButton').click(data, saveButtonEvent);
-        element.find('.cancelButton').click(data,cancelButtonEvent);
-        element.find('.deleteButton').click(data,deleteButtonEvent);
-        element.find('.addQuestion').click(data,addQuestionEvent);
+        element.find('button.saveButton').click(data, saveButtonEvent);
+        element.find('button.cancelButton').click(data,cancelButtonEvent);
+        element.find('button.deleteButton').click(data,deleteButtonEvent);
+        element.find('button.addQuestion').click(data,addQuestionEvent);
         element.find('button.editQuestion').click(data, editQuestionEvent);
         element.find('button.saveQuestion').click(data, saveQuestionEvent);
         element.find('button.addAnswer').click(data, addAnswerEvent);
+        element.find('button.cancelEdit').click(data,cancelEditEvent);
         element.tooltip();
     }
     
