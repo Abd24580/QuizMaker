@@ -7,7 +7,7 @@ composer.lock
 bower_components/*/*
 !bower_components/bootstrap/dist/
 !bower_components/handlebars/handlebars*.js
-!bower_components/jquery/dist/
+!bower_components/jQuery/dist/
 !bower_components/jquery-ui/jquery-ui*.js
 !bower_components/jquery-ui/themes/base/
 !bower_components/underscore/underscore*.js
