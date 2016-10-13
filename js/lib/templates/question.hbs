@@ -1,11 +1,10 @@
 <div class=question data-id="{{Id}}" data-department="{{DepartmentId}}" data-quiz="{{QuizId}}">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <h4>{{QuestionNumber}}. {{QuestionText}}</h4>
         </div>
-        <div class="col-sm-3">
-            <button class="btn btn-success btn-sm editQuestion" data-id="{{Id}}"><span class="glyphicon glyphicon-edit"></span></button>
-            <button class="btn btn-danger btn-sm deleteQuestion" data-id="{{Id}}"><span class="glyphicon glyphicon-remove"></span></button>
+        <div class="col-sm-2">
+            <button class="btn btn-success btn-sm editQuestion pull-right" data-id="{{Id}}" title="Edit this question"><span class="glyphicon glyphicon-edit"></span></button>
         </div>
     </div>
     <div class="row">

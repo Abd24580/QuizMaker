@@ -148,6 +148,7 @@ define([
         element.find('button.editQuestion').click(data, editQuestionEvent);
         element.find('button.saveQuestion').click(data, saveQuestionEvent);
         element.find('button.addAnswer').click(data, addAnswerEvent);
+        element.tooltip();
     }
     
     
