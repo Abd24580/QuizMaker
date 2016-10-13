@@ -28,6 +28,130 @@ define([
     'jquery-ui'
 ],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
     
+    function saveButtonEvent(e){
+        var quiz = new dos.quiz(e.data.data);
+        quiz.DepartmentId = qm.currentDepartment.Id;
+        qm.bind('currentQuiz').once.to(function(quiz){
+            e.data.model = quiz;
+            e.data.rerender();
+        });
+        repository.storeQuiz(quiz);
+    };
+    
+    function cancelButtonEvent(e){
+        e.data.hide();
+        qm.unset('currentQuiz');
+    };
+    
+    function deleteButtonEvent(e){
+        var message = "Are you sure you want to delete this quiz? This cannot be undone.";
+        var id = qm.currentQuiz.Id;
+        var deptId = qm.currentDepartment.Id;
+        var options =  {
+            title: "Are you sure?",
+            buttons:[
+                {
+                    text: "Delete this permanently.",
+                    click:function(){
+                        e.data.hide();
+                        $(this).dialog('close');
+                        repository.deleteQuiz(id, deptId);
+                        qm.unset('currentQuiz');
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function(){
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        };
+
+        utils.showDialog(options, message);
+    }
+    
+    function addQuestionEvent(e){
+        var q = new dos.question({
+            DepartmentId: qm.currentDepartment.Id,
+            QuizId: qm.currentQuiz.Id,
+            Id: _.uniqueId('NewQuestion')
+        });
+        e.data.model.addQuestion(q);
+        var temp = templating.questionEditor(q);
+        var jqTemp = $(temp);
+        var qList = e.data.dom.find('.questionsList');
+        qList.append(jqTemp);
+        attachHandlers(jqTemp, e.data);
+    }
+    
+    function editQuestionEvent(e){
+        var jqThis = $(this);
+        var id = jqThis.data('id');
+        var questionDiv = jqThis.parents('[class="question"][data-id="' + id + '"]');
+        var question = e.data.model.Questions[id];
+        var temp = templating.questionEditor(question);
+        var jqEl = $(temp);
+        questionDiv.html(jqEl.html());
+        attachHandlers(questionDiv, e.data);
+    }
+    
+    function saveQuestionEvent(e){
+        var jqThis = $(this);
+        var id = jqThis.data('id');
+        var isNewQuestion = id.indexOf('NewQuestion') === 0;
+        var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
+        var answerInputs = questionDiv.find('[name="' + id + 'Answer"]');
+        var answers = [];
+        answerInputs.each(function(i, el){
+            answers.push(el.value);
+        });
+        var corrAnswer = questionDiv.find('[name="' + id + 'Correct"][checked]').data('index');
+        var questionParams = {
+            DepartmentId: qm.currentDepartment.Id,
+            QuizId: qm.currentQuiz.Id,
+            QuestionText: questionDiv.find('[name="QuestionText"]').val(),
+            AnswersArray: answers,
+            CorrectIndex: corrAnswer,
+            IncorrectMessage: questionDiv.find('[name="IncorrectMessage"]').val()
+        };
+        var question = new dos.question(questionParams);
+        question.Id = isNewQuestion ? null : id;
+        qm.bind('currentQuiz').once.to(function(quiz){
+            e.data.model = quiz;
+            e.data.rerender();
+        });
+        repository.storeQuestion(question);
+    }
+    
+    function addAnswerEvent(e){
+        var jqThis = $(this);
+        var id = jqThis.data('id');
+        var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
+        var answersList = questionDiv.find('.answerList');
+        var lastAnswer = answersList.find('.answerText').last();
+        var newIndex = lastAnswer.length > 0 ? parseFloat(lastAnswer.data('index')) + 1 : 0;
+        var newAnswer = {questionId: id, index: newIndex};
+        if(newIndex === 0) newAnswer.correct = true;
+        var temp = templating.answerEditor(newAnswer);
+        var jqTemp = $(temp);
+        attachHandlers(jqTemp, e.data);
+        answersList.append(temp);  
+    }
+    
+    function attachHandlers(element, data){
+        
+        element.find('.saveButton').click(data, saveButtonEvent);
+        element.find('.cancelButton').click(data,cancelButtonEvent);
+        element.find('.deleteButton').click(data,deleteButtonEvent);
+        element.find('.addQuestion').click(data,addQuestionEvent);
+        element.find('button.editQuestion').click(data, editQuestionEvent);
+        element.find('button.saveQuestion').click(data, saveQuestionEvent);
+        element.find('button.addAnswer').click(data, addAnswerEvent);
+    }
+    
+    
+    
     function quizEditor(quiz){
         this.model = quiz || {};
         this.template = templating.quizEditor;
@@ -35,105 +159,13 @@ define([
             'data':{
                 get: function data(){
                     this.model['Name'] = this.dom.find('[name="Name"]').val();
+                    this.model['DeparmentId'] = qm.currentDepartment.Id;
                     return this.model;
                 }
-            },'addQuestionButton':{
-                get: function addQuestion(){
-                    return this.dom.find('.addQuestion');
-                }
             }
-        });
+        })
         this.attachHandlers = function(){
-            this.saveButton.click(this, function(e){
-                var quiz = new dos.quiz(e.data.data);
-                quiz.DepartmentId = qm.currentDepartment.Id;
-                qm.bind('currentQuiz').once.to(function(quiz){
-                    e.data.model = quiz;
-                    e.data.rerender();
-                });
-                repository.storeQuiz(quiz);
-            });
-            
-            this.cancelButton.click(this, function(e){
-                e.data.hide();
-                qm.unset('currentQuiz');
-            });
-            
-            this.deleteButton.click(this, function(e){
-                var message = "Are you sure you want to delete this quiz? This cannot be undone.";
-                var id = e.data.data['Id'];
-                var deptId = e.data.data['DepartmentId'];
-                var options =  {
-                    title: "Are you sure?",
-                    buttons:[
-                        {
-                            text: "Delete this permanently.",
-                            click:function(){
-                                e.data.hide();
-                                $(this).dialog('close');
-                                repository.deleteQuiz(id, deptId);
-                                qm.unset('currentQuiz');
-                            }
-                        },
-                        {
-                            text: "Cancel",
-                            click: function(){
-                                $(this).dialog('close');
-                            }
-                        }
-                    ]
-                };
-                
-                utils.showDialog(options, message);
-            });
-            
-            this.addQuestionButton.click(this, function(e){
-                var q = new dos.question();
-                var id = _.uniqueId('NewQuestion');
-                q.Id = id;
-                e.data.model.addQuestion(q);
-                e.data.rerender();
-            });
-            
-            this.dom.find('button.editQuestion').click(this, function(e){
-                var jqThis = $(this);
-                var id = jqThis.data('id');
-                e.data.model.Questions[id].editing = true;
-            });
-            
-            this.dom.find('button.saveQuestion').click(this, function(e){
-                var jqThis = $(this);
-                var id = jqThis.data('id');
-                var isNewQuestion = id.indexOf('NewQuestion') === 0;
-                var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
-                var answerInputs = questionDiv.find('[name="' + id + 'Answer"]');
-                var answers = [];
-                answerInputs.each(function(i, el){
-                    answers.push(el.value);
-                });
-                var corrAnswer = questionDiv.find('[name="' + id + 'Correct"]:checked').data('index');
-                var questionParams = {
-                    DepartmentId: qm.currentDepartment.Id,
-                    QuizId: qm.currentQuiz.Id,
-                    QuestionText: questionDiv.find('[name="QuestionText"]').val(),
-                    AnswersArray: answers,
-                    CorrectIndex: corrAnswer,
-                    IncorrectMessage: questionDiv.find('[name="IncorrectMessage"]').val()
-                };
-                var question = new dos.question(questionParams);
-                question.Id = isNewQuestion ? null : id;
-                repository.storeQuestion(question);
-            });
-            
-            this.dom.find('button.addAnswer').click(this, function(e){
-                var jqThis = $(this);
-                var id = jqThis.data('id');
-                var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
-                //Add new input grouping here...
-            });
-            
-            
-            
+            attachHandlers(this.dom, this);
         };
     }
     
