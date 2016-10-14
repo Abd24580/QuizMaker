@@ -10,23 +10,25 @@
         {{/listQuestions}}
     </div>
     <div class="row">
-        <div class="col-xs-12">
-            {{#if Id}}
-                <button class="btn btn-success btn-sm addQuestion">Add new Question</button>
-              {{else}}
-                <p>You must first save the quiz before you can add any questions.</p>
-            {{/if}}
-            <button class="btn btn-info btn-sm resetOrder">Reset question order</button>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-xs-12">
+                    {{#if Id}}
+                        <button class="btn btn-success btn-sm addQuestion">Add new Question</button>
+                      {{else}}
+                        <p>You must first save the quiz before you can add any questions.</p>
+                    {{/if}}
+                    <button class="btn btn-info btn-sm resetOrder">Reset question order</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="saveButton btn btn-primary">Save</button>
+                    {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
+                    <button class="cancelButton btn btn-default">Cancel</button>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <button class="saveButton btn btn-primary">Save</button>
-            {{#if Id }}<button class="deleteButton btn btn-danger">Delete</button>{{/if}}
-            <button class="cancelButton btn btn-default">Cancel</button>
-        </div>
-    </div>
-    <div class="row">
-        <div id="alertSpot"></div>
+        <div id="alertSpot" class="col-sm-6"></div>
     </div>
 </div>
