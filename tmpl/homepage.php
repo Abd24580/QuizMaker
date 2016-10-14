@@ -32,6 +32,8 @@
     </head>
     <body class="container">
         <div id="navBarContainer"></div>
-        <div class="col-lg-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="mainCanvas"></div>        
+        <div class="row">
+            <div class="col-lg-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="mainCanvas"></div>        
+        </div>
     </body>
 </html>

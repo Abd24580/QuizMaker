@@ -1,14 +1,14 @@
 body {
   background-image: url("../imgs/testbg.png");
 }
-
+/*
 hr {
     margin-top: 15px;
     margin-bottom: 15px;
     border: 0;
     border-top: 2px solid #1c6ca5;
     width: 720px;
-}
+}*/
 
 /*.currentQuestion{
   font-size: 18px;
@@ -155,4 +155,14 @@ color:green;
 }
 .answerBlock:nth-child(4n){
     background-color: #ffe6b3;
+}
+
+#loadingBar{
+    padding-top: 1em;
+    display: none;
+}
+
+#loadingBar > img{
+    height: 10px;
+    width: 100%;
 }

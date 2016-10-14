@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _, $){
+define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], function(dos, qm, _, $){
    
     function applyDepartments(data){
         for(var d in data.data){
@@ -65,10 +65,10 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery'], function(dos, qm, _
     } 
     
     function displayLoading(){
-            
+        $('#loadingBar').show('fade',200);
     }
     function stopLoading (){
-
+        $('#loadingBar').hide('fade',200);
     }
 
     function getDepartments (){
