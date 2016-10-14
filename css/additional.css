@@ -139,3 +139,20 @@ color:green;
     float:right;
     margin-left:2px;
 }
+
+.answerBlock{
+    padding: 5px;
+    border-radius: 5px;
+}
+.answerBlock:nth-child(1n){
+    background-color: #d5d5ef;
+}
+.answerBlock:nth-child(2n){
+    background-color: #d5efe5;
+}
+.answerBlock:nth-child(3n){
+    background-color: #ffb380;
+}
+.answerBlock:nth-child(4n){
+    background-color: #ffe6b3;
+}
