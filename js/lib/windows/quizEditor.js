@@ -29,7 +29,7 @@ define([
 ],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
 
     function showAlert(message){
-        var alert = $('<div class="alert alert-info pull-right" id="alertBox" role="alert">' + message + '</div>');
+        var alert = $('<div class="alert alert-info" id="alertBox" role="alert">' + message + '</div>');
         $('#alertSpot').html('').append(alert);
         
     }
@@ -207,6 +207,14 @@ define([
         e.data.editing = false;
     }
     
+    
+    function resetOrderEvent(e){
+        e.data.dom.find('.questionsList').sortable('cancel');
+        e.data.model.QuestionOrders = e.data.model.cachedOrder;
+        this.style.display = 'none';
+        hideAlert();
+    }
+    
     function attachHandlers(element, quizEditor){
         element.find('button.saveButton').click(quizEditor, saveButtonEvent);
         element.find('button.cancelButton').click(quizEditor,cancelButtonEvent);
@@ -217,21 +225,39 @@ define([
         element.find('button.deleteQuestion').click(quizEditor,deleteQuestionEvent);
         element.find('button.addAnswer').click(quizEditor, addAnswerEvent);
         element.find('button.cancelEdit').click(quizEditor,cancelEditEvent);
-        
+        element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
             containment: 'parent',
             axis: 'y',
+            cursor: 'move',
             update: function(){
+                if(!quizEditor.model.cachedOrder)
+                    quizEditor.model.cachedOrder = quizEditor.model.QuestionOrders;
                 var newOrder = [];
                 var questions = $(this).find('.question');
                 questions.each(function(i, el){
                     var jqEl = $(el);
                     newOrder.push(jqEl.data('id'));
                 });
-                quizEditor.model.QuestionOrders = newOrder;
-                showAlert('The new order of your questions will not be saved until you click the save button.');
+                var diff = false;
+                for(var i in newOrder){
+                    if(quizEditor.model.cachedOrder[i] !== newOrder[i]){
+                        diff=true;
+                        break;
+                    }
+                }
+                var resetButton = element.find('button.resetOrder');
+                if(diff){
+                    quizEditor.model.QuestionOrders = newOrder;
+                    showAlert('The new order of your questions will not be saved until you click the save button.');
+                    resetButton.show();
+                }else{
+                    hideAlert();
+                    resetButton.hide();
+                }
+                quizEditor.dom.find('.editQuestion, .addQuestion').prop('disabled',diff);
             }
         });
         element.tooltip();
@@ -273,7 +299,7 @@ define([
                     }
                 }
             }
-        })
+        });
         this.attachHandlers = function(){
             attachHandlers(this.dom, this);
         };
