@@ -20,7 +20,7 @@ define([
     'text!templates/question.hbs',
     'text!templates/deptEditor.hbs',
     'text!templates/navbar.hbs',
-    'text!templates/quiz.hbs',
+    'text!templates/quizEditor.hbs',
     'text!templates/questionEditor.hbs',
     'text!templates/answerEditor.hbs'
 ],function(hb,tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor){
