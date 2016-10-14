@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-10 form-horizontal">
             <label>Question:</label>
-            <input class="form-control questionText" type="text" name="QuestionText" value="{{QuestionText}}">
+            <input class="form-control questionText questionInput" type="text" name="QuestionText" value="{{QuestionText}}">
         </div>
         <div class="col-sm-2">
             <div class="buttonRight">
@@ -27,12 +27,12 @@
     </div>
     <div class="row">
         <div class="col-sm-10">
-            <p class="incorrectMessage">Incorrect Message: <input type="text" class="form-control" name="IncorrectMessage" value="{{IncorrectMessage}}">
+            <p class="incorrectMessage questionInput">Incorrect Message: <input type="text" class="form-control" name="IncorrectMessage" value="{{IncorrectMessage}}">
         </div>
         <div class="col-sm-2">
             <div class="buttonRight">
-                <button class="btn btn-primary btn-sm saveQuestion" disabled data-id="{{Id}}"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-                <button class="btn btn-danger btn-sm deleteQuestion" data-id="{{Id}}" title="Delete this question"><span class="glyphicon glyphicon-trash"></span></button>
+                <button class="btn btn-primary btn-sm saveQuestion questionInput" disabled data-id="{{Id}}"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                <button class="btn btn-danger btn-sm deleteQuestion questionInput" data-id="{{Id}}" title="Delete this question"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </div>
