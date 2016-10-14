@@ -97,7 +97,8 @@ define(['underscore'],function(_){
             };
         },
         unbind: function(propertyName, id){
-            delete this.bindings[propertyName][id];
+            if(id) delete this.bindings[propertyName][id];
+            else delete this.bindings[propertyName];
         },
         /**
          * // func = 

@@ -7,7 +7,6 @@
         <div class="col-sm-2">
             <div class="buttonRight">
                 <button class="btn btn-default btn-sm cancelEdit" data-id="{{Id}}" title="Cancel edit"><span class="glyphicon glyphicon-remove"></span></button>
-                <button class="btn btn-danger btn-sm deleteQuestion" data-id="{{Id}}" title="Delete this question"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </div>
@@ -31,7 +30,10 @@
             <p class="incorrectMessage">Incorrect Message: <input type="text" class="form-control" name="IncorrectMessage" value="{{IncorrectMessage}}">
         </div>
         <div class="col-sm-2">
-            <button class="btn btn-primary btn-sm saveQuestion buttonRight" data-id="{{Id}}">Save</button>
+            <div class="buttonRight">
+                <button class="btn btn-primary btn-sm saveQuestion" disabled data-id="{{Id}}"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                <button class="btn btn-danger btn-sm deleteQuestion" data-id="{{Id}}" title="Delete this question"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
         </div>
     </div>
 </div>

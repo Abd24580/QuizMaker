@@ -61,8 +61,31 @@ define([
     };
     
     function cancelButtonEvent(e){
-        e.data.hide();
-        qm.unset('currentQuiz');
+        if(e.data.dirty){
+            var message = "Are you sure you want to close this quiz? You will lose your unsaved changes.";
+            var options = {
+                title: "Are you sure?",
+                buttons:[
+                    {
+                        text: "Yes",
+                        click: function(){
+                            $(this).dialog('close');
+                            e.data.hide();
+                            qm.unset('currentQuiz');
+                            qm.unbind('dirty');
+                        }
+                    },
+                    {
+                        text: "Never mind",
+                        click: function(){
+                            $(this).dialog('close');
+                        }
+                    }
+                    
+                ]
+            };
+            utils.showDialog(options, message);
+        }
     };
     
     function deleteButtonEvent(e){
@@ -210,7 +233,7 @@ define([
     
     function resetOrderEvent(e){
         e.data.dom.find('.questionsList').sortable('cancel');
-        e.data.dom.find('.editQuestion, .addQuestion').prop('disabled',false);
+        e.data.toggleQuestionButtons(true);
         e.data.model.QuestionOrders = e.data.model.cachedOrder;
         e.data.dirty = false;
         this.style.display = 'none';
@@ -219,7 +242,10 @@ define([
     
     function deleteAnswerEvent(e){
         $(this).parents('.answer').remove();
-        
+    }
+    
+    function questionChangeEvent(e){
+        $(this).parents('.question').find('.saveQuestion').prop('disabled', false);
     }
     
     function attachHandlers(element, quizEditor){
@@ -234,6 +260,10 @@ define([
         element.find('button.cancelEdit').click(quizEditor,cancelEditEvent);
         element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
         element.find('button.deleteAnswerButton').click(quizEditor,deleteAnswerEvent);
+        element.find('input.answerText, input.answerRadio').change(quizEditor, questionChangeEvent);
+        element.find('input[name="Name"]').change(quizEditor, function(e){
+            e.data.dirty = true;
+        });
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
@@ -267,18 +297,17 @@ define([
                     resetButton.hide();
                     quizEditor.dirty = false;
                 }
-                quizEditor.dom.find('.editQuestion, .addQuestion').prop('disabled',diff);
+                quizEditor.toggleQuestionButtons(!diff);
             }
         });
         element.tooltip();
     }
     
-    
-    
     function quizEditor(quiz){
         this.template = templating.quizEditor;
         qm.bind('dirty').to(function(val, qe){
             qe.saveButton.prop('disabled',!val);
+            qe.toggleQuestionButtons(!val);
         }, this);
         this.model = quiz || {};
         Object.defineProperties(this,{
@@ -298,17 +327,11 @@ define([
                 },
                 set: function editing(x){
                     this._editing = x;
-                    this.saveButton.prop('disabled',x);
-                    var editButtons = this.dom.find('.editQuestion, .addQuestion').prop('disabled',x);
-                    this.dom.find('.questionsList').sortable('option','disabled', x);
+                    this.toggleQuestionButtons(!x);                    
                     if(x){
-                        this.saveButton.prop('title',"You must finish with the question you're editing before you save the quiz.");
-                        editButtons.prop('title', "You must finish with the question you're editing before you edit another.");
-                        this.dom.find('.moveBlock').hide();
+                        this.saveButton.prop('disabled',true);
                     }else{ 
-                        this.saveButton.prop('title',"");
-                        editButtons.prop('title', '');
-                        this.dom.find('.moveBlock').show();
+                        if(this.dirty) this.saveButton.prop('disabled', false);
                     }
                 }
             }
@@ -319,6 +342,18 @@ define([
     }
     
     quizEditor.prototype = mainWindow;
+    quizEditor.prototype.toggleQuestionButtons = function(activate){
+        this.dom.find('.editQuestion, .addQuestion').prop('disabled',activate);
+        var qList = this.dom.find('.questionsList');
+        if (qList.sortable('instance')){
+            qList.sortable('option','disabled', !activate);
+        }
+        if(activate){
+            this.dom.find('.moveBlock').show();
+            return;
+        }
+        this.dom.find('.moveBlock').hide();
+    };
     
     return quizEditor;
 });
