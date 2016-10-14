@@ -257,7 +257,7 @@ define([
         element.find('button.cancelEdit').click(quizEditor,cancelEditEvent);
         element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
         element.find('button.deleteAnswerButton').click(quizEditor,deleteAnswerEvent);
-        element.find('input.answerText, input.answerRadio').change(quizEditor, questionChangeEvent);
+        element.find('input.questionInput').change(quizEditor, questionChangeEvent);
         element.find('input[name="Name"]').change(quizEditor, function(e){
             e.data.dirty = true;
         });
