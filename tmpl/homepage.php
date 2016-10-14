@@ -23,11 +23,12 @@
 <html>
     <head>
         <title>QuizMaker</title>
-        <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="../css/additional.css">
-        <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/base/all.css">
+        
         <script data-main="../js/app" src="../js/require.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/additional.css">
+        <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css">
     </head>
     <body class="container">
         <div id="navBarContainer"></div>
