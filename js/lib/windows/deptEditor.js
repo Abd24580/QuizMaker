@@ -17,7 +17,7 @@
 
 define([
     './mainWindow', 
-    './utils',
+    './popUps',
     'dataObjects',
     'quizMaker',
     'templating',

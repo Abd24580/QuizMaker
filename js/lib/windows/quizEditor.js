@@ -20,7 +20,7 @@ define([
     'dataObjects', 
     'quizMaker',
     'repository',
-    './utils',
+    './popUps',
     './mainWindow',
     'dataObjects',
     'underscore',
