@@ -30,7 +30,7 @@ use QM\Repositories\QuizRepo;
 use QM\RequestRouter\RequestData;
 use QM\RequestRouter\RequestDataFactory;
 use QM\RequestRouter\RequestRouter;
-use Responses\JsonPackager;
+use QM\Responses\JsonPackager;
 
 /**
  * This is the highest level class that controls the operation of this application.
@@ -94,16 +94,15 @@ class Application {
     }
     
     public function GetHomePage(RequestData $data){
-        $this->log->info("Requested Home page");
-        
+        $this->log->info("Requested Home page");        
+        include(ROOT . DS . 'tmpl' . DS . 'homepage.php');
     }
-    
     
     public function GetQuiz(RequestData $data)
     {
         $quizId = $data->data['Id'];
         $departmentId = $data->data['DepartmentId'];
-        $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId, true);
+        $quiz = $this->quizRepo->GetQuiz($departmentId, $quizId);
         if(is_null($quiz)){
             $this->jsonPackager->SendData("No quiz was found with the id of $quizId", 'failure');
             return;
@@ -122,10 +121,10 @@ class Application {
     
     public function DeleteQuiz(RequestData $data)
     {
-        $id = $data->data['QUIZID'];
-        $dept = $data->data['DEPARTMENTID'];
-        $this->quizRepo->DeleteQuiz($dept, $id);
-        $this->jsonPackager->SendData("");
+        $id = $data->data['Id'];
+        $dept = $data->data['DepartmentId'];
+        $depts = $this->quizRepo->DeleteQuiz($dept, $id);
+        $this->jsonPackager->SendData($depts);
     }
     
     public function UpdateQuiz(RequestData $data)
@@ -133,6 +132,7 @@ class Application {
         $quiz = new Quiz($data->data['Id']);
         $quiz->Name = $data->data['Name'];
         $quiz->DepartmentId = $data->data['DepartmentId'];
+        $quiz->QuestionOrders = $data->data['QuestionOrders'];
         $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($loadedQuiz);
     }
@@ -190,7 +190,7 @@ class Application {
                 $d['CorrectIndex'], 
                 $d['IncorrectMessage']);
         $newQuiz = $this->quizRepo->AddQuestionToQuiz($q);
-        $this->jsonPackager->SendData($quiz);
+        $this->jsonPackager->SendData($newQuiz);
     }
     
     public function DeleteQuestion(RequestData $data)
@@ -223,7 +223,7 @@ class Application {
     {
         $dept = new Department($data->data['Id']);
         $dept->Name = $data->data['Name'];
-        $depts = $this->departmentsRepo->StoreDepartment($department);
+        $depts = $this->departmentsRepo->StoreDepartment($dept);
         $this->jsonPackager->SendData($depts);
     }
     
@@ -232,9 +232,4 @@ class Application {
         $departments = $this->departmentsRepo->GetDepartments();
         $this->jsonPackager->SendData($departments);
     }
-    
-    
-
-    
-
 }

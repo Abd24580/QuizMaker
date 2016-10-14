@@ -1,0 +1,12 @@
+<div class="row answer">
+    <div class="col-xs-9 form-group">
+        <input type="text" class="form-control answerText" name="{{questionId}}Answer" value="{{answer}}" data-index="{{index}}">
+    </div>
+    <div class="col-xs-3 form-group">
+        <label for="{{questionId}}Answer{{index}}" title="Is this the correct answer?">Correct?</label>
+        <input type="radio" name="{{questionId}}Correct" id="{{questionId}}Answer{{index}}" title="Is this the correct answer?" class="correctAnswer" data-index="{{index}}" {{#if correct}}checked{{/if}}>
+        <button class="btn btn-danger btn-sm deleteAnswerButton buttonRight" data-index="{{index}}" title="Remove this answer">
+            <span class="glyphicon glyphicon-minus-sign"></span>
+        </button>
+    </div>
+</div>

@@ -10,11 +10,7 @@ hr {
     width: 720px;
 }
 
-
-.test {
-  padding : 20px;
-}
-.currentQuestion{
+/*.currentQuestion{
   font-size: 18px;
   font-weight: bold;
   padding:10px;
@@ -72,12 +68,12 @@ color:green;
 
 .headerinfos{
   padding-left:10px;
-}
+}*/
 
 .answerList {
   padding-left: 20px;
 }
-
+/*
 #logo {
   height:33px;
   position:relative;
@@ -93,4 +89,70 @@ color:green;
 #btnNext {
   width:90px;
   margin-right:10px;
+}*/
+
+#mainCanvas{
+    margin-top: 90px;
+}
+#mainCanvas > div{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+.questionsList{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+.ui-dialog{
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 10px 10px 10px black;
+}
+
+.answerList .answerText{
+    width:100%;
+}
+
+.answer{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.question{
+    border-color: #1c6ca5;
+    border-width: 2px;
+    border-style: solid;
+    padding: 10px;
+    margin-bottom:10px;
+}
+
+.deleteAnswerButton{
+    margin-left: 5px;
+}
+
+.row{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.buttonRight{
+    float:right;
+    margin-left:2px;
+}
+
+.answerBlock{
+    padding: 5px;
+    border-radius: 5px;
+}
+.answerBlock:nth-child(1n){
+    background-color: #d5d5ef;
+}
+.answerBlock:nth-child(2n){
+    background-color: #d5efe5;
+}
+.answerBlock:nth-child(3n){
+    background-color: #ffb380;
+}
+.answerBlock:nth-child(4n){
+    background-color: #ffe6b3;
 }

@@ -34,6 +34,6 @@ class Department {
             $id = uniqid('dept');
         }
         $this->Id = $id;
-        $this->Quizzes = array();
+        $this->Quizzes = new \ArrayObject();
     }   
 }

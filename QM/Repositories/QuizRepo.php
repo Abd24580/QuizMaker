@@ -72,7 +72,6 @@ class QuizRepo {
         if($this->QuizExists($quiz->DepartmentId, $quiz->Id)){
             $oldQuiz = $this->GetQuiz($quiz->DepartmentId, $quiz->Id);
             $quiz->QuestionsArray = $oldQuiz->QuestionsArray;
-            $quiz->QuestionOrders = $oldQuiz;
         }
         $this->storeToJson($quiz);
         $this->deptsRepo->AddQuizToDepartment($quiz);
@@ -86,7 +85,7 @@ class QuizRepo {
             return false;
         }
         /* @var $dept \QM\Quiz\Department */
-        $quiz = $dept->Quizzes[$quizId];
+        $quiz = $dept->Quizzes->$quizId;
         return isset($quiz);
     }
     
@@ -94,7 +93,8 @@ class QuizRepo {
         $quizPath = $this->getQuizPath($departmentId, $quizId);
         $this->log->notice("Deleting Quiz at $quizPath");
         unlink($quizPath);
-        $this->deptsRepo->DeleteQuizFromDepartment($departmentId, $quizId);
+        $depts = $this->deptsRepo->DeleteQuizFromDepartment($departmentId, $quizId);
+        return $depts;
     }
     
     public function AddQuestionToQuiz(Question $question){
@@ -138,7 +138,7 @@ class QuizRepo {
         if($rawJson){
             return $str;
         }
-        return json_decode($str);
+        return json_decode($str, true);
     }
     
     private function storeToJson(Quiz $quiz){

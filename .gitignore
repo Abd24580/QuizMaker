@@ -1,7 +1,7 @@
-bower_components/
 nbproject/private/
-vendor/
 .DS_Store
 logs/
 data/
 composer.lock
+node_modules/
+bower_components/

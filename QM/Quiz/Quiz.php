@@ -41,14 +41,11 @@ class Quiz {
     }
     
     public function SaveQuestion(Question $question){
-        $position;
-        if(isset($this->QuestionsArray[$question->Id])){
-            $position = array_search($question->Id, $this->QuestionOrders);
-        }else{
+        $position = array_search($question->Id, $this->QuestionOrders);
+        if($position === false){
             $max = max(array_keys($this->QuestionOrders));
-            $position = $max === false ? 0 : $max;
+            $position = $max === false ? 0 : $max + 1;
         }
-        
         $this->QuestionsArray[$question->Id] = $question;
         $this->QuestionOrders[$position] = $question->Id;
     }

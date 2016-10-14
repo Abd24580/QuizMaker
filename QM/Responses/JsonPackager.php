@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Responses;
+namespace QM\Responses;
 
 use Exception;
 use QM\ConfigManager\ConfigManager;
