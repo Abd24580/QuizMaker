@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['jquery', 'jquery-ui'], function($){
+define(['quizMaker','jquery', 'jquery-ui'], function(qm,$){
     
     return {
         get saveButton(){
@@ -36,6 +36,7 @@ define(['jquery', 'jquery-ui'], function($){
         },
         rerender: function(){
             delete this._dom;
+            delete this.dirty;
             var mc = $('#mainCanvas');
             this.attachHandlers();
             mc.html('').append(this.dom);
@@ -57,6 +58,9 @@ define(['jquery', 'jquery-ui'], function($){
         },
         set model(x){
             this._model = x;
+            if(this.dirty == null)
+                this.dirty = false;
+            else this.dirty = true;
         },
         get dom(){
             if(!this._dom){
@@ -64,6 +68,12 @@ define(['jquery', 'jquery-ui'], function($){
                 this._dom = $(html);
             }
             return this._dom;
+        },
+        get dirty(){
+            return qm.prop("dirty");
+        },
+        set dirty(x){
+            qm.prop("dirty", x);
         }
     };
 });

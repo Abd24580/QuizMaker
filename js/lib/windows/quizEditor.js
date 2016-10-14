@@ -210,13 +210,16 @@ define([
     
     function resetOrderEvent(e){
         e.data.dom.find('.questionsList').sortable('cancel');
+        e.data.dom.find('.editQuestion, .addQuestion').prop('disabled',false);
         e.data.model.QuestionOrders = e.data.model.cachedOrder;
+        e.data.dirty = false;
         this.style.display = 'none';
         hideAlert();
     }
     
     function deleteAnswerEvent(e){
         $(this).parents('.answer').remove();
+        
     }
     
     function attachHandlers(element, quizEditor){
@@ -256,11 +259,13 @@ define([
                 var resetButton = element.find('button.resetOrder');
                 if(diff){
                     quizEditor.model.QuestionOrders = newOrder;
+                    quizEditor.dirty = true;
                     showAlert('The new order of your questions will not be saved until you click the save button.');
                     resetButton.show();
                 }else{
                     hideAlert();
                     resetButton.hide();
+                    quizEditor.dirty = false;
                 }
                 quizEditor.dom.find('.editQuestion, .addQuestion').prop('disabled',diff);
             }
@@ -271,8 +276,11 @@ define([
     
     
     function quizEditor(quiz){
-        this.model = quiz || {};
         this.template = templating.quizEditor;
+        qm.bind('dirty').to(function(val, qe){
+            qe.saveButton.prop('disabled',!val);
+        }, this);
+        this.model = quiz || {};
         Object.defineProperties(this,{
             'data':{
                 get: function data(){

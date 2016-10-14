@@ -55,7 +55,7 @@ define(['underscore'],function(_){
             this.updateBindings(propName);
         },
         prop:function(propName, value){
-            if(!value){
+            if(value == null){
                 return this['__'+ propName];
             }
             this['__'+propName] = value;
@@ -68,18 +68,23 @@ define(['underscore'],function(_){
             
             function addRemovalFunction(propertyName, id){
                 var newId = _.uniqueId(id);
-                self.bindings[propertyName][newId] = function(){
-                    self.unbind(propertyName, id);
-                    self.unbind(propertyName, newId);
+                self.bindings[propertyName][newId] = {
+                    binding: function(){
+                        self.unbind(propertyName, id);
+                        self.unbind(propertyName, newId);
+                    }
                 };
             }
             
             return {
-                to: function(binding){ //binding = function(property)
+                to: function(binding, data){ //binding = function(property, data)
                     if(!self.bindings[propertyName])
                         self.bindings[propertyName] = {};
                     var id = _.uniqueId(propertyName);
-                    self.bindings[propertyName][id] = binding;
+                    self.bindings[propertyName][id] = {
+                        binding: binding,
+                        data:data
+                    };
                     if(onceOnly){
                         addRemovalFunction(propertyName, id);
                     }
@@ -141,7 +146,7 @@ define(['underscore'],function(_){
             }
             for(var f in bindings){
                 if(bindings[f]){
-                    bindings[f](this.prop(propertyName));
+                    bindings[f].binding(this.prop(propertyName), bindings[f].data);
                 }
             }
         },
