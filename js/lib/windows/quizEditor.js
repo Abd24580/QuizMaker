@@ -215,6 +215,10 @@ define([
         hideAlert();
     }
     
+    function deleteAnswerEvent(e){
+        $(this).parents('.answer').remove();
+    }
+    
     function attachHandlers(element, quizEditor){
         element.find('button.saveButton').click(quizEditor, saveButtonEvent);
         element.find('button.cancelButton').click(quizEditor,cancelButtonEvent);
@@ -226,6 +230,7 @@ define([
         element.find('button.addAnswer').click(quizEditor, addAnswerEvent);
         element.find('button.cancelEdit').click(quizEditor,cancelEditEvent);
         element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
+        element.find('button.deleteAnswerButton').click(quizEditor,deleteAnswerEvent);
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
