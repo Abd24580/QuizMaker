@@ -31,7 +31,6 @@ define([
     function showAlert(message){
         var alert = $('<div class="alert alert-info" id="alertBox" role="alert">' + message + '</div>');
         $('#alertSpot').html('').append(alert);
-        
     }
 
     function hideAlert(){
@@ -70,9 +69,7 @@ define([
                         text: "Yes",
                         click: function(){
                             $(this).dialog('close');
-                            e.data.hide();
-                            qm.unset('currentQuiz');
-                            qm.unbind('dirty');
+                            e.data.close();
                         }
                     },
                     {
@@ -81,11 +78,12 @@ define([
                             $(this).dialog('close');
                         }
                     }
-                    
                 ]
             };
             utils.showDialog(options, message);
+            return;
         }
+        e.data.close();
     };
     
     function deleteButtonEvent(e){
@@ -98,10 +96,9 @@ define([
                 {
                     text: "Delete this permanently.",
                     click:function(){
-                        e.data.hide();
                         $(this).dialog('close');
                         repository.deleteQuiz(id, deptId);
-                        qm.unset('currentQuiz');
+                        e.data.close();
                     }
                 },
                 {
@@ -343,7 +340,7 @@ define([
     
     quizEditor.prototype = mainWindow;
     quizEditor.prototype.toggleQuestionButtons = function(activate){
-        this.dom.find('.editQuestion, .addQuestion').prop('disabled',activate);
+        this.dom.find('.editQuestion, .addQuestion').prop('disabled',!activate);
         var qList = this.dom.find('.questionsList');
         if (qList.sortable('instance')){
             qList.sortable('option','disabled', !activate);
@@ -353,6 +350,12 @@ define([
             return;
         }
         this.dom.find('.moveBlock').hide();
+    };
+    quizEditor.prototype.close = function(){
+        this.hide();
+        qm.unset('currentQuiz');
+        qm.unbind('dirty');
+        qm.unset('dirty');
     };
     
     return quizEditor;
