@@ -187,6 +187,11 @@ define([
         var jqThis = $(this);
         var qInfo = getParentQuestionInfo(jqThis, e.data.model);
         var lastAnswer = qInfo.answersList.find('.answerText').last();
+        if(lastAnswer.length > 0 && lastAnswer.val().trim() === ""){
+            showAlert("You cannot add another answer until you type something for the last one.");
+            return;
+        }
+        hideAlert();
         var newIndex = lastAnswer.length > 0 ? parseFloat(lastAnswer.data('index')) + 1 : 0;
         var newAnswer = {questionId: qInfo.id, index: newIndex};
         if(newIndex === 0) newAnswer.correct = true;
@@ -194,8 +199,7 @@ define([
         var jqTemp = $(temp);
         attachHandlers(jqTemp, e.data);
         qInfo.answersList.append(jqTemp);
-        jqTemp.find('.answerText').change();
-        hideAlert();
+//        jqTemp.find('.answerText').change();
     }
 
     function deleteAnswerEvent(e){
@@ -220,6 +224,7 @@ define([
             delete e.data.model[qInfo.id];
         }
         e.data.editing = false;
+        hideAlert();
     }
     
     function deleteQuestionEvent(e){
