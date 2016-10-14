@@ -40,10 +40,9 @@ define([
             });
             this.dom.find('[data-quiz]').click(function(){
                 var jq = $(this);
-                var id = qm.bind('currentQuiz').to(function(quiz){
+                qm.bind('currentQuiz').once.to(function(quiz){
                     var win = new quizEditor(quiz);
                     win.render();
-                    qm.unbind('currentQuiz', id);
                 });
                 repository.getQuiz(jq.data('id'), qm.currentDepartment.Id);
             }); 

@@ -25,7 +25,7 @@ requirejs.config({
         "jquery":'deps/jquery.min',
         bootstrap:'deps/bootstrap.min',
         'json-human':'deps/json.human',
-        templates:'/tmpl'
+        templates:'templates'
     },
     shim:{
         'underscore':{

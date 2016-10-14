@@ -18,22 +18,22 @@
 define([
     'handlebars',
     'json-human',
-    'text!templates/question.hbs',
-    'text!templates/deptEditor.hbs',
-    'text!templates/navbar.hbs',
-    'text!templates/quizEditor.hbs',
-    'text!templates/questionEditor.hbs',
-    'text!templates/answerEditor.hbs',
-    'text!templates/downloadQuiz.hbs'
+    'templates/question.hbs',
+    'templates/deptEditor.hbs',
+    'templates/navbar.hbs',
+    'templates/quizEditor.hbs',
+    'templates/questionEditor.hbs',
+    'templates/answerEditor.hbs',
+    'templates/downloadQuiz.hbs'
 ],function(hb,JsonHuman, tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor,tDownloadQuiz){
     
-    var deptEditorTemplate;
-    var quizEditorTemplate;
-    var navBarTemplate;
-    var answerEditorTemplate;
-    var questionEditorTemplate;
-    var questionTemplate;
-    var downloadQuizTemplate;
+    var deptEditorTemplate = tDeptEdit;
+    var quizEditorTemplate = tQuiz;
+    var navBarTemplate = tNavBar;
+    var answerEditorTemplate = tAnswerEditor;
+    var questionEditorTemplate = tQuestionEditor;
+    var questionTemplate = tQuestion;
+    var downloadQuizTemplate = tDownloadQuiz;
     
     return {
         initialize: function (){
@@ -89,45 +89,24 @@ define([
             });
         }, 
         get deptEditor(){
-            if(!deptEditorTemplate){
-                deptEditorTemplate = hb.compile(tDeptEdit);
-            }
             return deptEditorTemplate;
         },
         get quizEditor(){
-            if(!quizEditorTemplate){
-                quizEditorTemplate = hb.compile(tQuiz);
-            }
             return quizEditorTemplate;
         },
         get navBar(){
-            if(!navBarTemplate){
-                navBarTemplate = hb.compile(tNavBar);
-            }
             return navBarTemplate;
         },
         get answerEditor(){
-            if(!answerEditorTemplate){
-                answerEditorTemplate = hb.compile(tAnswerEditor);
-            }
             return answerEditorTemplate;
         },
         get questionEditor(){
-            if(!questionEditorTemplate){
-                questionEditorTemplate = hb.compile(tQuestionEditor);
-            }
             return questionEditorTemplate;
         },
         get question(){
-            if(!questionTemplate){
-                questionTemplate = hb.compile(tQuestion);
-            }
             return questionTemplate;
         },
         get downloadQuiz(){
-            if(!downloadQuizTemplate){
-                downloadQuizTemplate = hb.compile(tDownloadQuiz);
-            }
             return downloadQuizTemplate;
         }
         

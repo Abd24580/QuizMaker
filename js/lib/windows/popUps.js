@@ -17,6 +17,12 @@
 
 define(['underscore', 'jquery', 'jquery-ui'], function(_,$){
     
+    
+    function showQuizCloner(quiz){
+        
+    }
+    
+    
     return {
         showDialog: function(options, dialogText){
              var div = $('<div class="dialog">' + dialogText + '</div>');

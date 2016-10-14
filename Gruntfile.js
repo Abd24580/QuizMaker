@@ -61,11 +61,41 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+        handlebars:{
+            compile:{
+                options:{
+                    amd: true,
+                    namespace:false,
+                    compilerOptions:{
+                        min: true
+                    },
+                },
+                files:[
+                    {
+                        src:['tmpl/*.hbs'],
+                        mode: true,
+                        dest:"js/lib/templates/",
+                        expand: true,
+                        flatten: true,
+                        rename: function(dest, src){
+                            return dest  + src + ".js";
+                        }
+                    }
+                ]
+            }
+            
         }
+        
     });
 //    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.registerTask('copyDependencies',function(){
         grunt.loadNpmTasks('grunt-contrib-copy');
         grunt.task.run('copy:dependencies');
+    });
+    
+    grunt.registerTask('compileTemplates', function(){
+       grunt.loadNpmTasks('grunt-contrib-handlebars');
+       grunt.task.run('handlebars:compile');
     });
 };
