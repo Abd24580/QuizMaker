@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                     },
                     {
                         cwd:'bower_components/jquery-ui/themes/base/',
-                        src: ['jquery-ui.min.css','images/'],
+                        src: ['jquery-ui.min.css','images/*'],
                         mode: true,
                         dest:"css/",
                         expand: true,
