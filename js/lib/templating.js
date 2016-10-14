@@ -77,6 +77,10 @@ define([
                 if(isNaN(num)) return "";
                 return (++num).toString();
             });
+            hb.registerHelper('downloadQuizHref', function(quiz){
+                var json = JSON.stringify(quiz, null, 2);
+                return "data:text/json;charset=utf-8," + encodeURIComponent(json);
+            });
         }, 
         get deptEditor(){
             if(!deptEditorTemplate){

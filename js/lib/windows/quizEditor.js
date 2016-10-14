@@ -291,6 +291,8 @@ define([
         element.find('input[name="Name"]').change(quizEditor, function(e){
             e.data.dirty = true;
         });
+//        element.find('button.downloadButton').click(quizEditor, downloadQuiz);
+//        element.find('button.cloneButton').click(quizEditor, cloneQuiz);
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
