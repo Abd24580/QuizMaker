@@ -1,13 +1,25 @@
 <div class="quizEditor" data-id="{{Id}}" data-department="{{DepartmentId}}">
-    <div class="form-group lead">
-        <label for="Name">Quiz Name:</label>
-        <input class="form-control" type="text" name="Name" value="{{Name}}" >
+    <div class="row">
+        <div class="form-group lead col-sm-9 col-md-10">
+            <label>Quiz Name:</label>
+            <input class="form-control" type="text" name="Name" value="{{Name}}" >
+        </div>
+        <div class="col-md-2 col-sm-3">
+            {{#if Id}}
+            <div class="buttonRight">
+                <button class="btn btn-default btn-sm downloadButton" title="Download JSON"><span class="glyphicon glyphicon-download-alt"></span></button>
+                <button class="btn btn-default btn-sm cloneButton" title="Clone this quiz"><span class="glyphicon glyphicon-duplicate"></span></button>
+            </div>
+            {{/if}}
+        </div>
     </div>
-    <div class="questionsList">
-        <h3>Questions:</h3>
-        {{#listQuestions this}}
-            {{> question-partial this}}
-        {{/listQuestions}}
+    <div class="row">
+        <div class="questionsList col-xs-12">
+            <h3>Questions:</h3>
+            {{#listQuestions this}}
+                {{> question-partial this}}
+            {{/listQuestions}}
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
