@@ -26,7 +26,8 @@ module.exports = function (grunt) {
                             'handlebars/handlebars.min.js',
                             'jQuery/dist/jquery.min.js',
                             'jquery-ui/jquery-ui.min.js',
-                            'underscore/underscore-min.js'
+                            'underscore/underscore-min.js',
+                            'json-human/src/json.human.js'
                         ],
                         mode: true,
                         dest:"js/lib/deps/",

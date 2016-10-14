@@ -17,13 +17,15 @@
 
 define([
     'handlebars',
+    'json-human',
     'text!templates/question.hbs',
     'text!templates/deptEditor.hbs',
     'text!templates/navbar.hbs',
     'text!templates/quizEditor.hbs',
     'text!templates/questionEditor.hbs',
-    'text!templates/answerEditor.hbs'
-],function(hb,tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor){
+    'text!templates/answerEditor.hbs',
+    'text!templates/downloadQuiz.hbs'
+],function(hb,JsonHuman, tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor,tDownloadQuiz){
     
     var deptEditorTemplate;
     var quizEditorTemplate;
@@ -31,9 +33,11 @@ define([
     var answerEditorTemplate;
     var questionEditorTemplate;
     var questionTemplate;
+    var downloadQuizTemplate;
     
     return {
         initialize: function (){
+            var self = this;
             hb.registerPartial('question-partial', this.question);
             hb.registerPartial('questionEditor-partial', this.questionEditor);
             hb.registerPartial('answerEditor-partial', this.answerEditor);
@@ -78,8 +82,10 @@ define([
                 return (++num).toString();
             });
             hb.registerHelper('downloadQuizHref', function(quiz){
-                var json = JSON.stringify(quiz, null, 2);
-                return "data:text/json;charset=utf-8," + encodeURIComponent(json);
+                var Table = JsonHuman.format(JSON.parse(JSON.stringify(quiz))).outerHTML;
+                var Json = encodeURIComponent(JSON.stringify(quiz, null, 2));
+                var html = self.downloadQuiz({Name: quiz.Name, Json: Json, Table: Table}); 
+                return "data:text/html;charset=utf-8," + encodeURIComponent(html);
             });
         }, 
         get deptEditor(){
@@ -117,6 +123,13 @@ define([
                 questionTemplate = hb.compile(tQuestion);
             }
             return questionTemplate;
+        },
+        get downloadQuiz(){
+            if(!downloadQuizTemplate){
+                downloadQuizTemplate = hb.compile(tDownloadQuiz);
+            }
+            return downloadQuizTemplate;
         }
+        
     };
 });

@@ -240,7 +240,7 @@ define([
                         $(this).dialog('close');
                         qm.intercept('currentQuiz').once.withFunc(function(quiz){
                             e.data.model = quiz;
-                            qInfo.questionDiv.remove();
+                            e.data.rerender();
                             return true;
                         });
                         repository.deleteQuestion(question);
@@ -347,10 +347,14 @@ define([
             if(val){
                 saveButton.prop('disabled',true).prop('title', "You must save your question first.");
                 qe.dom.find('.addQuestion').prop('title',"You cannot add a new question until you finish with the one you're currently editing.");
+                qe.dom.find('.downloadButton').addClass('disabled',true).find('a').click(function(e){
+                    e.preventDefault();
+                });
                 return;
             }
             saveButton.prop('title','');
             if(qe.dirty) saveButton.prop('disabled', false);
+            if(!qe.dirty) qe.dom.find('.downloadButton').removeClass('disabled').find('a').off('click');
         },this);
         this.model = quiz || {};
     }

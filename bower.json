@@ -19,6 +19,7 @@
     "bootstrap": "3.3.7",
     "jQuery": "3.1.1",
     "handlebars": "^4.0.5",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "json-human": "^0.1.1"
   }
 }

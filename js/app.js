@@ -24,6 +24,7 @@ requirejs.config({
         "jquery-ui": 'deps/jquery-ui.min',
         "jquery":'deps/jquery.min',
         bootstrap:'deps/bootstrap.min',
+        'json-human':'deps/json.human',
         templates:'/tmpl'
     },
     shim:{
