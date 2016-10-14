@@ -1,0 +1,24 @@
+{
+  "name": "quizmaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtfalkenstein/QuizMaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jtfalkenstein/QuizMaker/issues"
+  },
+  "homepage": "https://github.com/jtfalkenstein/QuizMaker#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0"
+  }
+}
