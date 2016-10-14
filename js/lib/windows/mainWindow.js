@@ -36,7 +36,7 @@ define(['quizMaker','jquery', 'jquery-ui'], function(qm,$){
         },
         rerender: function(){
             delete this._dom;
-            delete this.dirty;
+            this.dirty = false;
             var mc = $('#mainCanvas');
             this.attachHandlers();
             mc.html('').append(this.dom);
