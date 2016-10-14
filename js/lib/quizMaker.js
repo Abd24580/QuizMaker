@@ -50,9 +50,11 @@ define(['underscore'],function(_){
         set currentQuiz(x){
             this.prop('currentQuiz', x);
         },
-        unset: function(propName){
+        unset: function(propName, noUpdate){
             delete this['__' + propName];
+            if(noUpdate) return this;
             this.updateBindings(propName);
+            return this;
         },
         prop:function(propName, value){
             if(value == null){
@@ -60,6 +62,7 @@ define(['underscore'],function(_){
             }
             this['__'+propName] = value;
             this.updateBindings(propName);
+            return this;
         },
         
         bind: function (propertyName){
@@ -97,8 +100,19 @@ define(['underscore'],function(_){
             };
         },
         unbind: function(propertyName, id){
-            if(id) delete this.bindings[propertyName][id];
-            else delete this.bindings[propertyName];
+            if(id){
+                if(this.bindings[propertyName])delete this.bindings[propertyName][id];
+                if(this.interceptions[propertyName]) delete this.interceptions[propertyName][id];
+            }else {
+                delete this.bindings[propertyName];
+                delete this.interceptions[propertyName];
+            }
+            var self = this;
+            return {
+                unset: function(){
+                    return self.unset(propertyName, true);
+                }
+            };
         },
         /**
          * // func = 

@@ -38,14 +38,32 @@ define([
     }
 
     function getParentQuestionInfo(element, model){
-        if(!(element instanceof jQuery)) var element = $(element);
-        var id = element.data('id');
-        var questionDiv = element.parents('[class="question"][data-id="' + id + '"]');
+        var el = $(element);
+        id = el.data('id');
+        var questionDiv, answersList, id;
+        var requery = false;
         var question = model.Questions[id];
+        grabElements();
+        function getJqEl(){
+            return $(element);
+        }
+        function grabElements(){
+            questionDiv = el.parents('[class="question"][data-id="' + id + '"]');
+            if(requery || questionDiv.length === 0){
+                questionDiv = $('[class="question"][data-id="' + id + '"]');
+            }
+            answersList = questionDiv.find('.answerList');
+        }
         return {
             id: id,
             questionDiv: questionDiv,
-            question: question
+            question: question,
+            answersList: answersList,
+            requery: function(){
+                requery = true;
+                grabElements();
+                return this;
+            }
         };
     }
 
@@ -167,17 +185,27 @@ define([
     
     function addAnswerEvent(e){
         var jqThis = $(this);
-        var id = jqThis.data('id');
-        var questionDiv = jqThis.parents('div.question[data-id="' + id + '"]');
-        var answersList = questionDiv.find('.answerList');
-        var lastAnswer = answersList.find('.answerText').last();
+        var qInfo = getParentQuestionInfo(jqThis, e.data.model);
+        var lastAnswer = qInfo.answersList.find('.answerText').last();
         var newIndex = lastAnswer.length > 0 ? parseFloat(lastAnswer.data('index')) + 1 : 0;
-        var newAnswer = {questionId: id, index: newIndex};
+        var newAnswer = {questionId: qInfo.id, index: newIndex};
         if(newIndex === 0) newAnswer.correct = true;
         var temp = templating.answerEditor(newAnswer);
         var jqTemp = $(temp);
         attachHandlers(jqTemp, e.data);
-        answersList.append(temp);  
+        qInfo.answersList.append(jqTemp);
+        jqTemp.find('.answerText').change();
+        hideAlert();
+    }
+
+    function deleteAnswerEvent(e){
+        questionChangeEvent.call(this);
+        var jqThis = $(this);
+        var qInfo = getParentQuestionInfo(jqThis, e.data.model);
+        jqThis.parents('.answer').remove();
+         if(qInfo.requery().answersList.find('.answer').length === 0){
+            showAlert("You need at least one answer for a question.");
+        }
     }
     
     function cancelEditEvent(e){
@@ -236,13 +264,10 @@ define([
         this.style.display = 'none';
         hideAlert();
     }
+
     
-    function deleteAnswerEvent(e){
-        $(this).parents('.answer').remove();
-    }
-    
-    function questionChangeEvent(e){
-        $(this).parents('.question').find('.saveQuestion').prop('disabled', false);
+    function questionChangeEvent(){
+        $(this).parents('.question').find('.saveQuestion').prop('disabled', false).prop('title', '');
     }
     
     function attachHandlers(element, quizEditor){
@@ -301,62 +326,72 @@ define([
     }
     
     function quizEditor(quiz){
+        quizProto.call(this);
         this.template = templating.quizEditor;
         qm.bind('dirty').to(function(val, qe){
             qe.saveButton.prop('disabled',!val);
+            if(!val) qe.saveButton.prop('title', "There are no changes to save.");
+            else qe.saveButton.prop('title', "Save changes to this quiz.");
             qe.toggleQuestionButtons(!val);
         }, this);
+        qm.bind('editing').to(function(val,qe){
+            qe.toggleQuestionButtons(!val);
+            var saveButton = qe.saveButton;
+            if(val){
+                saveButton.prop('disabled',true).prop('title', "You must save your question first.");
+                qe.dom.find('.addQuestion').prop('title',"You cannot add a new question until you finish with the one you're currently editing.");
+                return;
+            }
+            saveButton.prop('title','');
+            if(qe.dirty) saveButton.prop('disabled', false);
+        },this);
         this.model = quiz || {};
+    }
+    
+    function quizProto(){
+        this.toggleQuestionButtons = function(activate){
+            this.dom.find('.editQuestion, .addQuestion').prop('disabled',!activate);
+            var qList = this.dom.find('.questionsList');
+            if (qList.sortable('instance')){
+                qList.sortable('option','disabled', !activate);
+            }
+            if(activate){
+                this.dom.find('.moveBlock').show();
+                return;
+            }
+            this.dom.find('.moveBlock').hide();
+        };
+        this.close = function(){
+            this.hide();
+            qm.unset('currentQuiz');
+            qm.unbind('dirty').unset();
+            qm.unbind('editing').unset();
+        },
+        this.attachHandlers = function(){
+            attachHandlers(this.dom, this);
+        };
         Object.defineProperties(this,{
-            'data':{
+            data:{
                 get: function data(){
                     this.model['Name'] = this.dom.find('[name="Name"]').val();
                     this.model['DeparmentId'] = qm.currentDepartment.Id;
                     return this.model;
                 }
             },
-            'editing':{
+            editing:{
                 get: function editing(){
-                    if(this._editing == null){
-                        this._editing = false;
+                    if(qm.prop('editing') == null){
+                        qm.prop('editing', false);
                     }
-                    return this._editing;
+                    return qm.prop('editing');
                 },
                 set: function editing(x){
-                    this._editing = x;
-                    this.toggleQuestionButtons(!x);                    
-                    if(x){
-                        this.saveButton.prop('disabled',true);
-                    }else{ 
-                        if(this.dirty) this.saveButton.prop('disabled', false);
-                    }
+                    qm.prop('editing',x);
                 }
             }
         });
-        this.attachHandlers = function(){
-            attachHandlers(this.dom, this);
-        };
     }
-    
     quizEditor.prototype = mainWindow;
-    quizEditor.prototype.toggleQuestionButtons = function(activate){
-        this.dom.find('.editQuestion, .addQuestion').prop('disabled',!activate);
-        var qList = this.dom.find('.questionsList');
-        if (qList.sortable('instance')){
-            qList.sortable('option','disabled', !activate);
-        }
-        if(activate){
-            this.dom.find('.moveBlock').show();
-            return;
-        }
-        this.dom.find('.moveBlock').hide();
-    };
-    quizEditor.prototype.close = function(){
-        this.hide();
-        qm.unset('currentQuiz');
-        qm.unbind('dirty');
-        qm.unset('dirty');
-    };
     
     return quizEditor;
 });
