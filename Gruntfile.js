@@ -69,7 +69,7 @@ module.exports = function (grunt) {
                     namespace:false,
                     compilerOptions:{
                         min: true
-                    },
+                    }
                 },
                 files:[
                     {
@@ -85,17 +85,18 @@ module.exports = function (grunt) {
                 ]
             }
             
+        },
+        shell:{
+            bowerInstall:{
+                command: "bower install"
+            }
         }
-        
-    });
-//    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('copyDependencies',function(){
-        grunt.loadNpmTasks('grunt-contrib-copy');
-        grunt.task.run('copy:dependencies');
     });
     
-    grunt.registerTask('compileTemplates', function(){
-       grunt.loadNpmTasks('grunt-contrib-handlebars');
-       grunt.task.run('handlebars:compile');
+    grunt.registerTask('copyDependencies',function(){
+        grunt.loadNpmTasks('grunt-contrib-copy');
+        grunt.loadNpmTasks('grunt-shell');
+        grunt.task.run('shell:bowerInstall');
+        grunt.task.run('copy:dependencies');
     });
 };
