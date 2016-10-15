@@ -132,7 +132,7 @@ class Application {
         $quiz = new Quiz($data->data['Id']);
         $quiz->Name = $data->data['Name'];
         $quiz->DepartmentId = $data->data['DepartmentId'];
-        $quiz->QuestionOrders = $data->data['QuestionOrders'];
+        $quiz->QuestionOrder = $data->data['QuestionOrder'];
         $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($loadedQuiz);
     }
@@ -142,7 +142,7 @@ class Application {
         $quiz = $this->quizRepo->GetQuiz($data->data['DepartmentId'], $data->data['Id']);
         $order = $data->data['NEWORDER'];
         foreach($order as $i => $id){
-            $quiz->QuestionOrders[$i] = $id;
+            $quiz->QuestionOrder[$i] = $id;
         }
         $newQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($newQuiz);

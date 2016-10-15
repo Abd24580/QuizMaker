@@ -264,7 +264,7 @@ define([
     function resetOrderEvent(e){
         e.data.dom.find('.questionsList').sortable('cancel');
         e.data.toggleQuestionButtons(true);
-        e.data.model.QuestionOrders = e.data.model.cachedOrder;
+        e.data.model.QuestionOrder = e.data.model.cachedOrder;
         e.data.dirty = false;
         this.style.display = 'none';
         hideAlert();
@@ -301,7 +301,7 @@ define([
             cursor: 'move',
             update: function(){
                 if(!quizEditor.model.cachedOrder)
-                    quizEditor.model.cachedOrder = quizEditor.model.QuestionOrders;
+                    quizEditor.model.cachedOrder = quizEditor.model.QuestionOrder;
                 var newOrder = [];
                 var questions = $(this).find('.question');
                 questions.each(function(i, el){
@@ -317,7 +317,7 @@ define([
                 }
                 var resetButton = element.find('button.resetOrder');
                 if(diff){
-                    quizEditor.model.QuestionOrders = newOrder;
+                    quizEditor.model.QuestionOrder = newOrder;
                     quizEditor.dirty = true;
                     showAlert('The new order of your questions will not be saved until you click the save button.');
                     resetButton.show();

@@ -41,7 +41,7 @@ define(function(){
         this.Id = params.Id || null;
         this.Name = params.Name || null;
         this.DepartmentId = params.DepartmentId || null;
-        this.QuestionOrders = params.QuestionOrders || [];
+        this.QuestionOrder = params.QuestionOrder || [];
         this.Questions = {};
         this.parseParamsToQuestions(params);
     }
@@ -64,7 +64,7 @@ define(function(){
                 Id: self.Id,
                 Name: self.Name,
                 DepartmentId: self.DepartmentId,
-                QuestionOrders: self.QuestionOrders,
+                QuestionOrder: self.QuestionOrder,
                 Questions: self.Questions
             };
             return obj;
