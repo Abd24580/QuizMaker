@@ -262,11 +262,9 @@ define([
     
     
     function resetOrderEvent(e){
-        e.data.dom.find('.questionsList').sortable('cancel');
         e.data.toggleQuestionButtons(true);
         e.data.model.QuestionOrders = e.data.model.cachedOrder;
-        e.data.dirty = false;
-        this.style.display = 'none';
+        e.data.rerender();
         hideAlert();
     }
 
@@ -291,8 +289,8 @@ define([
         element.find('input[name="Name"]').change(quizEditor, function(e){
             e.data.dirty = true;
         });
-//        element.find('button.downloadButton').click(quizEditor, downloadQuiz);
 //        element.find('button.cloneButton').click(quizEditor, cloneQuiz);
+
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
@@ -303,7 +301,8 @@ define([
                 if(!quizEditor.model.cachedOrder)
                     quizEditor.model.cachedOrder = quizEditor.model.QuestionOrders;
                 var newOrder = [];
-                var questions = $(this).find('.question');
+                var jqThis = $(this);
+                var questions = jqThis.find('.question');
                 questions.each(function(i, el){
                     var jqEl = $(el);
                     newOrder.push(jqEl.data('id'));
@@ -350,9 +349,11 @@ define([
                 qe.dom.find('.downloadButton').addClass('disabled',true).find('a').click(function(e){
                     e.preventDefault();
                 });
+                qe.dom.find('.moveBlock').hide();
                 return;
             }
             saveButton.prop('title','');
+            qe.dom.find('.moveBlock').show();
             if(qe.dirty) saveButton.prop('disabled', false);
             if(!qe.dirty) qe.dom.find('.downloadButton').removeClass('disabled').find('a').off('click');
         },this);
@@ -362,15 +363,6 @@ define([
     function quizProto(){
         this.toggleQuestionButtons = function(activate){
             this.dom.find('.editQuestion, .addQuestion').prop('disabled',!activate);
-            var qList = this.dom.find('.questionsList');
-            if (qList.sortable('instance')){
-                qList.sortable('option','disabled', !activate);
-            }
-            if(activate){
-                this.dom.find('.moveBlock').show();
-                return;
-            }
-            this.dom.find('.moveBlock').hide();
         };
         this.close = function(){
             this.hide();
