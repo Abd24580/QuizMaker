@@ -96,6 +96,10 @@ define(['underscore'],function(_){
                 get once() {
                     onceOnly = true;
                     return this;
+                },
+                get exclusively(){
+                    self.unbind(propertyName).unset();
+                    return this;
                 }
             };
         },
