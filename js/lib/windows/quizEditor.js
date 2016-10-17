@@ -335,13 +335,13 @@ define([
     function quizEditor(quiz){
         quizProto.call(this);
         this.template = templating.quizEditor;
-        qm.bind('dirty').to(function(val, qe){
+        qm.bind('dirty').exclusively.to(function(val, qe){
             qe.saveButton.prop('disabled',!val);
             if(!val) qe.saveButton.prop('title', "There are no changes to save.");
             else qe.saveButton.prop('title', "Save changes to this quiz.");
             qe.toggleQuestionButtons(!val);
         }, this);
-        qm.bind('editing').to(function(val,qe){
+        qm.bind('editing').exclusively.to(function(val,qe){
             qe.toggleQuestionButtons(!val);
             var saveButton = qe.saveButton;
             if(val){
