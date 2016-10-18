@@ -70,7 +70,7 @@ class Application {
            $router = new RequestRouter($this);
            // 4. Route based upon the data
            $router->Route($data);
-       } catch (Exception $ex) {
+       } catch (\Exception $ex) {
            $this->log->logException($ex);
            if(isset($data)){
                if($data->format === "json"){
