@@ -141,10 +141,6 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], functi
         
     }
     
-    function reorderQuiz(){
-        
-    }
-    
     function storeQuestion(question){
         var parameters = {
             data: question,
