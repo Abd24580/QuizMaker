@@ -76,3 +76,6 @@ body {
     height: 10px;
     width: 100%;
 }
+.moveBlock{
+    cursor: move;
+}

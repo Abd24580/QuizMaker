@@ -62,30 +62,6 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        handlebars:{
-            compile:{
-                options:{
-                    amd: true,
-                    namespace:false,
-                    compilerOptions:{
-                        min: true
-                    }
-                },
-                files:[
-                    {
-                        src:['tmpl/*.hbs'],
-                        mode: true,
-                        dest:"js/lib/templates/",
-                        expand: true,
-                        flatten: true,
-                        rename: function(dest, src){
-                            return dest  + src + ".js";
-                        }
-                    }
-                ]
-            }
-            
-        },
         shell:{
             bowerInstall:{
                 command: "bower install"
