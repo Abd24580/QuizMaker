@@ -26,7 +26,7 @@ define([
     'underscore',
     'jquery',
     'jquery-ui'
-],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
+],function(templating, dos, qm, repository, popUps, mainWindow, dos,_, $){
 
     function showAlert(message){
         var alert = $('<div class="alert alert-info" id="alertBox" role="alert">' + message + '</div>');
@@ -98,7 +98,7 @@ define([
                     }
                 ]
             };
-            utils.showDialog(options, message);
+            popUps.showDialog(options, message);
             return;
         }
         e.data.close();
@@ -128,7 +128,7 @@ define([
             ]
         };
 
-        utils.showDialog(options, message);
+        popUps.showDialog(options, message);
     }
     
     function addQuestionEvent(e){
@@ -255,7 +255,7 @@ define([
             ]
         };
         
-        utils.showDialog(options, message);
+        popUps.showDialog(options, message);
         
         e.data.editing = false;
     }
@@ -289,7 +289,9 @@ define([
         element.find('input[name="Name"]').change(quizEditor, function(e){
             e.data.dirty = true;
         });
-//        element.find('button.cloneButton').click(quizEditor, cloneQuiz);
+        element.find('button.cloneButton').click(quizEditor, function(){
+            popUps.showQuizCloner();
+        });
 
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
