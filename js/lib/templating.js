@@ -26,8 +26,8 @@ define([
     'text!templates/questionEditor.hbs',
     'text!templates/answerEditor.hbs',
     'text!templates/downloadQuiz.hbs',
-    'text!templates/questionCloner.hbs'
-],function(hb,JsonHuman,_, tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor,tDownloadQuiz, tQuestionCloner){
+    'text!templates/quizCloner.hbs'
+],function(hb,JsonHuman,_, tQuestion, tDeptEdit,tNavBar, tQuiz,tQuestionEditor, tAnswerEditor,tDownloadQuiz, tQuizCloner){
     
     var deptEditorTemplate;
     var quizEditorTemplate;
@@ -36,7 +36,7 @@ define([
     var questionEditorTemplate;
     var questionTemplate;
     var downloadQuizTemplate;
-    var questionClonerTemplate;
+    var quizClonerTemplate;
     
     function registerHelpers(self){
         hb.registerHelper("listAnswers", function(question, options){
@@ -150,10 +150,10 @@ define([
             return downloadQuizTemplate;
         },
         get questionCloner(){
-            if(!questionClonerTemplate){
-                questionClonerTemplate = hb.compile(tQuestionCloner);
+            if(!quizClonerTemplate){
+                quizClonerTemplate = hb.compile(tQuizCloner);
             }
-            return questionClonerTemplate;
+            return quizClonerTemplate;
         }
         
         
