@@ -66,7 +66,7 @@ define([
                 return new hb.SafeString(lis.join('\n'));
             });
         hb.registerHelper('listQuestions', function(quiz, options){
-            var lis = [], qos = quiz.QuestionOrders;
+            var lis = [], qos = quiz.QuestionOrder;
             for(var o in qos){
                 var question = quiz.Questions[qos[o]];
                 question.QuestionNumber = parseInt(o) + 1;
