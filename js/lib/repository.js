@@ -137,12 +137,13 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], functi
         postData(parameters);
     }
     
-    function cloneQuiz(quizId, deptId, newName){
+    function cloneQuiz(quizToClone, newDept, newName){
         var parameters = {
             data:{
-                Id: quizId,
-                DepartmentId: deptId,
+                Id: quizToClone.Id,
+                DepartmentId: quizToClone.DepartmentId,
                 Name: newName,
+                NewDepartmentId: newDept,
                 SUBJECT: 'quiz',
                 ACTION: 'clone'
             },
