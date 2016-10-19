@@ -23,7 +23,6 @@ use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
 use QM\Quiz\Department;
-use QM\Quiz\Question;
 use QM\Quiz\QuestionFactory;
 use QM\Quiz\Quiz;
 use QM\Repositories\DeptRepo;
@@ -163,7 +162,7 @@ class Application {
             }
             $newQuiz->$prop = $val;
         }
-        $this->applyNewAttributesToClone($newQuiz, $newName, $deptId);
+        $this->applyNewAttributesToClone($newQuiz, $newName, $newDept);
         $quizToSend =  $this->quizRepo->StoreQuiz($newQuiz);
         $this->jsonPackager->SendData($quizToSend);
     }
@@ -186,9 +185,10 @@ class Application {
                     $question->IncorrectMessage
             );
             $newArray[$newQues->Id] = $newQues;
-            $newOrder[] = $newQues;
+            $newOrder[$index] = $newQues->Id;
         }
         $quiz->QuestionsArray = $newArray;
+        $quiz->QuestionOrder = $newOrder;
     }
     
     public function CreateQuestion(RequestData $data)
