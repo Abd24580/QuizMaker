@@ -137,12 +137,19 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], functi
         postData(parameters);
     }
     
-    function cloneQuiz(id){
-        
-    }
-    
-    function reorderQuiz(){
-        
+    function cloneQuiz(quizToClone, newDept, newName){
+        var parameters = {
+            data:{
+                Id: quizToClone.Id,
+                DepartmentId: quizToClone.DepartmentId,
+                Name: newName,
+                NewDepartmentId: newDept,
+                SUBJECT: 'quiz',
+                ACTION: 'clone'
+            },
+            callback: applyQuiz
+        };
+        postData(parameters);
     }
     
     function storeQuestion(question){
@@ -174,6 +181,7 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], functi
         getQuiz: getQuiz,
         storeQuiz: storeQuiz,
         deleteQuiz: deleteQuiz,
+        cloneQuiz: cloneQuiz,
         storeQuestion: storeQuestion,
         deleteQuestion: deleteQuestion
     };

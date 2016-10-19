@@ -51,7 +51,7 @@ class QuizRepo {
         $quiz = new Quiz($json['Id']);
         $quiz->DepartmentId = $json['DepartmentId'];
         $quiz->Name = $json['Name'];
-        $quiz->QuestionOrders = $json['QuestionOrders'];
+        $quiz->QuestionOrder = $json['QuestionOrder'];
         foreach($json['QuestionsArray'] as $key => $val){
             $q = $this->qFac->GetPreExisting(
                     $val['Id'], 

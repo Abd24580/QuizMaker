@@ -23,6 +23,7 @@ use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
 use QM\Quiz\Department;
+use QM\Quiz\Question;
 use QM\Quiz\QuestionFactory;
 use QM\Quiz\Quiz;
 use QM\Repositories\DeptRepo;
@@ -132,7 +133,7 @@ class Application {
         $quiz = new Quiz($data->data['Id']);
         $quiz->Name = $data->data['Name'];
         $quiz->DepartmentId = $data->data['DepartmentId'];
-        $quiz->QuestionOrders = $data->data['QuestionOrders'];
+        $quiz->QuestionOrder = $data->data['QuestionOrder'];
         $loadedQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($loadedQuiz);
     }
@@ -142,7 +143,7 @@ class Application {
         $quiz = $this->quizRepo->GetQuiz($data->data['DepartmentId'], $data->data['Id']);
         $order = $data->data['NEWORDER'];
         foreach($order as $i => $id){
-            $quiz->QuestionOrders[$i] = $id;
+            $quiz->QuestionOrder[$i] = $id;
         }
         $newQuiz = $this->quizRepo->StoreQuiz($quiz);
         $this->jsonPackager->SendData($newQuiz);
@@ -153,6 +154,8 @@ class Application {
         $deptId = $data->data['DepartmentId'];
         $quizId = $data->data['Id'];
         $quiz = $this->quizRepo->GetQuiz($deptId, $quizId);
+        $newName = isset($data->data['Name']) ? $data->data['Name'] : $quiz->Name;
+        $newDept = $data->data['NewDepartmentId'];
         $newQuiz = new Quiz();
         foreach($quiz as $prop => $val){
             if($prop === "Id"){
@@ -160,8 +163,32 @@ class Application {
             }
             $newQuiz->$prop = $val;
         }
-        $this->quizRepo->StoreQuiz($newQuiz);
-        $this->jsonPackager->SendData($newQuiz);
+        $this->applyNewAttributesToClone($newQuiz, $newName, $deptId);
+        $quizToSend =  $this->quizRepo->StoreQuiz($newQuiz);
+        $this->jsonPackager->SendData($quizToSend);
+    }
+    
+    private function applyNewAttributesToClone(Quiz $quiz, $newName, $newDeptId){
+        $quiz->Name = $newName;
+        $quiz->DepartmentId = $newDeptId;
+        $newArray = array();
+        $newOrder = array();
+        
+        foreach($quiz->QuestionOrder as $index => $id){
+            /* @var $question \QM\Quiz\Question */
+            $question = $quiz->QuestionsArray[$id];
+            $newQues = $this->questionFactory->CreateNew(
+                    $newDeptId, 
+                    $quiz->Id, 
+                    $question->QuestionText, 
+                    $question->AnswersArray, 
+                    $question->CorrectIndex, 
+                    $question->IncorrectMessage
+            );
+            $newArray[$newQues->Id] = $newQues;
+            $newOrder[] = $newQues;
+        }
+        $quiz->QuestionsArray = $newArray;
     }
     
     public function CreateQuestion(RequestData $data)
@@ -214,6 +241,11 @@ class Application {
     public function DeleteDepartment(RequestData $data)
     {
         $id = $data->data['Id'];
+        $depts = $this->departmentsRepo->GetDepartments();
+        $dept = $depts[$id];
+        foreach($dept->Quizzes as $quizId => $name){
+            $this->quizRepo->DeleteQuiz($id, $quizId);
+        }
         $this->departmentsRepo->DeleteDepartment($id);
         $depts = $this->departmentsRepo->GetDepartments();
         $this->jsonPackager->SendData($depts);
