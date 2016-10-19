@@ -199,7 +199,6 @@ define([
         var jqTemp = $(temp);
         attachHandlers(jqTemp, e.data);
         qInfo.answersList.append(jqTemp);
-//        jqTemp.find('.answerText').change();
     }
 
     function deleteAnswerEvent(e){
@@ -314,7 +313,7 @@ define([
         element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
         element.find('button.deleteAnswerButton').click(quizEditor,deleteAnswerEvent);
         element.find('input.questionInput').change(quizEditor, questionChangeEvent);
-        element.find('input[name="Name"]').change(quizEditor, function(e){
+        element.find('input[name="Name"]').keydown(quizEditor, function(e){
             e.data.dirty = true;
         });
         element.find('button.cloneButton').click(quizEditor, cloneQuizEvent);
