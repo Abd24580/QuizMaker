@@ -1,7 +1,7 @@
 <div>
     <div class="form-group">
         <label>Please select the department you would like this quiz cloned to:</label>
-        <select class="form-control">
+        <select class="form-control" name="Destination">
             {{#listDepartments this}}
             <option value="{{Id}}" {{#if Selected}} selected {{/if}}>{{Name}}</option>
             {{/listDepartments}}
@@ -9,6 +9,6 @@
     </div>
     <div class="form-group">
         <label>What would you like the <em>cloned</em> quiz named?</label>
-        <input type="text" name="Name" value="{{currentQuiz.Name}}">
+        <input type="text" name="Name"  class="form-control" value="{{currentQuiz.Name}}">
     </div>
 </div>
