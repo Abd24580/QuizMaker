@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(['underscore','quizMaker','templating', 'repository', 'jquery', 'jquery-ui'], function(_,qm,templating,repo,$){
+define(['underscore','quizMaker','templating', 'jquery', 'jquery-ui'], function(_,qm,templating, $){
     
     
     var modalDialogOptions = {
@@ -28,21 +28,13 @@ define(['underscore','quizMaker','templating', 'repository', 'jquery', 'jquery-u
     };    
     
     
-    function showQuizCloner(){
+    function showQuizCloner(options){
         var template = templating.questionCloner;
         var html = template(qm);
         var div = $(html);
         var currentQuiz = qm.currentQuiz;
-        var options = {
-            buttons: [
-                {
-                    text: "Clone!",
-                    click: function(){
-                    }
-                }
-            ]
-        };
-        div.dialog(modalDialogOptions);
+        var selectedOptions = _.extend(modalDialogOptions, options);
+        div.dialog(selectedOptions);
     }
     
     
