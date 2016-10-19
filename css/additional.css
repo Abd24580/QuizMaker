@@ -52,7 +52,7 @@ body {
 
 .answerBlock{
     padding: 5px;
-    border-radius: 5px;
+    background-clip: content-box;
 }
 .answerBlock:nth-child(1n){
     background-color: #d5d5ef;
