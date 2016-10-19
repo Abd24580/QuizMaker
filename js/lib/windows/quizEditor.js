@@ -263,7 +263,7 @@ define([
     
     function resetOrderEvent(e){
         e.data.toggleQuestionButtons(true);
-        e.data.model.QuestionOrders = e.data.model.cachedOrder;
+        e.data.model.QuestionOrder = e.data.model.cachedOrder;
         e.data.rerender();
         hideAlert();
     }
@@ -271,6 +271,34 @@ define([
     
     function questionChangeEvent(){
         $(this).parents('.question').find('.saveQuestion').prop('disabled', false).prop('title', '');
+    }
+    
+    function cloneQuizEvent(e){
+        var options = {
+            buttons: [
+                {
+                    text: "Clone!",
+                    click: function(){
+                        var jqThis = $(this);
+                        var newName = jqThis.find('[name="Name"]').val();
+                        var destDept = jqThis.find('[name="Destination"]').val();
+                        qm.bind('currentQuiz').once.to(function(quiz){
+                            var qe = new quizEditor(quiz);
+                            qe.render();
+                        });
+                        repository.cloneQuiz(e.data.model, destDept, newName);
+                        jqThis.dialog('close');
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function(){
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        };
+        popUps.showQuizCloner(options);
     }
     
     function attachHandlers(element, quizEditor){
@@ -289,10 +317,7 @@ define([
         element.find('input[name="Name"]').change(quizEditor, function(e){
             e.data.dirty = true;
         });
-        element.find('button.cloneButton').click(quizEditor, function(){
-            popUps.showQuizCloner();
-        });
-
+        element.find('button.cloneButton').click(quizEditor, cloneQuizEvent);
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
@@ -301,7 +326,7 @@ define([
             cursor: 'move',
             update: function(){
                 if(!quizEditor.model.cachedOrder)
-                    quizEditor.model.cachedOrder = quizEditor.model.QuestionOrders;
+                    quizEditor.model.cachedOrder = quizEditor.model.QuestionOrder;
                 var newOrder = [];
                 var jqThis = $(this);
                 var questions = jqThis.find('.question');
@@ -318,7 +343,7 @@ define([
                 }
                 var resetButton = element.find('button.resetOrder');
                 if(diff){
-                    quizEditor.model.QuestionOrders = newOrder;
+                    quizEditor.model.QuestionOrder = newOrder;
                     quizEditor.dirty = true;
                     showAlert('The new order of your questions will not be saved until you click the save button.');
                     resetButton.show();
