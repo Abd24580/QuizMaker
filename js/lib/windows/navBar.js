@@ -41,6 +41,9 @@ define([
                     ){
                     qm.currentDepartment = qm.departments[jq.data('id')];
                     qm.unset('currentQuiz');
+                    $('#mainCanvas').hide('fade', 400,function(){
+                        $(this).html('').show();
+                    });
                 }
             });
             this.dom.find('[data-quiz]').click(function(){
