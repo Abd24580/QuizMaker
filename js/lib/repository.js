@@ -33,6 +33,7 @@ define(['dataObjects', 'quizMaker', 'underscore', 'jquery', 'jquery-ui'], functi
         var quiz = new dos.quiz(data.data);
         stopLoading();
         qm.departments[quiz.DepartmentId].Quizzes[quiz.Id] = quiz.Name;
+        qm.currentDepartment = qm.departments[quiz.DepartmentId];
         qm.currentQuiz = quiz;
     }
       

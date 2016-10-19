@@ -21,7 +21,7 @@
                     </a>
                     <ul class="dropdown-menu" id="deptsDropDown">
                         {{#each departments}}
-                            <li><a href="#" data-department data-id="{{Id}}" data-name="{{Name}}">{{Name}}</a></li>
+                            <li><a href="#" data-department data-id="{{Id}}" data-name="{{Name}}">{{Name}} ({{count Quizzes}})</a></li>
                         {{/each}}
                         <li role="separator" class="divider"></li>
                         <li><a href="#" id="createDepartment">Create New Department</a></li>

@@ -93,6 +93,13 @@ define([
             }
             return opts.join('\n');
         });
+        hb.registerHelper('count', function(item){
+           if(_.isArray(item))
+               return item.length.toString();
+           if(_.isObject(item))
+               return _.keys(item).length.toString();
+           return "";
+        });
     }
     
     function registerPartials(self){
