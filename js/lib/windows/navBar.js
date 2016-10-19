@@ -36,7 +36,12 @@ define([
             delete this._dom;
             this.dom.find('[data-department]').click(this,function(e){
                 var jq = $(this);
-                qm.currentDepartment = qm.departments[jq.data('id')];
+                if((qm.currentDepartment && qm.currentDepartment.Id !== jq.data('id'))
+                    || !qm.currentDepartment
+                    ){
+                    qm.currentDepartment = qm.departments[jq.data('id')];
+                    qm.unset('currentQuiz');
+                }
             });
             this.dom.find('[data-quiz]').click(function(){
                 var jq = $(this);
@@ -47,12 +52,14 @@ define([
                 repository.getQuiz(jq.data('id'), qm.currentDepartment.Id);
             }); 
             this.dom.find('#createDepartment').click(function(){
+                qm.unset('currentQuiz');
                 var de = new deptEditor();
                 de.render();
             });
             this.dom.find('#editDept').click(function(){
                 var dept = qm.currentDepartment;
                 var de = new deptEditor(dept);
+                qm.unset('currentQuiz');
                 de.render();
             });
             this.dom.find('#createQuiz').click(function(){
