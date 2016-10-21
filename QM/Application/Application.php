@@ -70,7 +70,7 @@ class Application {
            $router = new RequestRouter($this);
            // 4. Route based upon the data
            $router->Route($data);
-       } catch (Exception $ex) {
+       } catch (\Exception $ex) {
            $this->log->logException($ex);
            if(isset($data)){
                if($data->format === "json"){
@@ -153,6 +153,8 @@ class Application {
         $deptId = $data->data['DepartmentId'];
         $quizId = $data->data['Id'];
         $quiz = $this->quizRepo->GetQuiz($deptId, $quizId);
+        $newName = isset($data->data['Name']) ? $data->data['Name'] : $quiz->Name;
+        $newDept = $data->data['NewDepartmentId'];
         $newQuiz = new Quiz();
         foreach($quiz as $prop => $val){
             if($prop === "Id"){
@@ -160,8 +162,33 @@ class Application {
             }
             $newQuiz->$prop = $val;
         }
-        $this->quizRepo->StoreQuiz($newQuiz);
-        $this->jsonPackager->SendData($newQuiz);
+        $this->applyNewAttributesToClone($newQuiz, $newName, $newDept);
+        $quizToSend =  $this->quizRepo->StoreQuiz($newQuiz);
+        $this->jsonPackager->SendData($quizToSend);
+    }
+    
+    private function applyNewAttributesToClone(Quiz $quiz, $newName, $newDeptId){
+        $quiz->Name = $newName;
+        $quiz->DepartmentId = $newDeptId;
+        $newArray = array();
+        $newOrder = array();
+        
+        foreach($quiz->QuestionOrder as $index => $id){
+            /* @var $question \QM\Quiz\Question */
+            $question = $quiz->QuestionsArray[$id];
+            $newQues = $this->questionFactory->CreateNew(
+                    $newDeptId, 
+                    $quiz->Id, 
+                    $question->QuestionText, 
+                    $question->AnswersArray, 
+                    $question->CorrectIndex, 
+                    $question->IncorrectMessage
+            );
+            $newArray[$newQues->Id] = $newQues;
+            $newOrder[$index] = $newQues->Id;
+        }
+        $quiz->QuestionsArray = $newArray;
+        $quiz->QuestionOrder = $newOrder;
     }
     
     public function CreateQuestion(RequestData $data)
@@ -214,6 +241,11 @@ class Application {
     public function DeleteDepartment(RequestData $data)
     {
         $id = $data->data['Id'];
+        $depts = $this->departmentsRepo->GetDepartments();
+        $dept = $depts[$id];
+        foreach($dept->Quizzes as $quizId => $name){
+            $this->quizRepo->DeleteQuiz($id, $quizId);
+        }
         $this->departmentsRepo->DeleteDepartment($id);
         $depts = $this->departmentsRepo->GetDepartments();
         $this->jsonPackager->SendData($depts);

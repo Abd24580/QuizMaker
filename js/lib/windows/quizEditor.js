@@ -26,7 +26,7 @@ define([
     'underscore',
     'jquery',
     'jquery-ui'
-],function(templating, dos, qm, repository, utils, mainWindow, dos,_, $){
+],function(templating, dos, qm, repository, popUps, mainWindow, dos,_, $){
 
     function showAlert(message){
         var alert = $('<div class="alert alert-info" id="alertBox" role="alert">' + message + '</div>');
@@ -98,7 +98,7 @@ define([
                     }
                 ]
             };
-            utils.showDialog(options, message);
+            popUps.showDialog(options, message);
             return;
         }
         e.data.close();
@@ -128,7 +128,7 @@ define([
             ]
         };
 
-        utils.showDialog(options, message);
+        popUps.showDialog(options, message);
     }
     
     function addQuestionEvent(e){
@@ -199,7 +199,6 @@ define([
         var jqTemp = $(temp);
         attachHandlers(jqTemp, e.data);
         qInfo.answersList.append(jqTemp);
-//        jqTemp.find('.answerText').change();
     }
 
     function deleteAnswerEvent(e){
@@ -255,24 +254,50 @@ define([
             ]
         };
         
-        utils.showDialog(options, message);
+        popUps.showDialog(options, message);
         
         e.data.editing = false;
     }
     
     
     function resetOrderEvent(e){
-        e.data.dom.find('.questionsList').sortable('cancel');
         e.data.toggleQuestionButtons(true);
         e.data.model.QuestionOrder = e.data.model.cachedOrder;
-        e.data.dirty = false;
-        this.style.display = 'none';
+        e.data.rerender();
         hideAlert();
     }
 
     
     function questionChangeEvent(){
         $(this).parents('.question').find('.saveQuestion').prop('disabled', false).prop('title', '');
+    }
+    
+    function cloneQuizEvent(e){
+        var options = {
+            buttons: [
+                {
+                    text: "Clone!",
+                    click: function(){
+                        var jqThis = $(this);
+                        var newName = jqThis.find('[name="Name"]').val();
+                        var destDept = jqThis.find('[name="Destination"]').val();
+                        qm.bind('currentQuiz').once.to(function(quiz){
+                            var qe = new quizEditor(quiz);
+                            qe.render();
+                        });
+                        repository.cloneQuiz(e.data.model, destDept, newName);
+                        jqThis.dialog('close');
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function(){
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        };
+        popUps.showQuizCloner(options);
     }
     
     function attachHandlers(element, quizEditor){
@@ -288,11 +313,10 @@ define([
         element.find('button.resetOrder').hide().click(quizEditor, resetOrderEvent);
         element.find('button.deleteAnswerButton').click(quizEditor,deleteAnswerEvent);
         element.find('input.questionInput').change(quizEditor, questionChangeEvent);
-        element.find('input[name="Name"]').change(quizEditor, function(e){
+        element.find('input[name="Name"]').keydown(quizEditor, function(e){
             e.data.dirty = true;
         });
-//        element.find('button.downloadButton').click(quizEditor, downloadQuiz);
-//        element.find('button.cloneButton').click(quizEditor, cloneQuiz);
+        element.find('button.cloneButton').click(quizEditor, cloneQuizEvent);
         element.find('.questionsList').sortable({
             handle:'.moveBlock',
             items: '.question',
@@ -335,13 +359,13 @@ define([
     function quizEditor(quiz){
         quizProto.call(this);
         this.template = templating.quizEditor;
-        qm.bind('dirty').to(function(val, qe){
+        qm.bind('dirty').exclusively.to(function(val, qe){
             qe.saveButton.prop('disabled',!val);
             if(!val) qe.saveButton.prop('title', "There are no changes to save.");
             else qe.saveButton.prop('title', "Save changes to this quiz.");
             qe.toggleQuestionButtons(!val);
         }, this);
-        qm.bind('editing').to(function(val,qe){
+        qm.bind('editing').exclusively.to(function(val,qe){
             qe.toggleQuestionButtons(!val);
             var saveButton = qe.saveButton;
             if(val){
@@ -350,9 +374,11 @@ define([
                 qe.dom.find('.downloadButton').addClass('disabled',true).find('a').click(function(e){
                     e.preventDefault();
                 });
+                qe.dom.find('.moveBlock').hide();
                 return;
             }
             saveButton.prop('title','');
+            qe.dom.find('.moveBlock').show();
             if(qe.dirty) saveButton.prop('disabled', false);
             if(!qe.dirty) qe.dom.find('.downloadButton').removeClass('disabled').find('a').off('click');
         },this);
@@ -362,15 +388,6 @@ define([
     function quizProto(){
         this.toggleQuestionButtons = function(activate){
             this.dom.find('.editQuestion, .addQuestion').prop('disabled',!activate);
-            var qList = this.dom.find('.questionsList');
-            if (qList.sortable('instance')){
-                qList.sortable('option','disabled', !activate);
-            }
-            if(activate){
-                this.dom.find('.moveBlock').show();
-                return;
-            }
-            this.dom.find('.moveBlock').hide();
         };
         this.close = function(){
             this.hide();
