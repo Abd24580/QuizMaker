@@ -5,3 +5,4 @@ data/
 composer.lock
 node_modules/
 bower_components/
+vendor/.git
