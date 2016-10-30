@@ -33,6 +33,8 @@ class KLoggerWrapper extends AbstractLogger {
     private $klogger;
     public function __construct(ConfigManager $config) {
         $c = $config->GetValue('logging');
+        $timeZone = $c['defaultTimeZone'];
+        date_default_timezone_set($timeZone);
         $this->klogger = new Logger(
                 $c['logDirectory'],
                 constant('\Psr\Log\LogLevel::'. strtoupper($c['logLevel'])), 
