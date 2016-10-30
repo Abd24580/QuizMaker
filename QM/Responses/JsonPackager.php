@@ -21,6 +21,7 @@ namespace QM\Responses;
 
 use Exception;
 use QM\ConfigManager\ConfigManager;
+use QM\Logging\KLoggerWrapper;
 use stdClass;
 
 /**
@@ -30,8 +31,10 @@ use stdClass;
  */
 class JsonPackager {
     private $devMode;
-    public function __construct(ConfigManager $config) {
+    private $logger;
+    public function __construct(ConfigManager $config, KLoggerWrapper $logger) {
         $this->devMode = $config->GetValue('devMode');
+        $this->logger = $logger;
     }
     
     public function SendException(Exception $ex){
@@ -57,8 +60,8 @@ class JsonPackager {
             'status' => $status,
             'data' => $data
         );
-        
-        return json_encode($array,JSON_PRETTY_PRINT);
+        $this->logger->debug("JSON to be output:", $array);
+        return json_encode($array);
     }
     
     private function output($json){

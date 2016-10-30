@@ -19,7 +19,6 @@
 
 namespace QM\Application;
 
-use Exception;
 use QM\ConfigManager\ConfigManager;
 use QM\Logging\KLoggerWrapper;
 use QM\Quiz\Department;
@@ -54,7 +53,7 @@ class Application {
                 $this->questionFactory,
                 $this->departmentsRepo,
                 $this->log);
-        $this->jsonPackager = new JsonPackager($this->configManager);
+        $this->jsonPackager = new JsonPackager($this->configManager, $this->log);
     }
     
     public function Run(){
@@ -77,7 +76,6 @@ class Application {
                    $this->jsonPackager->SendException($ex);
                }
            }
-           //TODO: institute some kind of global exception handler
        }
     }
     
@@ -261,7 +259,9 @@ class Application {
     
     public function GetDepartmentList(RequestData $data)
     {
+        $this->log->info('Department List requested');
         $departments = $this->departmentsRepo->GetDepartments();
+        $this->log->debug('Departments obtained:', (array)$departments);
         $this->jsonPackager->SendData($departments);
     }
 }

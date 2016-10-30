@@ -145,7 +145,7 @@ class QuizRepo {
         $quizPath = $this->getQuizPath($quiz->DepartmentId, $quiz->Id);
         $quizFolder = $this->getQuizFolder($quiz->DepartmentId);
         $this->log->info("Storing quiz $quiz->Name to $quizPath.");
-        $json = json_encode($quiz, JSON_PRETTY_PRINT);
+        $json = json_encode($quiz);
         if(!file_exists($quizFolder)){
             mkdir($quizFolder, 0777, true);
         }

@@ -98,7 +98,7 @@ class DeptRepo {
     
     private function storeToJson($object){
         $this->log->info("Storing department list to json.", (array)$object);
-        $json = json_encode($object, JSON_PRETTY_PRINT);
+        $json = json_encode($object);
         if(!file_exists($this->config['dataFolder'])){
             mkdir($this->config['dataFolder'], 0777, true);
         }
